@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="13a0ed8e23a24942a2081d8190941f51" Name="Diagram1">
+        <EntityTypeShape EntityType="PasswordManagerModel.Account" Width="1.5" PointX="4.625" PointY="1.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PasswordManagerModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="PasswordManagerModel.AspNetRole" Width="1.5" PointX="0.75" PointY="7.5" />
+        <EntityTypeShape EntityType="PasswordManagerModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="6" />
+        <EntityTypeShape EntityType="PasswordManagerModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="8.75" />
+        <EntityTypeShape EntityType="PasswordManagerModel.AspNetUser" Width="1.5" PointX="3" PointY="6.375" />
+        <AssociationConnector Association="PasswordManagerModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="PasswordManagerModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
+        <AssociationConnector Association="PasswordManagerModel.AspNetUserRoles" />
+        <AssociationConnector Association="PasswordManagerModel.FK_Account_AspNetUsers" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
