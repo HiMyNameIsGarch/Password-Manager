@@ -12,7 +12,13 @@ namespace PassManager_WebApi.Models
         {
 
         }
-        public Account(AccountVM  account)
+        public Account(AccountVM account)
+        {
+            AdaptTo(account);
+            this.LastModified = DateTime.Now;
+            this.LastVisited = DateTime.Now;
+        }
+        public void AdaptTo(AccountVM account)
         {
             this.Title = account.Title;
             this.Username = account.Username;
@@ -21,9 +27,7 @@ namespace PassManager_WebApi.Models
             this.PasswordEncrypted = account.PasswordEncrypted;
             this.SiteRegistered = account.SiteRegistered;
             this.Notes = account.Notes;
-            this.CreateDate = DateTime.Today;
             this.LastModified = DateTime.Now;
-            this.LastVisited = DateTime.Now;
         }
     }
 }
