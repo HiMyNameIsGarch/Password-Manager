@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PassManager_UI.MainPage" Padding="30">
+
+    <StackLayout>
+        <Label Text="Password Manager" TextColor="AliceBlue" FontSize="Title" HorizontalTextAlignment="Center"/>
+        <Label Text="This is only for learning purpose!" TextColor="AliceBlue" FontSize="Subtitle" HorizontalTextAlignment="Center"/>
+    </StackLayout>
+
+</ContentPage>
