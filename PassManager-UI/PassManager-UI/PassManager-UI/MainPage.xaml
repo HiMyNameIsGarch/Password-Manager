@@ -1,11 +1,43 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<ContentPage NavigationPage.HasNavigationBar="False" xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PassManager_UI.MainPage" Padding="30">
-
-    <StackLayout>
-        <Label Text="Password Manager" TextColor="AliceBlue" FontSize="Title" HorizontalTextAlignment="Center"/>
-        <Label Text="This is only for learning purpose!" TextColor="AliceBlue" FontSize="Subtitle" HorizontalTextAlignment="Center"/>
-    </StackLayout>
-
+             x:Class="PassManager.MainPage">
+    <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0,1">
+                <GradientStop Color="#dc2f02" Offset="0.1"/>
+                <GradientStop Color="#e85d04" Offset="1.0"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackLayout Grid.Row="2" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Start" Orientation="Horizontal">
+            <Label Text="{Binding InfoText}" VerticalOptions="Center" FontSize="14"/>
+            <Button Text="{Binding ChangePageText}" x:Name="CurrentPage" CornerRadius="15" FontSize="12" Clicked="ChangePage" WidthRequest="90" HeightRequest="40"/>
+        </StackLayout>
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0,1">
+                    <GradientStop Color="#370617" Offset="0.1"/>
+                    <GradientStop Color="#6a040f" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Label HorizontalOptions="CenterAndExpand" Text="{Binding PageTitle}" FontSize="27" Padding="0,30,0,0"/>
+            <StackLayout VerticalOptions="CenterAndExpand" Margin="0,30,0,0">
+                <StackLayout x:Name="fields" Padding="13">
+                    <Entry Keyboard="Email" Placeholder="Email" HorizontalTextAlignment="Center" Margin="10" FontSize="16"/>
+                    <Entry IsPassword="True" Placeholder="Password" HorizontalTextAlignment="Center" Margin="10" FontSize="16"/>
+                </StackLayout>
+                <Button Text="{Binding PageTitle}" x:Name="ActionBtn"  CornerRadius="20" HorizontalOptions="Center" FontSize="13" WidthRequest="90" HeightRequest="40" />
+            </StackLayout>
+        </Grid>
+    </Grid>
 </ContentPage>
