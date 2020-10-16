@@ -11,7 +11,7 @@
         </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="3*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -19,24 +19,38 @@
             <ColumnDefinition Width="10*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <StackLayout Grid.Row="2" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Start" Orientation="Horizontal">
+        <StackLayout Grid.Row="2" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Start" Orientation="Horizontal" IsVisible="{Binding IsInternet}">
             <Label Text="{Binding InfoText}" VerticalOptions="Center" FontSize="14"/>
             <Button Text="{Binding ChangePageText}" x:Name="CurrentPage" CornerRadius="15" FontSize="12" Clicked="ChangePage" WidthRequest="90" HeightRequest="40"/>
         </StackLayout>
-        <Grid Grid.Row="1" Grid.Column="1">
+        <StackLayout Grid.Row="1" Grid.Column="1" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+            <Label Text="{Binding InternetStatusText}" FontSize="18"/>
+            <Button Text="Refresh page" FontSize="15" Clicked="RefreshPage" CornerRadius="20"/>
+        </StackLayout>
+        <Grid Grid.Row="1" Grid.Column="1" IsVisible="{Binding IsInternet}">
             <Grid.Background>
                 <LinearGradientBrush EndPoint="0,1">
                     <GradientStop Color="#370617" Offset="0.1"/>
                     <GradientStop Color="#6a040f" Offset="1.0"/>
                 </LinearGradientBrush>
             </Grid.Background>
-            <Label HorizontalOptions="CenterAndExpand" Text="{Binding PageTitle}" FontSize="27" Padding="0,30,0,0"/>
-            <StackLayout VerticalOptions="CenterAndExpand" Margin="0,30,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="12*"/>
+            </Grid.RowDefinitions>
+            <Label x:Name="Title" Grid.Row="0" HorizontalOptions="CenterAndExpand" VerticalOptions="End" Text="{Binding PageTitle}" FontSize="27" Padding="0,0,0,0" />
+            <StackLayout Grid.Row="1" Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="End" IsVisible="{Binding IsError}">
+                <Label Text="{Binding ErrorMsg}" FontSize="16" TextColor="Red"/>
+                <Button Text="Refresh page" FontSize="13" Clicked="RefreshPage" CornerRadius="15" IsVisible="{Binding ErrorNeedBtn}"/>
+            </StackLayout>
+            <!-- with error: 3 - 2 - 10 and center center start normal: 3 - 2 - 10 and end center start  -->
+            <StackLayout Grid.Row="2" VerticalOptions="Start">
                 <StackLayout x:Name="fields" Padding="13">
                     <Entry Keyboard="Email" Placeholder="Email" HorizontalTextAlignment="Center" Margin="10" FontSize="16"/>
                     <Entry IsPassword="True" Placeholder="Password" HorizontalTextAlignment="Center" Margin="10" FontSize="16"/>
                 </StackLayout>
-                <Button Text="{Binding PageTitle}" x:Name="ActionBtn"  CornerRadius="20" HorizontalOptions="Center" FontSize="13" WidthRequest="90" HeightRequest="40" />
+                <Button Text="{Binding PageTitle}" x:Name="ActionBtn" CornerRadius="20" HorizontalOptions="Center" FontSize="13" WidthRequest="90" HeightRequest="40" />
             </StackLayout>
         </Grid>
     </Grid>
