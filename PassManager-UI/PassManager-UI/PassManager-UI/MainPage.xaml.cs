@@ -15,7 +15,7 @@ namespace PassManager
     public partial class MainPage : ContentPage, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        public TypeOfActions CurrentAction { get; set; }
+        public TypeOfActions CurrentAction { get;}
         private string _pageTitle;
         private bool _isInternet;
         private string _internetStatusText;
@@ -24,47 +24,55 @@ namespace PassManager
         private string _infoText;
         private bool _isError;
         private bool _errorNeedBtn;
+        //this is the page title, also the action button text
         public string PageTitle
         {
             get { return _pageTitle; }
             set { _pageTitle = value; NotifyPropertyChanged("PageTitle"); }
-        }
+        } 
+        //hides the visibility of the frame if not internet
         public bool IsInternet
         {
             get { return _isInternet; }
             set { _isInternet = value; NotifyPropertyChanged("IsInternet"); }
         }
+        //display and msg about internet status(if needed)
         public string InternetStatusText
         {
             get { return _internetStatusText; }
             set { _internetStatusText = value; NotifyPropertyChanged("InternetStatusText"); }
         }
+        //display the error in the frame excluded the internet ones
         public string ErrorMsg
         {
             get { return _errorMsg; }
             set { _errorMsg = value; NotifyPropertyChanged("ErrorMsg"); }
         }
+        //display the text for the button that changes the pages
         public string ChangePageText
         {
             get { return _changePageText; }
             set { _changePageText = value; NotifyPropertyChanged("ChangePageText"); }
         }
+        //display a little information about your current status
         public string InfoText
         {
             get { return _infoText; }
             set { _infoText = value; NotifyPropertyChanged("InfoText"); }
         }
+        //hides the visibility for the errors in the frame
         public bool IsError
         {
             get { return _isError; }
             set { _isError = value; NotifyPropertyChanged("IsError"); }
         }
+        //change the visibility for the error button in the frame
         public bool ErrorNeedBtn
         {
             get { return _errorNeedBtn; }
             set { _errorNeedBtn = value; NotifyPropertyChanged("ErrorNeedBtn"); }
         }
-
+        //implementation of INotifyPropertyChanged
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if(PropertyChanged != null)
@@ -72,6 +80,7 @@ namespace PassManager
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+        //construnctor for the page
         public MainPage(TypeOfActions action)
         {
             InitializeComponent();
@@ -106,11 +115,11 @@ namespace PassManager
         {
             IsError = false;
             IsInternet = true;
+            if (!CheckIfPageLoaded()) return;
             switch (CurrentAction)
             {
                 case TypeOfActions.Register:
                     SetNames(CurrentAction.ToString(), "Sign in", "Already have an account?");
-                    ActionBtn.Clicked -= CreateNewAccount;
                     ActionBtn.Clicked += Register;
                     Entry confirmPass = new Entry()
                     {
@@ -144,6 +153,10 @@ namespace PassManager
                     break;
             }
         }
+        private bool CheckIfPageLoaded()
+        {
+            return (PageTitle is null || ChangePageText is null || InfoText is null);
+        }
         private void SetNames(string title, string page, string infoText)
         {
             PageTitle = title;
@@ -154,30 +167,40 @@ namespace PassManager
         {
             if (CheckInternet())
             {
-
+                DisplayError("Our server is down, please refresh the page!", true);
             }
             else
             {
-                DisplayError(false, "Check for internet connection, then refresh the page!", true, true);
+                DisplayError(false, "Check for internet connection, then refresh the page!");
             }
         }
         private void CreateNewAccount(object sender, EventArgs e)
         {
             if (CheckInternet())
             {
-
+                DisplayError("Our server is down, please refresh the page!", true);
             }
             else
             {
-                DisplayError(false, "Check for internet connection, then refresh the page!", true, true);
+                DisplayError(false, "Check for internet connection, then refresh the page!");
             }
         }
-        private void DisplayError(bool internet, string errorMsg, bool error, bool btnError)
+        private void DisplayError(string errorMsg, bool needBtn)
+        {
+            if (needBtn)
+            {
+                Title.VerticalOptions = LayoutOptions.Center;
+                if (CurrentAction == TypeOfActions.Sign_In) Errors.VerticalOptions = LayoutOptions.End;
+                else Errors.VerticalOptions = LayoutOptions.Start;
+            }
+            IsError = true;
+            ErrorNeedBtn = needBtn;
+            ErrorMsg = errorMsg;
+        }
+        private void DisplayError(bool internet, string internetMsg)
         {
             IsInternet = internet;
-            InternetStatusText = errorMsg;
-            IsError = error;
-            ErrorNeedBtn = btnError;
+            InternetStatusText = internetMsg;
         }
     }
 }

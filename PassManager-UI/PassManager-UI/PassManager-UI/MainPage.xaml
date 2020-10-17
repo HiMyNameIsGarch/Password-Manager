@@ -40,12 +40,11 @@
                 <RowDefinition Height="12*"/>
             </Grid.RowDefinitions>
             <Label x:Name="Title" Grid.Row="0" HorizontalOptions="CenterAndExpand" VerticalOptions="End" Text="{Binding PageTitle}" FontSize="27" Padding="0,0,0,0" />
-            <StackLayout Grid.Row="1" Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="End" IsVisible="{Binding IsError}">
-                <Label Text="{Binding ErrorMsg}" FontSize="16" TextColor="Red"/>
-                <Button Text="Refresh page" FontSize="13" Clicked="RefreshPage" CornerRadius="15" IsVisible="{Binding ErrorNeedBtn}"/>
+            <StackLayout x:Name="Errors" Grid.Row="1" Orientation="Vertical" HorizontalOptions="Center" VerticalOptions="End" IsVisible="{Binding IsError}">
+                <Label Text="{Binding ErrorMsg}" FontSize="14" TextColor="Red" VerticalOptions="Center" HorizontalOptions="Center"/>
+                <Button Text="Refresh" FontSize="12" Clicked="RefreshPage" CornerRadius="20" HeightRequest="35" HorizontalOptions="Center" IsVisible="{Binding ErrorNeedBtn}"/>
             </StackLayout>
-            <!-- with error: 3 - 2 - 10 and center center start normal: 3 - 2 - 10 and end center start  -->
-            <StackLayout Grid.Row="2" VerticalOptions="Start">
+            <StackLayout x:Name="MainFrame" Grid.Row="2" VerticalOptions="Start">
                 <StackLayout x:Name="fields" Padding="13">
                     <Entry Keyboard="Email" Placeholder="Email" HorizontalTextAlignment="Center" Margin="10" FontSize="16"/>
                     <Entry IsPassword="True" Placeholder="Password" HorizontalTextAlignment="Center" Margin="10" FontSize="16"/>
