@@ -11,6 +11,7 @@ using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using PassManager.Enums;
+using PassManager.AccountPages;
 
 namespace PassManager
 {
@@ -192,30 +193,34 @@ namespace PassManager
                 Entry confirmPass = fields.Children.Last() as Entry;
                 //check if all fields are completed
                 if (String.IsNullOrWhiteSpace(emailField.Text) || String.IsNullOrWhiteSpace(passwordField.Text) || String.IsNullOrWhiteSpace(confirmPass.Text)) DisplayError("You need to complete all fields in order to register!", false);
-                //verify status of fields
-                Models.TaskStatus emailStatus = FieldsHelper.VerifyEmail(emailField.Text);
-                if (!emailStatus.IsError)
+                else
                 {
-                    Models.TaskStatus passwordStatus = FieldsHelper.VerifyPassword(passwordField.Text);
-                    if (!passwordStatus.IsError)
+                    //verify status of fields
+                    Models.TaskStatus emailStatus = FieldsHelper.VerifyEmail(emailField.Text);
+                    if (!emailStatus.IsError)
                     {
-                        if (confirmPass.Text == passwordField.Text)
+                        Models.TaskStatus passwordStatus = FieldsHelper.VerifyPassword(passwordField.Text);
+                        if (!passwordStatus.IsError)
                         {
-                            Models.TaskStatus statusRegister = await UserProcessor.Register(ApiHelper.ApiClient, emailField.Text, passwordField.Text, confirmPass.Text);
-                            if (!statusRegister.IsError)
+                            if (confirmPass.Text == passwordField.Text)
                             {
-                                //await Navigation.PushModalAsync(new page(), true);
+                                Models.TaskStatus statusRegister = await UserProcessor.Register(ApiHelper.ApiClient, emailField.Text, passwordField.Text, confirmPass.Text);
+                                if (!statusRegister.IsError)
+                                {
+                                    emailField.Text = null;
+                                    passwordField.Text = null;
+                                    confirmPass.Text = null;
+                                    await Navigation.PushModalAsync(new ListAccounts(), true);
+                                    //await Navigation.PopModalAsync(true);
+                                }
+                                else DisplayError(statusRegister.Message, false);
                             }
-                            else
-                            {
-                                DisplayError(statusRegister.Message, false);
-                            }
+                            else DisplayError("Your confirm password is not equal with your password!",false);
                         }
-                        else DisplayError("Your confirm password is not equal with your password!",false);
+                        else DisplayError(passwordStatus.Message, false);
                     }
-                    else DisplayError(passwordStatus.Message, false);
+                    else DisplayError(emailStatus.Message, false);
                 }
-                else DisplayError(emailStatus.Message, false);
             }
             else DisplayError(false, "Check for internet connection, then refresh the page!");
         }
@@ -223,12 +228,22 @@ namespace PassManager
         {
             if (CheckInternet())
             {
-                DisplayError("Our server is down, please refresh the page!", true);
+                //check if fields are completed
+                if (String.IsNullOrWhiteSpace(emailField.Text) || String.IsNullOrWhiteSpace(passwordField.Text)) DisplayError("You need to complete all fields in order to register!", false);
+                else
+                {
+                    Models.TaskStatus statusLogin = await UserProcessor.Login(ApiHelper.ApiClient, emailField.Text, passwordField.Text);
+                    if (!statusLogin.IsError)
+                    {
+                        emailField.Text = null;
+                        passwordField.Text = null;
+                        await Navigation.PushModalAsync(new ListAccounts(), true);
+                    }
+                    else
+                        DisplayError(statusLogin.Message, false);
+                }
             }
-            else
-            {
-                DisplayError(false, "Check for internet connection, then refresh the page!");
-            }
+            else DisplayError(false, "Check for internet connection, then refresh the page!");
         }
         private void DisplayError(string errorMsg, bool needBtn)
         {

@@ -17,13 +17,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="AccountPages\ListAccounts.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="MainPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="AccountPages\" />
     <Folder Include="ViewModels\" />
   </ItemGroup>
 </Project>
