@@ -2,6 +2,7 @@
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using PassManager;
+using PassManager.Enums;
 
 namespace PassManager_UI
 {

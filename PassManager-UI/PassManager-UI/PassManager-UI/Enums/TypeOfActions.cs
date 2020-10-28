@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
-namespace PassManager
+namespace PassManager.Enums
 {
     public enum TypeOfActions
     {
