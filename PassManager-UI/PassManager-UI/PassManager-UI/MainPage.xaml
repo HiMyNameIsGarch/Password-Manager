@@ -46,10 +46,10 @@
             </StackLayout>
             <StackLayout x:Name="MainFrame" Grid.Row="2" VerticalOptions="Start">
                 <StackLayout x:Name="fields" Padding="13">
-                    <Entry Keyboard="Email" Placeholder="Email" HorizontalTextAlignment="Center" Margin="10" FontSize="16"/>
-                    <Entry IsPassword="True" Placeholder="Password" HorizontalTextAlignment="Center" Margin="10" FontSize="16"/>
+                    <Entry x:Name="emailField" Keyboard="Email" Placeholder="Email" HorizontalTextAlignment="Center" Margin="10" FontSize="16"/>
+                    <Entry x:Name="passwordField" IsPassword="True" Placeholder="Password" HorizontalTextAlignment="Center" Margin="10" FontSize="16"/>
                 </StackLayout>
-                <Button Text="{Binding PageTitle}" x:Name="ActionBtn" CornerRadius="20" HorizontalOptions="Center" FontSize="13" WidthRequest="90" HeightRequest="40" />
+                <Button Text="{Binding PageTitle}" x:Name="ActionBtn" Clicked="Action" CornerRadius="20" HorizontalOptions="Center" FontSize="13" WidthRequest="90" HeightRequest="40" />
             </StackLayout>
         </Grid>
     </Grid>

@@ -1,19 +1,45 @@
-﻿using System;
+﻿using PassManager.Models;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using PassManager.Enums;
 
 namespace PassManager
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MainPage : ContentPage, INotifyPropertyChanged
     {
+        public MainPage(TypeOfActions action)
+        {
+            InitializeComponent();
+            ApiHelper.InitializeClient();
+            CurrentAction = action;
+            InternetStatusText = string.Empty;
+            if (CheckInternet())
+            {
+                    LoadPage();
+            }
+            else
+            {
+                IsInternet = false;
+                InternetStatusText = "You don't have internet!";
+            }
+            BindingContext = this;
+        }
+        //private bool CheckApi()
+        //{
+        //    PingReply apiResponse = new Ping().Send(ApiHelper.SERVER);
+        //    if (apiResponse.Status == IPStatus.Success) return true;
+        //    else return false;
+        //}
         public event PropertyChangedEventHandler PropertyChanged;
         public TypeOfActions CurrentAction { get;}
         private string _pageTitle;
@@ -81,23 +107,6 @@ namespace PassManager
             }
         }
         //construnctor for the page
-        public MainPage(TypeOfActions action)
-        {
-            InitializeComponent();
-            CurrentAction = action;
-            InternetStatusText = string.Empty;
-            if (CheckInternet())
-            {
-                LoadPage();
-            }
-            else
-            {
-                IsInternet = false;
-                InternetStatusText = "You don't have internet!";
-            }
-            BindingContext = this;
-        }
-
         private void RefreshPage(object sender, EventArgs e)
         {
             if (CheckInternet())
@@ -120,7 +129,6 @@ namespace PassManager
             {
                 case TypeOfActions.Register:
                     SetNames(CurrentAction.ToString(), "Sign in", "Already have an account?");
-                    ActionBtn.Clicked += Register;
                     Entry confirmPass = new Entry()
                     {
                         IsPassword = true,
@@ -133,7 +141,20 @@ namespace PassManager
                     break;
                 case TypeOfActions.Sign_In:
                     SetNames("Sign in", TypeOfActions.Register.ToString(), "Create a new account!");
-                    ActionBtn.Clicked += CreateNewAccount;
+                    break;
+                default:
+                    break;
+            }
+        }
+        async private void Action(object sender, EventArgs e)
+        {
+            switch (CurrentAction)
+            {
+                case TypeOfActions.Register:
+                    await Register();
+                    break;
+                case TypeOfActions.Sign_In:
+                    await CreateNewAccount();
                     break;
                 default:
                     break;
@@ -163,18 +184,42 @@ namespace PassManager
             ChangePageText = page;
             InfoText = infoText;
         }
-        private void Register(object sender, EventArgs e)
+        async private Task Register()
         {
             if (CheckInternet())
             {
-                DisplayError("Our server is down, please refresh the page!", true);
+                //take the last field(confirm password)
+                Entry confirmPass = fields.Children.Last() as Entry;
+                //check if all fields are completed
+                if (String.IsNullOrWhiteSpace(emailField.Text) || String.IsNullOrWhiteSpace(passwordField.Text) || String.IsNullOrWhiteSpace(confirmPass.Text)) DisplayError("You need to complete all fields in order to register!", false);
+                //verify status of fields
+                Models.TaskStatus emailStatus = FieldsHelper.VerifyEmail(emailField.Text);
+                if (!emailStatus.IsError)
+                {
+                    Models.TaskStatus passwordStatus = FieldsHelper.VerifyPassword(passwordField.Text);
+                    if (!passwordStatus.IsError)
+                    {
+                        if (confirmPass.Text == passwordField.Text)
+                        {
+                            Models.TaskStatus statusRegister = await UserProcessor.Register(ApiHelper.ApiClient, emailField.Text, passwordField.Text, confirmPass.Text);
+                            if (!statusRegister.IsError)
+                            {
+                                //await Navigation.PushModalAsync(new page(), true);
+                            }
+                            else
+                            {
+                                DisplayError(statusRegister.Message, false);
+                            }
+                        }
+                        else DisplayError("Your confirm password is not equal with your password!",false);
+                    }
+                    else DisplayError(passwordStatus.Message, false);
+                }
+                else DisplayError(emailStatus.Message, false);
             }
-            else
-            {
-                DisplayError(false, "Check for internet connection, then refresh the page!");
-            }
+            else DisplayError(false, "Check for internet connection, then refresh the page!");
         }
-        private void CreateNewAccount(object sender, EventArgs e)
+        async private Task CreateNewAccount()
         {
             if (CheckInternet())
             {
