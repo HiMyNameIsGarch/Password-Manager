@@ -48,7 +48,7 @@ namespace PassManager.Models
             //verify if username contains a dot in front or in back
             if (emailParts[0].First().ToString() == "." || emailParts[0].Last().ToString() == ".") return new TaskStatus(true, "Your username starts or ends with a dot!"); 
             //if all is alright return nothing
-            return new TaskStatus(false, string.Empty);
+            return new TaskStatus(false);
 
         } 
         public static TaskStatus VerifyPassword(string password)
@@ -66,7 +66,7 @@ namespace PassManager.Models
             if (numOfUpper == 0) return new TaskStatus(true, "Your password must contain at least one upper case letter!");
             if (numOfNumbers == 0) return new TaskStatus(true, "Your password must contain at least one digit!");
             if (specialChar == 0) return new TaskStatus(true, "Your password must contain at least one special character!");
-            return new TaskStatus(false, string.Empty);
+            return new TaskStatus(false);
         }
         public static bool VerifyPhoneNumber(string phone)
         {

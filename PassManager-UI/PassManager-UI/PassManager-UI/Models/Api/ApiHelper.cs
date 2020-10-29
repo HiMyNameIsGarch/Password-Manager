@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 
-namespace PassManager.Models
+namespace PassManager.Models.Api
 {
     public class ApiHelper
     {
@@ -23,8 +23,7 @@ namespace PassManager.Models
                             //bypass
                             return true;
                         },
-                    }
-                    , false
+                    } , false
                 );
                 //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization", "TOKEN");
                 return _httpClient;

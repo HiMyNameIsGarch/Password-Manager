@@ -1,4 +1,5 @@
 ﻿using PassManager.Models;
+using PassManager.Models.Api;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -26,7 +27,7 @@ namespace PassManager
             InternetStatusText = string.Empty;
             if (CheckInternet())
             {
-                    LoadPage();
+                LoadPage();
             }
             else
             {
@@ -35,12 +36,6 @@ namespace PassManager
             }
             BindingContext = this;
         }
-        //private bool CheckApi()
-        //{
-        //    PingReply apiResponse = new Ping().Send(ApiHelper.SERVER);
-        //    if (apiResponse.Status == IPStatus.Success) return true;
-        //    else return false;
-        //}
         public event PropertyChangedEventHandler PropertyChanged;
         public TypeOfActions CurrentAction { get;}
         private string _pageTitle;
@@ -149,6 +144,7 @@ namespace PassManager
         }
         async private void Action(object sender, EventArgs e)
         {
+            ActionBtn.IsEnabled = false;
             switch (CurrentAction)
             {
                 case TypeOfActions.Register:
@@ -160,6 +156,7 @@ namespace PassManager
                 default:
                     break;
             }
+            ActionBtn.IsEnabled = true;
         }
         async private void ChangePage(object sender, EventArgs e)
         {
@@ -211,7 +208,6 @@ namespace PassManager
                                     passwordField.Text = null;
                                     confirmPass.Text = null;
                                     await Navigation.PushModalAsync(new ListAccounts(), true);
-                                    //await Navigation.PopModalAsync(true);
                                 }
                                 else DisplayError(statusRegister.Message, false);
                             }
