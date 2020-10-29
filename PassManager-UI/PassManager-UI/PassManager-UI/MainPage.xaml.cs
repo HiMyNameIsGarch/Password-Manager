@@ -45,7 +45,6 @@ namespace PassManager
         private string _changePageText;
         private string _infoText;
         private bool _isError;
-        private bool _errorNeedBtn;
         //this is the page title, also the action button text
         public string PageTitle
         {
@@ -88,12 +87,6 @@ namespace PassManager
             get { return _isError; }
             set { _isError = value; NotifyPropertyChanged("IsError"); }
         }
-        //change the visibility for the error button in the frame
-        public bool ErrorNeedBtn
-        {
-            get { return _errorNeedBtn; }
-            set { _errorNeedBtn = value; NotifyPropertyChanged("ErrorNeedBtn"); }
-        }
         //implementation of INotifyPropertyChanged
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
@@ -130,8 +123,8 @@ namespace PassManager
                         IsPassword = true,
                         Placeholder = "Confirm Password",
                         HorizontalTextAlignment = TextAlignment.Center,
-                        Margin = 10,
-                        FontSize = 16
+                        Margin = new Thickness(10,5,10,5),
+                        FontSize = 17
                     };
                     fields.Children.Add(confirmPass);
                     break;
@@ -189,7 +182,7 @@ namespace PassManager
                 //take the last field(confirm password)
                 Entry confirmPass = fields.Children.Last() as Entry;
                 //check if all fields are completed
-                if (String.IsNullOrWhiteSpace(emailField.Text) || String.IsNullOrWhiteSpace(passwordField.Text) || String.IsNullOrWhiteSpace(confirmPass.Text)) DisplayError("You need to complete all fields in order to register!", false);
+                if (String.IsNullOrWhiteSpace(emailField.Text) || String.IsNullOrWhiteSpace(passwordField.Text) || String.IsNullOrWhiteSpace(confirmPass.Text)) DisplayError("You need to complete all fields in order to register!");
                 else
                 {
                     //verify status of fields
@@ -209,13 +202,13 @@ namespace PassManager
                                     confirmPass.Text = null;
                                     await Navigation.PushModalAsync(new ListAccounts(), true);
                                 }
-                                else DisplayError(statusRegister.Message, false);
+                                else DisplayError(statusRegister.Message);
                             }
-                            else DisplayError("Your confirm password is not equal with your password!",false);
+                            else DisplayError("Your confirm password is not equal with your password!");
                         }
-                        else DisplayError(passwordStatus.Message, false);
+                        else DisplayError(passwordStatus.Message);
                     }
-                    else DisplayError(emailStatus.Message, false);
+                    else DisplayError(emailStatus.Message);
                 }
             }
             else DisplayError(false, "Check for internet connection, then refresh the page!");
@@ -225,7 +218,7 @@ namespace PassManager
             if (CheckInternet())
             {
                 //check if fields are completed
-                if (String.IsNullOrWhiteSpace(emailField.Text) || String.IsNullOrWhiteSpace(passwordField.Text)) DisplayError("You need to complete all fields in order to register!", false);
+                if (String.IsNullOrWhiteSpace(emailField.Text) || String.IsNullOrWhiteSpace(passwordField.Text)) DisplayError("You need to complete all fields in order to register!");
                 else
                 {
                     Models.TaskStatus statusLogin = await UserProcessor.Login(ApiHelper.ApiClient, emailField.Text, passwordField.Text);
@@ -236,21 +229,14 @@ namespace PassManager
                         await Navigation.PushModalAsync(new ListAccounts(), true);
                     }
                     else
-                        DisplayError(statusLogin.Message, false);
+                        DisplayError(statusLogin.Message);
                 }
             }
             else DisplayError(false, "Check for internet connection, then refresh the page!");
         }
-        private void DisplayError(string errorMsg, bool needBtn)
+        private void DisplayError(string errorMsg)
         {
-            if (needBtn)
-            {
-                Title.VerticalOptions = LayoutOptions.Center;
-                if (CurrentAction == TypeOfActions.Sign_In) Errors.VerticalOptions = LayoutOptions.End;
-                else Errors.VerticalOptions = LayoutOptions.Start;
-            }
             IsError = true;
-            ErrorNeedBtn = needBtn;
             ErrorMsg = errorMsg;
         }
         private void DisplayError(bool internet, string internetMsg)
