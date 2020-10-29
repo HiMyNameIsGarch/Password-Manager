@@ -5,8 +5,8 @@
     <Grid>
         <Grid.Background>
             <LinearGradientBrush EndPoint="0,1">
-                <GradientStop Color="#dc2f02" Offset="0.1"/>
-                <GradientStop Color="#e85d04" Offset="1.0"/>
+                <GradientStop Color="#84a98c" Offset="0.1"/>
+                <GradientStop Color="#cad2c5" Offset="1.0"/>
             </LinearGradientBrush>
         </Grid.Background>
         <Grid.RowDefinitions>
@@ -20,7 +20,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackLayout Grid.Row="2" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Start" Orientation="Horizontal" IsVisible="{Binding IsInternet}">
-            <Label Text="{Binding InfoText}" VerticalOptions="Center" FontSize="14"/>
+            <Label Text="{Binding InfoText}" VerticalOptions="Center" FontSize="14" TextColor="#354f52"/>
             <Button Text="{Binding ChangePageText}" x:Name="CurrentPage" CornerRadius="15" FontSize="12" Clicked="ChangePage" WidthRequest="90" HeightRequest="40"/>
         </StackLayout>
         <StackLayout Grid.Row="1" Grid.Column="1" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
@@ -30,24 +30,21 @@
         <Grid Grid.Row="1" Grid.Column="1" IsVisible="{Binding IsInternet}">
             <Grid.Background>
                 <LinearGradientBrush EndPoint="0,1">
-                    <GradientStop Color="#370617" Offset="0.1"/>
-                    <GradientStop Color="#6a040f" Offset="1.0"/>
+                    <GradientStop Color="#2f3e46" Offset="0.1"/>
+                    <GradientStop Color="#354f52" Offset="1.0"/>
                 </LinearGradientBrush>
             </Grid.Background>
             <Grid.RowDefinitions>
                 <RowDefinition Height="3*"/>
-                <RowDefinition Height="2*"/>
-                <RowDefinition Height="12*"/>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="13*"/>
             </Grid.RowDefinitions>
-            <Label x:Name="Title" Grid.Row="0" HorizontalOptions="CenterAndExpand" VerticalOptions="End" Text="{Binding PageTitle}" FontSize="27" Padding="0,0,0,0" />
-            <StackLayout x:Name="Errors" Grid.Row="1" Orientation="Vertical" HorizontalOptions="Center" VerticalOptions="End" IsVisible="{Binding IsError}">
-                <Label Text="{Binding ErrorMsg}" FontSize="14" TextColor="Red" VerticalOptions="Center" HorizontalOptions="Center"/>
-                <Button Text="Refresh" FontSize="12" Clicked="RefreshPage" CornerRadius="20" HeightRequest="35" HorizontalOptions="Center" IsVisible="{Binding ErrorNeedBtn}"/>
-            </StackLayout>
-            <StackLayout x:Name="MainFrame" Grid.Row="2" VerticalOptions="Start">
-                <StackLayout x:Name="fields" Padding="13">
-                    <Entry x:Name="emailField" Keyboard="Email" Placeholder="Email" HorizontalTextAlignment="Center" Margin="10" FontSize="16"/>
-                    <Entry x:Name="passwordField" IsPassword="True" Placeholder="Password" HorizontalTextAlignment="Center" Margin="10" FontSize="16"/>
+            <Label x:Name="Title" Grid.Row="0" HorizontalOptions="CenterAndExpand" VerticalOptions="End" Text="{Binding PageTitle}" FontSize="26"/>
+            <Label Grid.Row="1" Text="{Binding ErrorMsg}" Padding="20,0,20,0" FontSize="16" TextColor="Red" VerticalOptions="End" HorizontalOptions="CenterAndExpand" IsVisible="{Binding IsError}"/>
+            <StackLayout x:Name="MainFrame" Grid.Row="2" VerticalOptions="StartAndExpand">
+                <StackLayout x:Name="fields" Padding="13,5,13,5">
+                    <Entry x:Name="emailField" Keyboard="Email" Placeholder="Email" HorizontalTextAlignment="Center" Margin="10,5,10,5" FontSize="17"/>
+                    <Entry x:Name="passwordField" IsPassword="True" Placeholder="Password" HorizontalTextAlignment="Center" Margin="10,5,10,5" FontSize="17"/>
                 </StackLayout>
                 <Button Text="{Binding PageTitle}" x:Name="ActionBtn" Clicked="Action" CornerRadius="20" HorizontalOptions="Center" FontSize="13" WidthRequest="90" HeightRequest="40" />
             </StackLayout>

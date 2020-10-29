@@ -31,9 +31,12 @@ namespace PassManager.Models.Api
         }
         internal static void InitializeClient()
         {
-            ApiClient.BaseAddress = new Uri(SERVER);
-            ApiClient.DefaultRequestHeaders.Accept.Clear();
-            ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            if(_httpClient is null)
+            {
+                ApiClient.BaseAddress = new Uri(SERVER);
+                ApiClient.DefaultRequestHeaders.Accept.Clear();
+                ApiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            }
         }
     }
 }
