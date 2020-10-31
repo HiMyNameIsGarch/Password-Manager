@@ -19,25 +19,24 @@ namespace PassManager
 	[XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MainPage : ContentPage, INotifyPropertyChanged
     {
-        public MainPage(TypeOfActions action)
+        //construnctor for the page
+        public MainPage()
         {
             InitializeComponent();
             ApiHelper.InitializeClient();
-            CurrentAction = action;
+            ActionStatus = true;
+            CurrentAction = TypeOfActions.Sign_In;
             InternetStatusText = string.Empty;
             if (CheckInternet())
             {
-                LoadPage();
+                IsInternet = true;
+                SetNames("Sign in", TypeOfActions.Register.ToString(), "Create a new account!");
             }
-            else
-            {
-                IsInternet = false;
-                InternetStatusText = "You don't have internet!";
-            }
+            else DisplayError(false,"Your don't have internet access!");
             BindingContext = this;
         }
         public event PropertyChangedEventHandler PropertyChanged;
-        public TypeOfActions CurrentAction { get;}
+        private TypeOfActions CurrentAction { get; set; }
         private string _pageTitle;
         private bool _isInternet;
         private string _internetStatusText;
@@ -87,57 +86,46 @@ namespace PassManager
             get { return _isError; }
             set { _isError = value; NotifyPropertyChanged("IsError"); }
         }
+        //hides the visibility for the errors behind the frame
+        public bool InternetErrorVis
+        {
+            get { return !_isInternet; }
+            set { NotifyPropertyChanged("InternetErrorVis"); }
+        }
+        //enable/disable buttons for actions that are executing
+        private bool _actionStatus;
+        public bool ActionStatus
+        {
+            get { return _actionStatus; }
+            set { _actionStatus = value; NotifyPropertyChanged("ActionStatus"); }
+        }
+
         //implementation of INotifyPropertyChanged
+
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
-            if(PropertyChanged != null)
+            if(this.PropertyChanged != null)
             {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-        //construnctor for the page
         private void RefreshPage(object sender, EventArgs e)
         {
             if (CheckInternet())
-                LoadPage();
+            {
+                DisplayError(true, string.Empty);
+                if (PageLoaded()) SetNames("Sign in", TypeOfActions.Register.ToString(), "Create a new account!");
+            }
             else
-                InternetStatusText = "You still don't have internet!";
+                DisplayError(false,"You don't have internet access!");
         }
         private bool CheckInternet()
         {
-            var current = Connectivity.NetworkAccess;
-            if (current == NetworkAccess.Internet) return true;
-            else return false;
-        }
-        private void LoadPage()
-        {
-            IsError = false;
-            IsInternet = true;
-            if (!CheckIfPageLoaded()) return;
-            switch (CurrentAction)
-            {
-                case TypeOfActions.Register:
-                    SetNames(CurrentAction.ToString(), "Sign in", "Already have an account?");
-                    Entry confirmPass = new Entry()
-                    {
-                        IsPassword = true,
-                        Placeholder = "Confirm Password",
-                        HorizontalTextAlignment = TextAlignment.Center,
-                        Margin = new Thickness(10,5,10,5),
-                        FontSize = 17
-                    };
-                    fields.Children.Add(confirmPass);
-                    break;
-                case TypeOfActions.Sign_In:
-                    SetNames("Sign in", TypeOfActions.Register.ToString(), "Create a new account!");
-                    break;
-                default:
-                    break;
-            }
+            return Connectivity.NetworkAccess == NetworkAccess.Internet;
         }
         async private void Action(object sender, EventArgs e)
         {
-            ActionBtn.IsEnabled = false;
+            ActionStatus = false;
             switch (CurrentAction)
             {
                 case TypeOfActions.Register:
@@ -149,23 +137,35 @@ namespace PassManager
                 default:
                     break;
             }
-            ActionBtn.IsEnabled = true;
+            ActionStatus = true;
         }
-        async private void ChangePage(object sender, EventArgs e)
+        private void ChangePage(object sender, EventArgs e)
         {
             switch (CurrentAction)
             {
-                case TypeOfActions.Register:
-                    await Navigation.PopModalAsync(true);
-                    break;
                 case TypeOfActions.Sign_In:
-                    await Navigation.PushModalAsync(new MainPage(TypeOfActions.Register), true);
+                    CurrentAction = TypeOfActions.Register;
+                    SetNames("Register", "Sign in", "Already have an account?");
+                    Entry confirmPass = new Entry()
+                    {
+                        IsPassword = true,
+                        Placeholder = "Confirm Password",
+                        HorizontalTextAlignment = TextAlignment.Center,
+                        Margin = new Thickness(10, 5, 10, 5),
+                        FontSize = 17
+                    };
+                    fields.Children.Add(confirmPass);
+                    break;
+                case TypeOfActions.Register:
+                    CurrentAction = TypeOfActions.Sign_In;
+                    SetNames("Sign in", "Register", "Create a new account!");
+                    fields.Children.Remove(fields.Children.Last());
                     break;
                 default:
                     break;
             }
         }
-        private bool CheckIfPageLoaded()
+        private bool PageLoaded()
         {
             return (PageTitle is null || ChangePageText is null || InfoText is null);
         }

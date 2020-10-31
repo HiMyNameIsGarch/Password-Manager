@@ -11,7 +11,7 @@ namespace PassManager_UI
         public App()
         {
             InitializeComponent();
-            MainPage = new NavigationPage(new MainPage(TypeOfActions.Sign_In));
+            MainPage = new NavigationPage(new MainPage());
         }
 
         protected override void OnStart()
