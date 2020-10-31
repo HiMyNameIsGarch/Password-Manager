@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage NavigationPage.HasNavigationBar="False" xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:PassManager.CustomRenderer"
              x:Class="PassManager.MainPage">
     <Grid>
         <Grid.Background>
@@ -39,14 +40,27 @@
                 <RowDefinition Height="3*"/>
                 <RowDefinition Height="13*"/>
             </Grid.RowDefinitions>
-            <Label x:Name="Title" Grid.Row="0" HorizontalOptions="CenterAndExpand" VerticalOptions="End" Text="{Binding PageTitle}" FontSize="26"/>
+            <Label x:Name="Title" Grid.Row="0" HorizontalOptions="CenterAndExpand" VerticalOptions="End" Text="{Binding PageTitle}" FontSize="26" FontAttributes="Bold"/>
             <Label Grid.Row="1" Text="{Binding ErrorMsg}" Padding="20,0,20,0" FontSize="16" TextColor="Red" VerticalOptions="End" HorizontalOptions="CenterAndExpand" IsVisible="{Binding IsError}"/>
             <StackLayout x:Name="MainFrame" Grid.Row="2" VerticalOptions="StartAndExpand">
-                <StackLayout x:Name="fields" Padding="13,5,13,5">
-                    <Entry x:Name="emailField" Keyboard="Email" Placeholder="Email" HorizontalTextAlignment="Center" Margin="10,5,10,5" FontSize="17"/>
-                    <Entry x:Name="passwordField" IsPassword="True" Placeholder="Password" HorizontalTextAlignment="Center" Margin="10,5,10,5" FontSize="17"/>
+                <StackLayout x:Name="fields" Padding="0,5,0,5">
+                    <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30" Margin="10,6,10,6">
+                        <StackLayout Orientation="Horizontal">
+                            <local:CustomeEntry x:Name="emailField" Keyboard="Email" Placeholder="Email" HorizontalTextAlignment="Start"
+                                   Margin="15,0,15,0" FontSize="17" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent"/>
+                        </StackLayout>
+                    </Frame>
+                    <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30" Margin="10,6,10,6">
+                        <StackLayout Orientation="Horizontal">
+                            <local:CustomeEntry x:Name="passwordField" IsPassword="True" Placeholder="Password" HorizontalTextAlignment="Start" 
+                                   Margin="15,0,0,0" FontSize="17" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent"/>
+                            <Frame BackgroundColor="SkyBlue" HeightRequest="35" WidthRequest="35" CornerRadius="30" Padding="0" Margin="5">
+                            </Frame>
+                    </StackLayout>
+                    </Frame>
                 </StackLayout>
-                <Button Text="{Binding PageTitle}" IsEnabled="{Binding ActionStatus}" x:Name="ActionBtn" Clicked="Action" CornerRadius="20" HorizontalOptions="Center" FontSize="13" WidthRequest="90" HeightRequest="40" />
+                <Button Text="{Binding PageTitle}" IsEnabled="{Binding ActionStatus}" x:Name="ActionBtn" 
+                Clicked="Action" CornerRadius="20" HorizontalOptions="Center" FontSize="13" WidthRequest="90" HeightRequest="40" />
             </StackLayout>
         </Grid>
     </Grid>
