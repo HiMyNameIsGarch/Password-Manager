@@ -13,6 +13,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using PassManager.Enums;
 using PassManager.AccountPages;
+using PassManager.CustomRenderer;
 
 namespace PassManager
 {
@@ -99,9 +100,7 @@ namespace PassManager
             get { return _actionStatus; }
             set { _actionStatus = value; NotifyPropertyChanged("ActionStatus"); }
         }
-
         //implementation of INotifyPropertyChanged
-
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if(this.PropertyChanged != null)
@@ -146,15 +145,8 @@ namespace PassManager
                 case TypeOfActions.Sign_In:
                     CurrentAction = TypeOfActions.Register;
                     SetNames("Register", "Sign in", "Already have an account?");
-                    Entry confirmPass = new Entry()
-                    {
-                        IsPassword = true,
-                        Placeholder = "Confirm Password",
-                        HorizontalTextAlignment = TextAlignment.Center,
-                        Margin = new Thickness(10, 5, 10, 5),
-                        FontSize = 17
-                    };
-                    fields.Children.Add(confirmPass);
+                    var childToAdd = CreateAnotherField();
+                    fields.Children.Add(childToAdd);
                     break;
                 case TypeOfActions.Register:
                     CurrentAction = TypeOfActions.Sign_In;
@@ -243,6 +235,43 @@ namespace PassManager
         {
             IsInternet = internet;
             InternetStatusText = internetMsg;
+        }
+        private Frame CreateAnotherField()
+        {
+            return new Frame()
+            {
+                BackgroundColor = Color.Transparent,
+                BorderColor = Color.DarkGray,
+                Padding = 0,
+                HorizontalOptions = LayoutOptions.FillAndExpand,
+                CornerRadius = 30,
+                Margin = new Thickness(10,6,10,6),
+                Content =  new StackLayout(){ 
+                    Orientation = StackOrientation.Horizontal,
+                    Children =
+                    {
+                        new CustomeEntry()
+                        {
+                            IsPassword = true,
+                            Placeholder = "Confirm password",
+                            HorizontalOptions = LayoutOptions.FillAndExpand,
+                            HorizontalTextAlignment = TextAlignment.Start,
+                            Margin = new Thickness(15, 0, 0, 0),
+                            FontSize = 17,
+                            BackgroundColor = Color.Transparent
+                        },
+                        new Frame()
+                        {
+                            BackgroundColor = Color.SkyBlue,
+                            HeightRequest = 35,
+                            WidthRequest = 35,
+                            CornerRadius = 30,
+                            Padding = 0,
+                            Margin = 5,
+                        }
+                    }
+                }
+            };
         }
     }
 }
