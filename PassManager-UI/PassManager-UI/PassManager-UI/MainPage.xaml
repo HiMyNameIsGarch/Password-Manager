@@ -21,13 +21,13 @@
         </Grid.ColumnDefinitions>
         <StackLayout Grid.Row="2" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Start" Orientation="Horizontal" IsVisible="{Binding IsInternet}">
             <Label Text="{Binding InfoText}" VerticalOptions="Center" FontSize="14" TextColor="#354f52"/>
-            <Button Text="{Binding ChangePageText}" x:Name="CurrentPage" CornerRadius="15" FontSize="12" Clicked="ChangePage" WidthRequest="90" HeightRequest="40"/>
+            <Button Text="{Binding ChangePageText}" IsEnabled="{Binding ActionStatus}" x:Name="CurrentPage" CornerRadius="15" FontSize="12" Clicked="ChangePage" WidthRequest="90" HeightRequest="40"/>
         </StackLayout>
-        <StackLayout Grid.Row="1" Grid.Column="1" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+        <StackLayout Grid.Row="1" Grid.Column="1" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" IsVisible="{Binding InternetErrorVis}">
             <Label Text="{Binding InternetStatusText}" FontSize="18"/>
             <Button Text="Refresh page" FontSize="15" Clicked="RefreshPage" CornerRadius="20"/>
         </StackLayout>
-        <Grid Grid.Row="1" Grid.Column="1" IsVisible="{Binding IsInternet}">
+        <Grid x:Name="PrincipleFrame" Grid.Row="1" Grid.Column="1" IsVisible="{Binding IsInternet}">
             <Grid.Background>
                 <LinearGradientBrush EndPoint="0,1">
                     <GradientStop Color="#2f3e46" Offset="0.1"/>
@@ -46,7 +46,7 @@
                     <Entry x:Name="emailField" Keyboard="Email" Placeholder="Email" HorizontalTextAlignment="Center" Margin="10,5,10,5" FontSize="17"/>
                     <Entry x:Name="passwordField" IsPassword="True" Placeholder="Password" HorizontalTextAlignment="Center" Margin="10,5,10,5" FontSize="17"/>
                 </StackLayout>
-                <Button Text="{Binding PageTitle}" x:Name="ActionBtn" Clicked="Action" CornerRadius="20" HorizontalOptions="Center" FontSize="13" WidthRequest="90" HeightRequest="40" />
+                <Button Text="{Binding PageTitle}" IsEnabled="{Binding ActionStatus}" x:Name="ActionBtn" Clicked="Action" CornerRadius="20" HorizontalOptions="Center" FontSize="13" WidthRequest="90" HeightRequest="40" />
             </StackLayout>
         </Grid>
     </Grid>
