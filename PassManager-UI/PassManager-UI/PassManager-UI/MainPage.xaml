@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage NavigationPage.HasNavigationBar="False" xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:PassManager.CustomRenderer"
-             x:Class="PassManager.MainPage">
+             xmlns:CRender="clr-namespace:PassManager.CustomRenderer"
+             xmlns:MarkExt="clr-namespace:PassManager.MarkupExtensions"
+             x:Class="PassManager.MainPage">        
     <Grid>
         <Grid.Background>
             <LinearGradientBrush EndPoint="0,1">
@@ -46,26 +47,38 @@
                 <StackLayout x:Name="fields" Padding="0,5,0,5">
                     <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30" Margin="10,6,10,6">
                         <StackLayout Orientation="Horizontal">
-                            <local:CustomeEntry x:Name="emailField" Keyboard="Email" Placeholder="Email" HorizontalTextAlignment="Start"
+                            <CRender:CustomeEntry x:Name="emailField" Keyboard="Email" Placeholder="Email" HorizontalTextAlignment="Start"
                                    Margin="15,0,15,0" FontSize="17" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent"/>
                         </StackLayout>
                     </Frame>
                     <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30" Margin="10,6,10,6">
-                        <StackLayout Orientation="Horizontal">
-                            <local:CustomeEntry x:Name="passwordField" IsPassword="True" Placeholder="Password" HorizontalTextAlignment="Start" 
+                        <StackLayout x:Name="password" Orientation="Horizontal">
+                            <CRender:CustomeEntry x:Name="passwordField" IsPassword="True" Placeholder="Password" HorizontalTextAlignment="Start" 
                                    Margin="15,0,0,0" FontSize="17" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent"/>
-                            <Frame BackgroundColor="SkyBlue" HeightRequest="35" WidthRequest="35" CornerRadius="30" Padding="0" Margin="5">
-                                <Image Source="Images/Locked.png" Aspect="AspectFill" Margin="0"/>
+                            <Frame BackgroundColor="Transparent" HeightRequest="35" WidthRequest="35" CornerRadius="30" Padding="0" Margin="5">
+                                <Image Source="{MarkExt:EmbeddedImage PassManager-UI.Images.Locked.png}" Aspect="AspectFill" Margin="0">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding ChangeVisCommand}"
+                                            CommandParameter="{Binding Source={x:Reference password}}" />
+                                    </Image.GestureRecognizers>
+                                </Image>
                             </Frame>
                     </StackLayout>
                     </Frame>
                     <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30"
                            Margin="10,6,10,6" IsEnabled="{Binding IsRegisterPage}" IsVisible="{Binding IsRegisterPage}">
-                        <StackLayout Orientation="Horizontal">
-                            <local:CustomeEntry x:Name="confirmPass" IsPassword="True" Placeholder="Confirm password" HorizontalTextAlignment="Start" 
+                        <StackLayout x:Name="confirmPass" Orientation="Horizontal">
+                            <CRender:CustomeEntry x:Name="confirmPassField" IsPassword="True" Placeholder="Confirm password" HorizontalTextAlignment="Start" 
                                    Margin="15,0,0,0" FontSize="17" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent"/>
-                            <Frame BackgroundColor="SkyBlue" HeightRequest="35" WidthRequest="35" CornerRadius="30" Padding="0" Margin="5">
-                                <Image Source="Images/Locked.png" Aspect="AspectFill" Margin="0"/>
+                            <Frame BackgroundColor="Transparent" HeightRequest="35" WidthRequest="35" CornerRadius="30" Padding="0" Margin="5">
+                                <Image Source="{MarkExt:EmbeddedImage PassManager-UI.Images.Locked.png}" Aspect="AspectFill" Margin="0">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer
+                                            Command="{Binding ChangeVisCommand}"
+                                            CommandParameter="{Binding Source={x:Reference confirmPass}}" />
+                                    </Image.GestureRecognizers>
+                                </Image>
                             </Frame>
                         </StackLayout>
                     </Frame>

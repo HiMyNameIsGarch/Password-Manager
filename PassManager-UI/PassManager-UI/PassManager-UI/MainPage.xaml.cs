@@ -14,6 +14,7 @@ using Xamarin.Forms.Xaml;
 using PassManager.Enums;
 using PassManager.AccountPages;
 using PassManager.CustomRenderer;
+using System.Windows.Input;
 
 namespace PassManager
 {
@@ -25,6 +26,7 @@ namespace PassManager
         {
             InitializeComponent();
             ApiHelper.InitializeClient();
+            _changeVisCommand = new Command(ChangeVis);
             ActionStatus = true;
             CurrentAction = TypeOfActions.Sign_In;
             IsRegisterPage = false;
@@ -108,6 +110,28 @@ namespace PassManager
             get { return _isRegisterPage; }
             set { _isRegisterPage = value; NotifyPropertyChanged("IsRegisterPage"); }
         }
+        private ICommand _changeVisCommand;
+        public ICommand ChangeVisCommand
+        {
+            get { return _changeVisCommand; }
+        }
+        private void ChangeVis(object o)
+        {
+            var mainStack = o as StackLayout;
+            CustomeEntry entry = mainStack.Children.FirstOrDefault() as CustomeEntry;
+            bool statusPassVis = false;
+            if (entry != null)
+            {
+                statusPassVis = entry.IsPassword;
+                entry.IsPassword = statusPassVis == true ? false : true;
+            }
+            Frame frame = mainStack.Children.Where(s => s.GetType().Name == "Frame").FirstOrDefault() as Frame;
+            if(frame != null)
+            {
+                Image image = frame.Content as Image;
+                if(image != null) image.Source = ImageSource.FromResource($"PassManager-UI.Images.{(statusPassVis ? "Open" : "Locked")}.png");
+            }
+        }
         //implementation of INotifyPropertyChanged
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
@@ -179,7 +203,7 @@ namespace PassManager
             if (CheckInternet())
             {
                 //check if all fields are completed
-                if (String.IsNullOrWhiteSpace(emailField.Text) || String.IsNullOrWhiteSpace(passwordField.Text) || String.IsNullOrWhiteSpace(confirmPass.Text)) DisplayError("You need to complete all fields in order to register!");
+                if (String.IsNullOrWhiteSpace(emailField.Text) || String.IsNullOrWhiteSpace(passwordField.Text) || String.IsNullOrWhiteSpace(confirmPassField.Text)) DisplayError("You need to complete all fields in order to register!");
                 else
                 {
                     //verify status of fields
@@ -189,14 +213,14 @@ namespace PassManager
                         Models.TaskStatus passwordStatus = FieldsHelper.VerifyPassword(passwordField.Text);
                         if (!passwordStatus.IsError)
                         {
-                            if (confirmPass.Text == passwordField.Text)
+                            if (confirmPassField.Text == passwordField.Text)
                             {
-                                Models.TaskStatus statusRegister = await UserProcessor.Register(ApiHelper.ApiClient, emailField.Text, passwordField.Text, confirmPass.Text);
+                                Models.TaskStatus statusRegister = await UserProcessor.Register(ApiHelper.ApiClient, emailField.Text, passwordField.Text, confirmPassField.Text);
                                 if (!statusRegister.IsError)
                                 {
                                     emailField.Text = null;
                                     passwordField.Text = null;
-                                    confirmPass.Text = null;
+                                    confirmPassField.Text = null;
                                     await Navigation.PushModalAsync(new ListAccounts(), true);
                                 }
                                 else DisplayError(statusRegister.Message);
