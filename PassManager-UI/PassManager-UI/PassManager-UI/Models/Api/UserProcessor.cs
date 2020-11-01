@@ -25,7 +25,7 @@ namespace PassManager.Models.Api
             }
             catch (Exception ex)
             {
-                return CheckIfServerIsUp(ex);
+                return ServerIsOpen(ex);
             }
             if (responseMessage.IsSuccessStatusCode)
                 return new TaskStatus(false);
@@ -66,7 +66,7 @@ namespace PassManager.Models.Api
             }
             catch(Exception ex)
             {
-                return CheckIfServerIsUp(ex);
+                return ServerIsOpen(ex);
             }
             ResponseToken token = await responseMessage.Content.ReadAsAsync<ResponseToken>();
             if (responseMessage.IsSuccessStatusCode)
@@ -83,7 +83,7 @@ namespace PassManager.Models.Api
             }
             else return new TaskStatus(true, token.error_description);
         }
-        private static TaskStatus CheckIfServerIsUp(Exception ex)
+        private static TaskStatus ServerIsOpen(Exception ex)
         {
             string msg = ex.InnerException.Message;
             return (msg.Contains("connection") && msg.Contains("server") && msg.Contains("not") && msg.Contains("established"))
