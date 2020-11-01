@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:CRender="clr-namespace:PassManager.CustomRenderer"
              xmlns:MarkExt="clr-namespace:PassManager.MarkupExtensions"
-             x:Class="PassManager.MainPage">        
+             x:Class="PassManager.Pages.MainPage">        
     <Grid>
         <Grid.Background>
             <LinearGradientBrush EndPoint="0,1">
@@ -49,14 +49,14 @@
                         <StackLayout Orientation="Horizontal">
                             <CRender:CustomeEntry x:Name="emailField" Keyboard="Email" Placeholder="Email" HorizontalTextAlignment="Start"
                                    Margin="15,0,15,0" FontSize="17" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent"
-                                   Text="{Binding Username,Mode=TwoWay}"/>
+                                   Text="{Binding Username, Mode=TwoWay}"/>
                         </StackLayout>
                     </Frame>
                     <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30" Margin="10,6,10,6">
                         <StackLayout x:Name="password" Orientation="Horizontal">
                             <CRender:CustomeEntry x:Name="passwordField" IsPassword="True" Placeholder="Password" HorizontalTextAlignment="Start" 
                                    Margin="15,0,0,0" FontSize="17" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent"
-                                    Text="{Binding Password,Mode=TwoWay}"/>
+                                    Text="{Binding Password, Mode=TwoWay}"/>
                             <Frame BackgroundColor="Transparent" HeightRequest="35" WidthRequest="35" CornerRadius="30" Padding="0" Margin="5">
                                 <Image Source="{MarkExt:EmbeddedImage PassManager-UI.Images.Locked.png}" Aspect="AspectFill" Margin="0">
                                     <Image.GestureRecognizers>
@@ -73,7 +73,7 @@
                         <StackLayout x:Name="confirmPass" Orientation="Horizontal">
                             <CRender:CustomeEntry x:Name="confirmPassField" IsPassword="True" Placeholder="Confirm password" HorizontalTextAlignment="Start" 
                                    Margin="15,0,0,0" FontSize="17" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent"
-                                    Text="{Binding ConfirmPassword, Mode=TwoWay}"/>
+                                    Text="{Binding ConfirmPass, Mode=TwoWay}"/>
                             <Frame BackgroundColor="Transparent" HeightRequest="35" WidthRequest="35" CornerRadius="30" Padding="0" Margin="5">
                                 <Image Source="{MarkExt:EmbeddedImage PassManager-UI.Images.Locked.png}" Aspect="AspectFill" Margin="0">
                                     <Image.GestureRecognizers>

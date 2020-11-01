@@ -3,6 +3,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using PassManager;
 using PassManager.Enums;
+using PassManager.Pages;
 
 namespace PassManager_UI
 {
@@ -11,7 +12,7 @@ namespace PassManager_UI
         public App()
         {
             InitializeComponent();
-            MainPage = new NavigationPage(new MainPage());
+            MainPage = new NavigationPage(new PassManager.Pages.MainPage());
         }
 
         protected override void OnStart()

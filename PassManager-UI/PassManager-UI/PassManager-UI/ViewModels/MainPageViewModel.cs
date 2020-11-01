@@ -3,6 +3,7 @@ using PassManager.CustomRenderer;
 using PassManager.Enums;
 using PassManager.Models;
 using PassManager.Models.Api;
+using PassManager.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,12 +17,13 @@ using Xamarin.Forms;
 
 namespace PassManager.Pages
 {
-    public class MainPage: INotifyPropertyChanged
+    public class MainPageViewModel : INotifyPropertyChanged
     {
-        public MainPage()
+        public MainPageViewModel(IPageService pageService)
         {
             ApiHelper.InitializeClient();
             //set some default values
+            _pageService = pageService;
             ActionStatus = true;
             CurrentAction = TypeOfActions.Sign_In;
             IsRegisterPage = false;
@@ -42,6 +44,7 @@ namespace PassManager.Pages
         private TypeOfActions CurrentAction { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
         //private props
+        private readonly IPageService _pageService;
         private string _pageTitle;
         private bool _isInternet;
         private string _internetStatusText;
@@ -79,17 +82,17 @@ namespace PassManager.Pages
         public string Username
         {
             get { return _username; }
-            private set { _username = value; NotifyPropertyChanged(); }
+            set { _username = value; NotifyPropertyChanged(); }
         }
         public string Password
         {
             get { return _password; }
-            private set { _password = value; NotifyPropertyChanged(); }
+            set { _password = value; NotifyPropertyChanged(); }
         }
         public string ConfirmPass
         {
             get { return _confirmPass; }
-            private set { _confirmPass = value; NotifyPropertyChanged(); }
+            set { _confirmPass = value; NotifyPropertyChanged(); }
         }
         public string PageTitle
         {
@@ -124,7 +127,7 @@ namespace PassManager.Pages
         public bool IsError
         {
             get { return _isError; }
-            set { _isError = value; NotifyPropertyChanged(); }
+            private set { _isError = value; NotifyPropertyChanged(); }
         }
         public bool ActionStatus
         {
@@ -221,7 +224,7 @@ namespace PassManager.Pages
                                 if (!statusRegister.IsError)
                                 {
                                     Username = Password = ConfirmPass = string.Empty;
-                                    //await Navigation.PushModalAsync(new ListAccounts(), true);
+                                    await _pageService.PushAsync(new ListAccounts());
                                 }
                                 else DisplayError(statusRegister.Message);
                             }
@@ -246,7 +249,7 @@ namespace PassManager.Pages
                     if (!statusLogin.IsError)
                     {
                         Username = Password = string.Empty;
-                        //await Navigation.PushModalAsync(new ListAccounts(), true);
+                        await _pageService.PushAsync(new ListAccounts());
                     }
                     else
                         DisplayError(statusLogin.Message);
