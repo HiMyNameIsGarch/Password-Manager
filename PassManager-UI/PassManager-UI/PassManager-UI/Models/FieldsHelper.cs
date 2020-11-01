@@ -26,6 +26,8 @@ namespace PassManager.Models
             if (emailParts.Length != 2) return new TaskStatus(true, "Your email does not contain just one '@'");
             //check if domain contains a dot
             if (!email.Contains('.')) return new TaskStatus(true, "Your domain does not contain a dot!");
+            //verify dns lendth
+            if (email.Length - email.IndexOf('.') < 3) return new TaskStatus(true, "Your dns is too short!");
             //split the domain in 2 parts
             string[] domainParts = emailParts[1].Split('.');
             //verify if the email contains more than 1 dot

@@ -22,12 +22,12 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackLayout Grid.Row="2" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Start" Orientation="Horizontal" IsVisible="{Binding IsInternet}">
-            <Label Text="{Binding InfoText}" VerticalOptions="Center" FontSize="14" TextColor="#354f52"/>
-            <Button Text="{Binding ChangePageText}" IsEnabled="{Binding ActionStatus}" x:Name="CurrentPage" CornerRadius="15" FontSize="12" Clicked="ChangePage" WidthRequest="90" HeightRequest="40"/>
+            <Label Text="{Binding QuestionForUser}" VerticalOptions="Center" FontSize="14" TextColor="#354f52"/>
+            <Button Text="{Binding AnotherPageText}" IsEnabled="{Binding ActionStatus}" x:Name="CurrentPage" CornerRadius="15" FontSize="12" Command="{Binding ChangePageCommand}" WidthRequest="90" HeightRequest="40"/>
         </StackLayout>
-        <StackLayout Grid.Row="1" Grid.Column="1" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" IsVisible="{Binding InternetErrorVis}">
+        <StackLayout Grid.Row="1" Grid.Column="1" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
             <Label Text="{Binding InternetStatusText}" FontSize="18"/>
-            <Button Text="Refresh page" FontSize="15" Clicked="RefreshPage" CornerRadius="20"/>
+            <Button Text="Refresh page" FontSize="15" Command="{Binding RefreshPageCommand}" CornerRadius="20"/>
         </StackLayout>
         <Grid x:Name="PrincipleFrame" Grid.Row="1" Grid.Column="1" IsVisible="{Binding IsInternet}">
             <Grid.Background>
@@ -48,13 +48,15 @@
                     <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30" Margin="10,6,10,6">
                         <StackLayout Orientation="Horizontal">
                             <CRender:CustomeEntry x:Name="emailField" Keyboard="Email" Placeholder="Email" HorizontalTextAlignment="Start"
-                                   Margin="15,0,15,0" FontSize="17" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent"/>
+                                   Margin="15,0,15,0" FontSize="17" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent"
+                                   Text="{Binding Username,Mode=TwoWay}"/>
                         </StackLayout>
                     </Frame>
                     <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30" Margin="10,6,10,6">
                         <StackLayout x:Name="password" Orientation="Horizontal">
                             <CRender:CustomeEntry x:Name="passwordField" IsPassword="True" Placeholder="Password" HorizontalTextAlignment="Start" 
-                                   Margin="15,0,0,0" FontSize="17" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent"/>
+                                   Margin="15,0,0,0" FontSize="17" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent"
+                                    Text="{Binding Password,Mode=TwoWay}"/>
                             <Frame BackgroundColor="Transparent" HeightRequest="35" WidthRequest="35" CornerRadius="30" Padding="0" Margin="5">
                                 <Image Source="{MarkExt:EmbeddedImage PassManager-UI.Images.Locked.png}" Aspect="AspectFill" Margin="0">
                                     <Image.GestureRecognizers>
@@ -70,7 +72,8 @@
                            Margin="10,6,10,6" IsEnabled="{Binding IsRegisterPage}" IsVisible="{Binding IsRegisterPage}">
                         <StackLayout x:Name="confirmPass" Orientation="Horizontal">
                             <CRender:CustomeEntry x:Name="confirmPassField" IsPassword="True" Placeholder="Confirm password" HorizontalTextAlignment="Start" 
-                                   Margin="15,0,0,0" FontSize="17" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent"/>
+                                   Margin="15,0,0,0" FontSize="17" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent"
+                                    Text="{Binding ConfirmPassword, Mode=TwoWay}"/>
                             <Frame BackgroundColor="Transparent" HeightRequest="35" WidthRequest="35" CornerRadius="30" Padding="0" Margin="5">
                                 <Image Source="{MarkExt:EmbeddedImage PassManager-UI.Images.Locked.png}" Aspect="AspectFill" Margin="0">
                                     <Image.GestureRecognizers>
@@ -84,7 +87,7 @@
                     </Frame>
                 </StackLayout>
                 <Button Text="{Binding PageTitle}" IsEnabled="{Binding ActionStatus}" x:Name="ActionBtn" 
-                Clicked="Action" CornerRadius="20" HorizontalOptions="Center" FontSize="13" WidthRequest="90" HeightRequest="40" />
+                 Command="{Binding ActionCommand}" CornerRadius="20" HorizontalOptions="Center" FontSize="13" WidthRequest="90" HeightRequest="40" />
             </StackLayout>
         </Grid>
     </Grid>
