@@ -27,6 +27,7 @@ namespace PassManager
             ApiHelper.InitializeClient();
             ActionStatus = true;
             CurrentAction = TypeOfActions.Sign_In;
+            IsRegisterPage = false;
             InternetStatusText = string.Empty;
             if (CheckInternet())
             {
@@ -45,6 +46,8 @@ namespace PassManager
         private string _changePageText;
         private string _infoText;
         private bool _isError;
+        private bool _isRegisterPage;
+        private bool _actionStatus;
         //this is the page title, also the action button text
         public string PageTitle
         {
@@ -94,11 +97,16 @@ namespace PassManager
             set { NotifyPropertyChanged("InternetErrorVis"); }
         }
         //enable/disable buttons for actions that are executing
-        private bool _actionStatus;
         public bool ActionStatus
         {
             get { return _actionStatus; }
             set { _actionStatus = value; NotifyPropertyChanged("ActionStatus"); }
+        }
+        //hides the field for confirm password in register "page"
+        public bool IsRegisterPage
+        {
+            get { return _isRegisterPage; }
+            set { _isRegisterPage = value; NotifyPropertyChanged("IsRegisterPage"); }
         }
         //implementation of INotifyPropertyChanged
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
@@ -144,14 +152,13 @@ namespace PassManager
             {
                 case TypeOfActions.Sign_In:
                     CurrentAction = TypeOfActions.Register;
+                    IsRegisterPage = true;
                     SetNames("Register", "Sign in", "Already have an account?");
-                    var childToAdd = CreateAnotherField();
-                    fields.Children.Add(childToAdd);
                     break;
                 case TypeOfActions.Register:
                     CurrentAction = TypeOfActions.Sign_In;
+                    IsRegisterPage = false;
                     SetNames("Sign in", "Register", "Create a new account!");
-                    fields.Children.Remove(fields.Children.Last());
                     break;
                 default:
                     break;
@@ -171,8 +178,6 @@ namespace PassManager
         {
             if (CheckInternet())
             {
-                //take the last field(confirm password)
-                Entry confirmPass = fields.Children.Last() as Entry;
                 //check if all fields are completed
                 if (String.IsNullOrWhiteSpace(emailField.Text) || String.IsNullOrWhiteSpace(passwordField.Text) || String.IsNullOrWhiteSpace(confirmPass.Text)) DisplayError("You need to complete all fields in order to register!");
                 else
@@ -235,43 +240,6 @@ namespace PassManager
         {
             IsInternet = internet;
             InternetStatusText = internetMsg;
-        }
-        private Frame CreateAnotherField()
-        {
-            return new Frame()
-            {
-                BackgroundColor = Color.Transparent,
-                BorderColor = Color.DarkGray,
-                Padding = 0,
-                HorizontalOptions = LayoutOptions.FillAndExpand,
-                CornerRadius = 30,
-                Margin = new Thickness(10,6,10,6),
-                Content =  new StackLayout(){ 
-                    Orientation = StackOrientation.Horizontal,
-                    Children =
-                    {
-                        new CustomeEntry()
-                        {
-                            IsPassword = true,
-                            Placeholder = "Confirm password",
-                            HorizontalOptions = LayoutOptions.FillAndExpand,
-                            HorizontalTextAlignment = TextAlignment.Start,
-                            Margin = new Thickness(15, 0, 0, 0),
-                            FontSize = 17,
-                            BackgroundColor = Color.Transparent
-                        },
-                        new Frame()
-                        {
-                            BackgroundColor = Color.SkyBlue,
-                            HeightRequest = 35,
-                            WidthRequest = 35,
-                            CornerRadius = 30,
-                            Padding = 0,
-                            Margin = 5,
-                        }
-                    }
-                }
-            };
         }
     }
 }

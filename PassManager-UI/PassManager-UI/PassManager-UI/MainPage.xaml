@@ -55,8 +55,19 @@
                             <local:CustomeEntry x:Name="passwordField" IsPassword="True" Placeholder="Password" HorizontalTextAlignment="Start" 
                                    Margin="15,0,0,0" FontSize="17" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent"/>
                             <Frame BackgroundColor="SkyBlue" HeightRequest="35" WidthRequest="35" CornerRadius="30" Padding="0" Margin="5">
+                                <Image Source="Images/Locked.png" Aspect="AspectFill" Margin="0"/>
                             </Frame>
                     </StackLayout>
+                    </Frame>
+                    <Frame BackgroundColor="Transparent" BorderColor="DarkGray" Padding="0" HorizontalOptions="FillAndExpand" CornerRadius="30"
+                           Margin="10,6,10,6" IsEnabled="{Binding IsRegisterPage}" IsVisible="{Binding IsRegisterPage}">
+                        <StackLayout Orientation="Horizontal">
+                            <local:CustomeEntry x:Name="confirmPass" IsPassword="True" Placeholder="Confirm password" HorizontalTextAlignment="Start" 
+                                   Margin="15,0,0,0" FontSize="17" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent"/>
+                            <Frame BackgroundColor="SkyBlue" HeightRequest="35" WidthRequest="35" CornerRadius="30" Padding="0" Margin="5">
+                                <Image Source="Images/Locked.png" Aspect="AspectFill" Margin="0"/>
+                            </Frame>
+                        </StackLayout>
                     </Frame>
                 </StackLayout>
                 <Button Text="{Binding PageTitle}" IsEnabled="{Binding ActionStatus}" x:Name="ActionBtn" 
