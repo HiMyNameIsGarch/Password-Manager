@@ -7,9 +7,14 @@ using Xamarin.Forms;
 
 namespace PassManager.ViewModels
 {
-    public class PageService : IPageService
+    internal class PageService : IPageService
     {
-        private readonly Page MainPage = Application.Current.MainPage;
+        public static void SetMainPage(Page page)
+        {
+            if (page is null) return;
+            if (MainPage is null) MainPage = page;
+        }
+        private protected static Page MainPage { get; set; }
         public async Task PushAsync(Page page)
         {
             await MainPage.Navigation.PushAsync(page);
