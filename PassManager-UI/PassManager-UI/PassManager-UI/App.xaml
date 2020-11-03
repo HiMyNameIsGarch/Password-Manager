@@ -3,6 +3,31 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PassManager_UI.App">
     <Application.Resources>
-
+            <!--#region Colors-->
+        <Color x:Key="PageTopColor">#84a98c</Color>
+        <Color x:Key="PageBottomolor">#cad2c5</Color>
+        <Color x:Key="FrameTopColor">#2f3e46</Color>
+        <Color x:Key="FrameBottomColor">#354f52</Color>
+            <!--#endregion-->    
+        
+            <!--#region Frames-->
+        <Style x:Key="RoundFrame" TargetType="Frame">
+            <Setter Property="BackgroundColor" Value="Transparent"/>
+            <Setter Property="HeightRequest" Value="35"/>
+            <Setter Property="WidthRequest" Value="35"/>
+            <Setter Property="CornerRadius" Value="30"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Padding" Value="0"/>
+        </Style>
+        <Style x:Key="CustomFrame" TargetType="Frame">
+            <Setter Property="BackgroundColor" Value="Transparent"/>
+            <Setter Property="BorderColor" Value="DarkGray"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+            <Setter Property="CornerRadius" Value="30"/>
+            <Setter Property="Margin" Value="10,6,10,6"/>
+        </Style>
+            <!--#endregion-->
+        
     </Application.Resources>
 </Application>

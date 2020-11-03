@@ -1,4 +1,4 @@
-﻿using PassManager.AccountPages;
+﻿using PassManager.Pages;
 using PassManager.CustomRenderer;
 using PassManager.Enums;
 using PassManager.Models;
@@ -39,7 +39,6 @@ namespace PassManager.Pages
                 IsInternet = true;
                 SetNames("Sign in", TypeOfActions.Register.ToString(), "Create a new account!");
             }
-            else DisplayError(false, "Your don't have internet access!");
         }
         private TypeOfActions CurrentAction { get; set; }
         public event PropertyChangedEventHandler PropertyChanged;
@@ -164,8 +163,6 @@ namespace PassManager.Pages
                 DisplayError(true, string.Empty);
                 if (IsPageLoaded()) SetNames("Sign in", TypeOfActions.Register.ToString(), "Create a new account!");
             }
-            else
-                DisplayError(false, "You don't have internet access!");
         }
         private void ChangePage()
         {
@@ -184,7 +181,9 @@ namespace PassManager.Pages
                 default:
                     break;
             }
+            //empty user fields and errors if exists
             Username = Password = ConfirmPass = string.Empty;
+            DisplayError(string.Empty);
         }
         private async void Action()
         {
@@ -207,55 +206,53 @@ namespace PassManager.Pages
         {
             if (CheckInternet())
             {
-                //check if all fields are completed
-                if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password) || String.IsNullOrWhiteSpace(ConfirmPass)) DisplayError("You need to complete all fields in order to register!");
-                else
-                {
-                    //verify status of fields
-                    Models.TaskStatus emailStatus = FieldsHelper.VerifyEmail(Username);
-                    if (!emailStatus.IsError)
-                    {
-                        Models.TaskStatus passwordStatus = FieldsHelper.VerifyPassword(Password);
-                        if (!passwordStatus.IsError)
-                        {
-                            if (ConfirmPass == Password)
-                            {
-                                Models.TaskStatus statusRegister = await UserProcessor.Register(ApiHelper.ApiClient, Username, Password, ConfirmPass);
-                                if (!statusRegister.IsError)
-                                {
-                                    Username = Password = ConfirmPass = string.Empty;
-                                    await _pageService.PushAsync(new ListAccounts());
-                                }
-                                else DisplayError(statusRegister.Message);
-                            }
-                            else DisplayError("Your confirm password is not equal with your password!");
-                        }
-                        else DisplayError(passwordStatus.Message);
-                    }
-                    else DisplayError(emailStatus.Message);
-                }
+                ////check if all fields are completed
+                //if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password) || String.IsNullOrWhiteSpace(ConfirmPass)) DisplayError("You need to complete all fields in order to register!");
+                //else
+                //{
+                //    //verify status of fields
+                //    Models.TaskStatus emailStatus = FieldsHelper.VerifyEmail(Username);
+                //    if (!emailStatus.IsError)
+                //    {
+                //        Models.TaskStatus passwordStatus = FieldsHelper.VerifyPassword(Password);
+                //        if (!passwordStatus.IsError)
+                //        {
+                //            if (ConfirmPass == Password)
+                //            {
+                //                Models.TaskStatus statusRegister = await UserProcessor.Register(ApiHelper.ApiClient, Username, Password, ConfirmPass);
+                //                if (!statusRegister.IsError)
+                //                {
+                //                    Username = Password = ConfirmPass = string.Empty;
+                                      await _pageService.PushAsync(new AccountsPage());
+                //                }
+                //                else DisplayError(statusRegister.Message);
+                //            }
+                //            else DisplayError("Your confirm password is not equal with your password!");
+                //        }
+                //        else DisplayError(passwordStatus.Message);
+                //    }
+                //    else DisplayError(emailStatus.Message);
+                //}
             }
-            else DisplayError(false, "Check for internet connection, then refresh the page!");
         }
         private async Task SignIn()
         {
             if (CheckInternet())
             {
-                //check if fields are completed
-                if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password)) DisplayError("You need to complete all fields in order to register!");
-                else
-                {
-                    Models.TaskStatus statusLogin = await UserProcessor.Login(ApiHelper.ApiClient, Username, Password);
-                    if (!statusLogin.IsError)
-                    {
-                        Username = Password = string.Empty;
-                        await _pageService.PushAsync(new ListAccounts());
-                    }
-                    else
-                        DisplayError(statusLogin.Message);
-                }
+                ////check if fields are completed
+                //if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password)) DisplayError("You need to complete all fields in order to register!");
+                //else
+                //{
+                //    Models.TaskStatus statusLogin = await UserProcessor.Login(ApiHelper.ApiClient, Username, Password);
+                //    if (!statusLogin.IsError)
+                //    {
+                //        Username = Password = string.Empty;
+                          await _pageService.PushAsync(new AccountsPage());
+                //    }
+                //    else
+                //        DisplayError(statusLogin.Message);
+                //}
             }
-            else DisplayError(false, "Check for internet connection, then refresh the page!");
         }
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
@@ -266,7 +263,9 @@ namespace PassManager.Pages
         }
         private bool CheckInternet()
         {
-            return Connectivity.NetworkAccess == NetworkAccess.Internet;
+            bool internet = Connectivity.NetworkAccess == NetworkAccess.Internet;
+            if (!internet) DisplayError(false, "Check for internet connection, then refresh the page!");
+            return internet;
         }
         private bool IsPageLoaded()
         {
@@ -278,6 +277,7 @@ namespace PassManager.Pages
             AnotherPageText = page;
             QuestionForUser = question;
         }
+        //the method can be used to clear the errors as well
         private void DisplayError(bool internet, string internetMsg)
         {
             IsInternet = internet;
