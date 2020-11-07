@@ -13,8 +13,8 @@ namespace PassManager_UI
         public App()
         {
             InitializeComponent();
-            MainPage = new NavigationPage(new MainPage());
-            PageService.SetMainPage(MainPage);
+            MainPage = new MainPage();
+            PageService.SetMainPage();
         }
 
         protected override void OnStart()
