@@ -185,16 +185,16 @@ namespace PassManager.Pages
             Username = Password = ConfirmPass = string.Empty;
             DisplayError(string.Empty);
         }
-        private async void Action()
+        private void Action()
         {
             ActionStatus = false;
             switch (CurrentAction)
             {
                 case TypeOfActions.Register:
-                    await Register();
+                    Register();
                     break;
                 case TypeOfActions.Sign_In:
-                    await SignIn();
+                    SignIn();
                     break;
                 default:
                     break;
@@ -202,7 +202,7 @@ namespace PassManager.Pages
             ActionStatus = true;
         }
         //methods
-        private async Task Register()
+        private void Register()
         {
             if (CheckInternet())
             {
@@ -223,7 +223,8 @@ namespace PassManager.Pages
                 //                if (!statusRegister.IsError)
                 //                {
                 //                    Username = Password = ConfirmPass = string.Empty;
-                                      await _pageService.PushAsync(new AccountsPage());
+                //await _pageService.PushAsync(new AccountsPage());
+                _pageService.ChangeMainPage(new AccountsPage());
                 //                }
                 //                else DisplayError(statusRegister.Message);
                 //            }
@@ -235,7 +236,7 @@ namespace PassManager.Pages
                 //}
             }
         }
-        private async Task SignIn()
+        private void SignIn()
         {
             if (CheckInternet())
             {
@@ -247,7 +248,8 @@ namespace PassManager.Pages
                 //    if (!statusLogin.IsError)
                 //    {
                 //        Username = Password = string.Empty;
-                          await _pageService.PushAsync(new AccountsPage());
+                //await _pageService.PushAsync(new AccountsPage());
+                _pageService.ChangeMainPage(new AccountsPage());
                 //    }
                 //    else
                 //        DisplayError(statusLogin.Message);
