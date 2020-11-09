@@ -1,5 +1,4 @@
-﻿using PassManager.Pages;
-using PassManager.CustomRenderer;
+﻿using PassManager.CustomRenderer;
 using PassManager.Enums;
 using PassManager.Models;
 using PassManager.Models.Api;
@@ -15,11 +14,11 @@ using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
-namespace PassManager.Pages
+namespace PassManager.Views
 {
-    public class MainPageViewModel : INotifyPropertyChanged
+    public class MainViewModel : INotifyPropertyChanged
     {
-        public MainPageViewModel(IPageService pageService)
+        public MainViewModel(IPageService pageService)
         {
             ApiHelper.InitializeClient();
             //set some default values
@@ -223,8 +222,7 @@ namespace PassManager.Pages
                 //                if (!statusRegister.IsError)
                 //                {
                 //                    Username = Password = ConfirmPass = string.Empty;
-                //await _pageService.PushAsync(new AccountsPage());
-                _pageService.ChangeMainPage(new AccountsPage());
+                _pageService.ChangeMainPage(new AccountsView());
                 //                }
                 //                else DisplayError(statusRegister.Message);
                 //            }
@@ -248,8 +246,7 @@ namespace PassManager.Pages
                 //    if (!statusLogin.IsError)
                 //    {
                 //        Username = Password = string.Empty;
-                //await _pageService.PushAsync(new AccountsPage());
-                _pageService.ChangeMainPage(new AccountsPage());
+                _pageService.ChangeMainPage(new AccountsView());
                 //    }
                 //    else
                 //        DisplayError(statusLogin.Message);

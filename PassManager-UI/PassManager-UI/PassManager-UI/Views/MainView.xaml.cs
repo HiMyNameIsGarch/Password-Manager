@@ -3,15 +3,15 @@ using System.ComponentModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace PassManager.Pages
+namespace PassManager.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class MainPage : ContentPage
+    public partial class MainView : ContentPage
     {
-        public MainPage()
+        public MainView()
         {
             InitializeComponent();
-            BindingContext = new MainPageViewModel(new PageService());
+            BindingContext = new MainViewModel(new PageService());
         }
     }
 }
