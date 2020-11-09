@@ -2,8 +2,7 @@
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using PassManager;
-using PassManager.Enums;
-using PassManager.Pages;
+using PassManager.Views;
 using PassManager.ViewModels;
 
 namespace PassManager_UI
@@ -13,7 +12,7 @@ namespace PassManager_UI
         public App()
         {
             InitializeComponent();
-            MainPage = new MainPage();
+            MainPage = new MainView();
             PageService.SetMainPage();
         }
 

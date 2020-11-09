@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Shell xmlns="http://xamarin.com/schemas/2014/forms" Shell.BackgroundColor="{StaticResource PageTopColor}"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:views="clr-namespace:PassManager.Views"
+             x:Class="PassManager.Views.AccountsView"
+             FlyoutHeaderBehavior="CollapseOnScroll" FlyoutBackgroundColor="{StaticResource PageTopColor}">
+    <Shell.FlyoutHeaderTemplate>
+        <DataTemplate>
+            <Grid BackgroundColor="{StaticResource PageTopColor}"
+              HeightRequest="300">
+                <Label Text="Welcome to PassMan!"
+                   TextColor="White"
+                   FontAttributes="Bold"
+                   HorizontalTextAlignment="Center"
+                   VerticalTextAlignment="Center" />
+            </Grid>
+        </DataTemplate>
+    </Shell.FlyoutHeaderTemplate>
+    <FlyoutItem Title="All Items">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate views:EntireItemsView}"/>
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem Title="Passwords">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate views:PasswordView}"/>
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem Title="Wi-Fi Passwords">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate views:WifiPassView}"/>
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem Title="Account Settings">
+        <Tab>
+            <ShellContent ContentTemplate="{DataTemplate views:SettingsView}"/>
+        </Tab>
+    </FlyoutItem>
+</Shell>

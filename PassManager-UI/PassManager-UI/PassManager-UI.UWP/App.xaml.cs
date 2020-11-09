@@ -57,7 +57,7 @@ namespace PassManager_UI.UWP
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
-                Xamarin.Forms.Forms.SetFlags("Brush_Experimental");
+                Xamarin.Forms.Forms.SetFlags("Brush_Experimental", "Shell_UWP_Experimental");
                 Xamarin.Forms.Forms.Init(e);
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
