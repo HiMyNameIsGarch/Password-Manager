@@ -12,15 +12,13 @@ namespace PassManager_WebApi.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Account
+    public partial class Password
     {
         public int Id { get; set; }
-        public string Title { get; set; }
+        public string Name { get; set; }
         public string Username { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
         public string PasswordEncrypted { get; set; }
-        public string SiteRegistered { get; set; }
+        public string Url { get; set; }
         public string Notes { get; set; }
         public System.DateTime CreateDate { get; set; }
         public System.DateTime LastVisited { get; set; }
