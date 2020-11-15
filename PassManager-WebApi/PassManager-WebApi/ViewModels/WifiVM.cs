@@ -10,20 +10,15 @@ namespace PassManager_WebApi.ViewModels
         public WifiVM() { }
         public WifiVM(Models.Wifi wifi)
         {
+            if (wifi is null) return;
             Id = wifi.Id;
             Name = wifi.Name;
             PasswordEncrypted = wifi.PasswordEncrypted;
             Notes = wifi.Notes;
-            CreateDate = DateTime.Now;
-            LastVisited = DateTime.Now;
-            LastModified = DateTime.Now;
         }
         public int Id { get; set; }
         public string Name { get; set; }
         public string PasswordEncrypted { get; set; }
         public string Notes { get; set; }
-        public DateTime CreateDate { get; set; }
-        public DateTime LastVisited { get; set; }
-        public DateTime LastModified { get; set; }
     }
 }

@@ -10,13 +10,17 @@ namespace PassManager_WebApi.Models
         public Password() { }
         public Password(ViewModels.PasswordVM passwordVM)
         {
+            ModifyTo(passwordVM);
+            CreateDate = DateTime.Now;
+            LastVisited = DateTime.Now;
+        }
+        public void ModifyTo(ViewModels.PasswordVM passwordVM)
+        {
             Name = passwordVM.Name;
             Username = passwordVM.Username;
             PasswordEncrypted = passwordVM.PasswordEncrypted;
             Url = passwordVM.Url;
             Notes = passwordVM.Notes;
-            CreateDate = DateTime.Now;
-            LastVisited = DateTime.Now;
             LastModified = DateTime.Now;
         }
     }
