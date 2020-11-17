@@ -201,56 +201,56 @@ namespace PassManager.Views
             ActionStatus = true;
         }
         //methods
-        private void Register()
+        private async void Register()
         {
             if (CheckInternet())
             {
-                ////check if all fields are completed
-                //if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password) || String.IsNullOrWhiteSpace(ConfirmPass)) DisplayError("You need to complete all fields in order to register!");
-                //else
-                //{
-                //    //verify status of fields
-                //    Models.TaskStatus emailStatus = FieldsHelper.VerifyEmail(Username);
-                //    if (!emailStatus.IsError)
-                //    {
-                //        Models.TaskStatus passwordStatus = FieldsHelper.VerifyPassword(Password);
-                //        if (!passwordStatus.IsError)
-                //        {
-                //            if (ConfirmPass == Password)
-                //            {
-                //                Models.TaskStatus statusRegister = await UserProcessor.Register(ApiHelper.ApiClient, Username, Password, ConfirmPass);
-                //                if (!statusRegister.IsError)
-                //                {
-                //                    Username = Password = ConfirmPass = string.Empty;
-                _pageService.ChangeMainPage(new AccountsView());
-                //                }
-                //                else DisplayError(statusRegister.Message);
-                //            }
-                //            else DisplayError("Your confirm password is not equal with your password!");
-                //        }
-                //        else DisplayError(passwordStatus.Message);
-                //    }
-                //    else DisplayError(emailStatus.Message);
-                //}
+                //check if all fields are completed
+                if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password) || String.IsNullOrWhiteSpace(ConfirmPass)) DisplayError("You need to complete all fields in order to register!");
+                else
+                {
+                    //verify status of fields
+                    Models.TaskStatus emailStatus = FieldsHelper.VerifyEmail(Username);
+                    if (!emailStatus.IsError)
+                    {
+                        Models.TaskStatus passwordStatus = FieldsHelper.VerifyPassword(Password);
+                        if (!passwordStatus.IsError)
+                        {
+                            if (ConfirmPass == Password)
+                            {
+                                Models.TaskStatus statusRegister = await UserProcessor.Register(ApiHelper.ApiClient, Username, Password, ConfirmPass);
+                                if (!statusRegister.IsError)
+                                {
+                                    Username = Password = ConfirmPass = string.Empty;
+                                    _pageService.ChangeMainPage(new ItemsView());
+                                }
+                                else DisplayError(statusRegister.Message);
+                            }
+                            else DisplayError("Your confirm password is not equal with your password!");
+                        }
+                        else DisplayError(passwordStatus.Message);
+                    }
+                    else DisplayError(emailStatus.Message);
+                }
             }
         }
-        private void SignIn()
+        private async void SignIn()
         {
             if (CheckInternet())
             {
-                ////check if fields are completed
-                //if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password)) DisplayError("You need to complete all fields in order to register!");
-                //else
-                //{
-                //    Models.TaskStatus statusLogin = await UserProcessor.Login(ApiHelper.ApiClient, Username, Password);
-                //    if (!statusLogin.IsError)
-                //    {
-                //        Username = Password = string.Empty;
-                _pageService.ChangeMainPage(new AccountsView());
-                //    }
-                //    else
-                //        DisplayError(statusLogin.Message);
-                //}
+                //check if fields are completed
+                if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password)) DisplayError("You need to complete all fields in order to register!");
+                else
+                {
+                    Models.TaskStatus statusLogin = await UserProcessor.LogIn(ApiHelper.ApiClient, Username, Password);
+                    if (!statusLogin.IsError)
+                    {
+                        Username = Password = string.Empty;
+                        _pageService.ChangeMainPage(new ItemsView());
+                    }
+                    else
+                        DisplayError(statusLogin.Message);
+                }
             }
         }
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")

@@ -25,31 +25,14 @@ namespace PassManager.Models.Api
             }
             catch (Exception ex)
             {
-                return ServerIsOpen(ex);
+                return ApiHelper.ServerIsOpen(ex);
             }
             if (responseMessage.IsSuccessStatusCode)
-                return new TaskStatus(false);
+                return await LogIn(httpClient, username, password);
             else
                 return new TaskStatus(true, "The form input is invalid!");
         }
-        internal static async Task<TaskStatus> Login(HttpClient httpClient, string username, string password)
-        {
-            TaskStatus statusToken = await GetToken(httpClient, username,password);
-            if (!statusToken.IsError)
-            {
-                try
-                {
-                    string authToken = await SecureStorage.GetAsync("auth_token");
-                    return new TaskStatus(false);
-                }
-                catch (Exception ex)
-                {
-                    return new TaskStatus(true, ex.Message);
-                }
-            }
-            else return statusToken;
-        }
-        private static async Task<TaskStatus> GetToken(HttpClient httpClient, string username, string password)
+        internal static async Task<TaskStatus> LogIn(HttpClient httpClient, string username, string password)
         {
             HttpContent content = new FormUrlEncodedContent(new[]
             {
@@ -66,14 +49,16 @@ namespace PassManager.Models.Api
             }
             catch(Exception ex)
             {
-                return ServerIsOpen(ex);
+                return ApiHelper.ServerIsOpen(ex);
             }
             ResponseToken token = await responseMessage.Content.ReadAsAsync<ResponseToken>();
             if (responseMessage.IsSuccessStatusCode)
             {
                 try
                 {
-                    await SecureStorage.SetAsync("auth_token", token.token_type + token.access_token);
+                    await SecureStorage.SetAsync("token_auth", token.access_token);
+                    await SecureStorage.SetAsync("token_type", token.token_type);
+                    ApiHelper.AddAuthorization(token.token_type, token.access_token);
                 }
                 catch (Exception ex)
                 {
@@ -82,13 +67,6 @@ namespace PassManager.Models.Api
                 return new TaskStatus(false);
             }
             else return new TaskStatus(true, token.error_description);
-        }
-        private static TaskStatus ServerIsOpen(Exception ex)
-        {
-            string msg = ex.InnerException.Message;
-            return (msg.Contains("connection") && msg.Contains("server") && msg.Contains("not") && msg.Contains("established"))
-                ? new TaskStatus(true, "Our server is down, please try again later!")
-                : new TaskStatus(true, "Something went wrong, try again!");
         }
     }
 }
