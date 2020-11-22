@@ -15,6 +15,7 @@ namespace PassManager.Views
         public PasswordView()
         {
             InitializeComponent();
+            BindingContext = new ViewModels.PasswordViewModel(new ViewModels.PageService());
         }
     }
 }

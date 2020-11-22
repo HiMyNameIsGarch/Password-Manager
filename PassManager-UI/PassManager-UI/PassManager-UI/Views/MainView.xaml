@@ -23,17 +23,12 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
             <!--#endregion-->
-        <StackLayout Grid.Row="2" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Start" Orientation="Horizontal" 
-                     IsVisible="{Binding IsInternet}">
+        <StackLayout Grid.Row="2" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Start" Orientation="Horizontal">
             <Label Text="{Binding QuestionForUser}" VerticalOptions="Center" FontSize="14" TextColor="#354f52"/>
             <Button Text="{Binding AnotherPageText}" IsEnabled="{Binding ActionStatus}" CornerRadius="15"
                     FontSize="12" Command="{Binding ChangePageCommand}" WidthRequest="90" HeightRequest="40"/>
         </StackLayout>
-        <StackLayout Grid.Row="1" Grid.Column="1" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-            <Label Text="{Binding InternetStatusText}" FontSize="18"/>
-            <Button Text="Refresh page" FontSize="15" Command="{Binding RefreshPageCommand}" CornerRadius="20"/>
-        </StackLayout>
-        <Grid Grid.Row="1" Grid.Column="1" IsVisible="{Binding IsInternet}">
+        <Grid Grid.Row="1" Grid.Column="1">
                 <!--#region Second grid settings-->
             <Grid.Background>
                 <LinearGradientBrush EndPoint="0,1">

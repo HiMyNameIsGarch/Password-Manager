@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PassManager.ViewModels
 {
-    public class AccountsViewModel
+    public class ItemsViewModel
     {
     }
 }

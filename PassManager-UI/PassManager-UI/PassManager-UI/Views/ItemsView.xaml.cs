@@ -10,12 +10,12 @@ using Xamarin.Forms.Xaml;
 namespace PassManager.Views
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class AccountsView : Shell
+    public partial class ItemsView : Shell
     {
-        public AccountsView()
+        public ItemsView()
         {
             InitializeComponent();
-            BindingContext = new ViewModels.AccountsViewModel();
+            BindingContext = new ViewModels.ItemsViewModel();
         }
     }
 }
