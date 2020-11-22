@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Rg.Plugins.Popup.Extensions;
+using Rg.Plugins.Popup.Pages;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +10,13 @@ namespace PassManager.ViewModels
 {
     internal class PageService : IPageService
     {
+        public PageService(Page page)
+        {
+            MainPage = page;
+        }
+        public PageService()
+        {
+        }
         public static void SetMainPage()
         {
             if (Application.Current.MainPage is null) return;
@@ -25,7 +34,15 @@ namespace PassManager.ViewModels
         public void ChangeMainPage(Page page)
         {
             Application.Current.MainPage = page;
+            MainPage = page;
         }
-
+        public Task PushPopupAsync(PopupPage page)
+        {
+            return MainPage.Navigation.PushPopupAsync(page);
+        }
+        public Task PopPopupAsync()
+        {
+           return MainPage.Navigation.PopPopupAsync();
+        }
     }
 }

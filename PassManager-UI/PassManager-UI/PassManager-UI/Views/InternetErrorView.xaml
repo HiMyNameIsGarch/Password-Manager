@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             x:Class="PassManager.Views.InternetErrorView"
+             CloseWhenBackgroundIsClicked="False">
+    <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Padding="20" BackgroundColor="{StaticResource FrameTopColor}">
+        <Label FontSize="Medium" Text="You don't have internet connection!" TextColor="{StaticResource PageTopColor}"/>
+        <StackLayout Orientation="Horizontal">
+            <Button Text="Quit" BackgroundColor="{StaticResource TextColor}" TextColor="{StaticResource PageTopColor}"
+                    Padding="10" Command="{Binding QuitApp}" HorizontalOptions="StartAndExpand" />
+            <Button Text="Refresh" BackgroundColor="{StaticResource TextColor}" TextColor="{StaticResource PageTopColor}" 
+                    Padding="10" Command="{Binding RefreshPage}" HorizontalOptions="EndAndExpand" />
+        </StackLayout>
+    </StackLayout>
+</pages:PopupPage>
