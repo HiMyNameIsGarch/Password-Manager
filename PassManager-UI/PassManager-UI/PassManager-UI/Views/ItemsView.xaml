@@ -2,13 +2,14 @@
 <Shell xmlns="http://xamarin.com/schemas/2014/forms" Shell.BackgroundColor="{StaticResource PageTopColor}"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:views="clr-namespace:PassManager.Views"
-             x:Class="PassManager.Views.AccountsView"
+             x:Class="PassManager.Views.ItemsView"
+             Shell.NavBarHasShadow="False"
              FlyoutHeaderBehavior="CollapseOnScroll" FlyoutBackgroundColor="{StaticResource PageTopColor}">
     <Shell.FlyoutHeaderTemplate>
         <DataTemplate>
             <Grid BackgroundColor="{StaticResource PageTopColor}"
               HeightRequest="300">
-                <Label Text="Welcome to PassMan!"
+                <Label Text="Welcome user {user}"
                    TextColor="White"
                    FontAttributes="Bold"
                    HorizontalTextAlignment="Center"
@@ -36,4 +37,9 @@
             <ShellContent ContentTemplate="{DataTemplate views:SettingsView}"/>
         </Tab>
     </FlyoutItem>
+    <TabBar>
+        <Tab Title="Add new account!">
+            <ShellContent ContentTemplate="{DataTemplate views:MainView}"/>
+        </Tab>
+    </TabBar>
 </Shell>

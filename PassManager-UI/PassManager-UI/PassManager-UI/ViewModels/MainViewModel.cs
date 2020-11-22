@@ -16,36 +16,24 @@ using Xamarin.Forms;
 
 namespace PassManager.Views
 {
-    public class MainViewModel : INotifyPropertyChanged
+    public class MainViewModel : BaseViewModel
     {
-        public MainViewModel(IPageService pageService)
+        public MainViewModel(IPageService pageService) : base(pageService)
         {
             ApiHelper.InitializeClient();
             //set some default values
-            _pageService = pageService;
             ActionStatus = true;
             CurrentAction = TypeOfActions.Sign_In;
             IsRegisterPage = false;
-            InternetStatusText = string.Empty;
             //set commands
             _changeVisCommand = new Command(ChangeVisOfPassField);
-            _refreshPageCommand = new Command(RefreshPage);
             _changePageCommand = new Command(ChangePage);
             _actionCommand = new Command(Action);
-            //check if can put data on page
-            if (CheckInternet())
-            {
-                IsInternet = true;
-                SetNames("Sign in", TypeOfActions.Register.ToString(), "Create a new account!");
-            }
+            //set some names for page
+            SetNames("Sign in", TypeOfActions.Register.ToString(), "Create a new account!");
         }
         private TypeOfActions CurrentAction { get; set; }
-        public event PropertyChangedEventHandler PropertyChanged;
         //private props
-        private readonly IPageService _pageService;
-        private string _pageTitle;
-        private bool _isInternet;
-        private string _internetStatusText;
         private string _errorMsg;
         private string _anotherPageText;
         private string _questionForUser;
@@ -57,16 +45,11 @@ namespace PassManager.Views
         private string _confirmPass;
         //commands
         private ICommand _changeVisCommand;
-        private ICommand _refreshPageCommand;
         private ICommand _changePageCommand;
         private ICommand _actionCommand;
         public ICommand ChangeVisCommand
         {
             get { return _changeVisCommand; }
-        }
-        public ICommand RefreshPageCommand
-        {
-            get { return _refreshPageCommand; }
         }
         public ICommand ChangePageCommand
         {
@@ -91,21 +74,6 @@ namespace PassManager.Views
         {
             get { return _confirmPass; }
             set { _confirmPass = value; NotifyPropertyChanged(); }
-        }
-        public string PageTitle
-        {
-            get { return _pageTitle; }
-            private set { _pageTitle = value; NotifyPropertyChanged(); }
-        }
-        public bool IsInternet
-        {
-            get { return _isInternet; }
-            private set { _isInternet = value; NotifyPropertyChanged(); }
-        }
-        public string InternetStatusText
-        {
-            get { return _internetStatusText; }
-            private set { _internetStatusText = value; NotifyPropertyChanged(); }
         }
         public string ErrorMsg
         {
@@ -155,14 +123,6 @@ namespace PassManager.Views
                 if (image != null) image.Source = ImageSource.FromResource($"PassManager-UI.Images.{(statusPassVis ? "Open" : "Locked")}.png");
             }
         }
-        private void RefreshPage()
-        {
-            if (CheckInternet())
-            {
-                DisplayError(true, string.Empty);
-                if (IsPageLoaded()) SetNames("Sign in", TypeOfActions.Register.ToString(), "Create a new account!");
-            }
-        }
         private void ChangePage()
         {
             switch (CurrentAction)
@@ -201,74 +161,57 @@ namespace PassManager.Views
             ActionStatus = true;
         }
         //methods
-        private async void Register()
+        private void Register()
         {
-            if (CheckInternet())
-            {
-                //check if all fields are completed
-                if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password) || String.IsNullOrWhiteSpace(ConfirmPass)) DisplayError("You need to complete all fields in order to register!");
-                else
-                {
-                    //verify status of fields
-                    Models.TaskStatus emailStatus = FieldsHelper.VerifyEmail(Username);
-                    if (!emailStatus.IsError)
-                    {
-                        Models.TaskStatus passwordStatus = FieldsHelper.VerifyPassword(Password);
-                        if (!passwordStatus.IsError)
-                        {
-                            if (ConfirmPass == Password)
-                            {
-                                Models.TaskStatus statusRegister = await UserProcessor.Register(ApiHelper.ApiClient, Username, Password, ConfirmPass);
-                                if (!statusRegister.IsError)
-                                {
-                                    Username = Password = ConfirmPass = string.Empty;
+            //if (CheckInternet())
+            //{
+            //    //check if all fields are completed
+            //    if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password) || String.IsNullOrWhiteSpace(ConfirmPass)) DisplayError("You need to complete all fields in order to register!");
+            //    else
+            //    {
+            //        //verify status of fields
+            //        Models.TaskStatus emailStatus = FieldsHelper.VerifyEmail(Username);
+            //        if (!emailStatus.IsError)
+            //        {
+            //            Models.TaskStatus passwordStatus = FieldsHelper.VerifyPassword(Password);
+            //            if (!passwordStatus.IsError)
+            //            {
+            //                if (ConfirmPass == Password)
+            //                {
+            //                    Models.TaskStatus statusRegister = await UserProcessor.Register(ApiHelper.ApiClient, Username, Password, ConfirmPass);
+            //                    if (!statusRegister.IsError)
+            //                    {
+            //                        Username = Password = ConfirmPass = string.Empty;
                                     _pageService.ChangeMainPage(new ItemsView());
-                                }
-                                else DisplayError(statusRegister.Message);
-                            }
-                            else DisplayError("Your confirm password is not equal with your password!");
-                        }
-                        else DisplayError(passwordStatus.Message);
-                    }
-                    else DisplayError(emailStatus.Message);
-                }
-            }
+            //                    }
+            //                    else DisplayError(statusRegister.Message);
+            //                }
+            //                else DisplayError("Your confirm password is not equal with your password!");
+            //            }
+            //            else DisplayError(passwordStatus.Message);
+            //        }
+            //        else DisplayError(emailStatus.Message);
+            //    }
+            //}
         }
-        private async void SignIn()
+        private void SignIn()
         {
-            if (CheckInternet())
-            {
-                //check if fields are completed
-                if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password)) DisplayError("You need to complete all fields in order to register!");
-                else
-                {
-                    Models.TaskStatus statusLogin = await UserProcessor.LogIn(ApiHelper.ApiClient, Username, Password);
-                    if (!statusLogin.IsError)
-                    {
-                        Username = Password = string.Empty;
+            //if (CheckInternet())
+            //{
+            //    //check if fields are completed
+            //    if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password)) DisplayError("You need to complete all fields in order to register!");
+            //    else
+            //    {
+            //        Models.TaskStatus statusLogin = await UserProcessor.LogIn(ApiHelper.ApiClient, Username, Password);
+            //        if (!statusLogin.IsError)
+            //        {
+            //            Username = Password = string.Empty;
                         _pageService.ChangeMainPage(new ItemsView());
-                    }
-                    else
-                        DisplayError(statusLogin.Message);
-                }
-            }
-        }
-        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            if (this.PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-        private bool CheckInternet()
-        {
-            bool internet = Connectivity.NetworkAccess == NetworkAccess.Internet;
-            if (!internet) DisplayError(false, "Check for internet connection, then refresh the page!");
-            return internet;
-        }
-        private bool IsPageLoaded()
-        {
-            return (PageTitle is null || AnotherPageText is null || QuestionForUser is null);
+            //        }
+            //        else
+            //            DisplayError(statusLogin.Message);
+            //    }
+            //}
         }
         private void SetNames(string title, string page, string question)
         {
@@ -277,11 +220,6 @@ namespace PassManager.Views
             QuestionForUser = question;
         }
         //the method can be used to clear the errors as well
-        private void DisplayError(bool internet, string internetMsg)
-        {
-            IsInternet = internet;
-            InternetStatusText = internetMsg;
-        }
         private void DisplayError(string errorMsg)
         {
             IsError = true;
