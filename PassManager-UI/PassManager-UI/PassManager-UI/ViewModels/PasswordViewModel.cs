@@ -7,7 +7,7 @@ using System.Text;
 
 namespace PassManager.ViewModels
 {
-    public class PasswordViewModel : BaseViewModel
+    public class PasswordViewModel : BaseListItemVM
     {
         public PasswordViewModel(IPageService pageService) : base(pageService)
         {
@@ -17,12 +17,6 @@ namespace PassManager.ViewModels
                 AddDataForAndroid();
             }
             PageTitle = "Passwords";
-        }
-        private ObservableCollection<ItemPreview> _passwords;
-        public ObservableCollection<ItemPreview> Passwords
-        {
-            get { return _passwords; }
-            private set { _passwords = value; }
         }
         //this function is for android testing
         private void AddDataForAndroid()
