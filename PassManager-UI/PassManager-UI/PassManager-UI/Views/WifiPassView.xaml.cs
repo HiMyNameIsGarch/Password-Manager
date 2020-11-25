@@ -15,6 +15,7 @@ namespace PassManager.Views
         public WifiPassView()
         {
             InitializeComponent();
+            BindingContext = new ViewModels.WifiPassViewModel(new ViewModels.PageService());
         }
     }
 }

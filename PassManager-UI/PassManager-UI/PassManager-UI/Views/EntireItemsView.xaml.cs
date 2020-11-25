@@ -15,6 +15,7 @@ namespace PassManager.Views
         public EntireItemsView()
         {
             InitializeComponent();
+            BindingContext = new ViewModels.EntireItemsViewModel(new ViewModels.PageService());
         }
     }
 }
