@@ -4,11 +4,14 @@ using System.ComponentModel;
 using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
+using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace PassManager.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
+        public BaseViewModel(){ }
         public BaseViewModel(IPageService pageService)
         {
             _pageService = pageService;
@@ -17,6 +20,7 @@ namespace PassManager.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         private string _pageTitle;
         protected private IPageService _pageService;
+        //commands
         //props
         public string PageTitle
         {
