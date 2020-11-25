@@ -30,9 +30,27 @@
         </Style>
             <!--#endregion-->
         <ResourceDictionary>
-            <ControlTemplate x:Key="ButtonToAddItem">
+            <ControlTemplate x:Key="ListViewItemTemplate">
                 <StackLayout>
-                    <ContentPresenter />
+                    <SearchBar Placeholder="Search passwords..." PlaceholderColor="{StaticResource FrameTopColor}"
+                                TextColor="{StaticResource FrameTopColor}" BackgroundColor="{StaticResource PageTopColor}"/>
+                    <Label Text="You don't have a password yet, press the button to add a new one!"
+                            FontSize="20" Padding="10"
+                            VerticalOptions="End" TextColor="{StaticResource TextColor}"
+                            HorizontalOptions="Center" IsVisible="False"/>
+                    <ListView ItemsSource="{TemplateBinding BindingContext.Passwords}" HasUnevenRows="True">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <StackLayout Padding="10" Orientation="Vertical">
+                                        <Label Text="{Binding Title}" FontSize="17" FontAttributes="Bold" TextColor="{StaticResource TextColor}" 
+                                                   HorizontalTextAlignment="Center"/>
+                                        <Label Text="{Binding SubTitle}" FontSize="15" TextColor="{StaticResource PageTopColor}" HorizontalTextAlignment="Center"/>
+                                    </StackLayout>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
                     <Button Text="Add" FontSize="15" FontAttributes="Bold" BackgroundColor="{StaticResource FrameTopColor}" WidthRequest="66" 
                             TextColor="{StaticResource PageTopColor}" HeightRequest="66" CornerRadius="33"
                             HorizontalOptions="CenterAndExpand" Padding="10" Margin="15" Command="{TemplateBinding BindingContext.SelectItem}"/>
