@@ -15,7 +15,7 @@ namespace PassManager.Views
         public ListItemView()
         {
             InitializeComponent();
-            BindingContext = new ViewModels.ListItemViewModel(new ViewModels.PageService());
+            BindingContext = new ViewModels.ListItemViewModel();
         }
     }
 }
