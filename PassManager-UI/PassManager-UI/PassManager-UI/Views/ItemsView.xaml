@@ -19,27 +19,22 @@
     </Shell.FlyoutHeaderTemplate>
     <FlyoutItem Title="All Items">
         <Tab>
-            <ShellContent ContentTemplate="{DataTemplate views:EntireItemsView}"/>
+            <ShellContent Route="EntireItems" ContentTemplate="{DataTemplate views:EntireItemsView}"/>
         </Tab>
     </FlyoutItem>
     <FlyoutItem Title="Passwords">
         <Tab>
-            <ShellContent ContentTemplate="{DataTemplate views:PasswordView}"/>
+            <ShellContent Route="Password" ContentTemplate="{DataTemplate views:PasswordView}"/>
         </Tab>
     </FlyoutItem>
     <FlyoutItem Title="Wi-Fi Passwords">
         <Tab>
-            <ShellContent ContentTemplate="{DataTemplate views:WifiPassView}"/>
+            <ShellContent Route="WifiPass" ContentTemplate="{DataTemplate views:WifiPassView}"/>
         </Tab>
     </FlyoutItem>
     <FlyoutItem Title="Account Settings">
         <Tab>
-            <ShellContent ContentTemplate="{DataTemplate views:SettingsView}"/>
+            <ShellContent Route="Settings" ContentTemplate="{DataTemplate views:SettingsView}"/>
         </Tab>
     </FlyoutItem>
-    <TabBar>
-        <Tab Title="Add new account!">
-            <ShellContent ContentTemplate="{DataTemplate views:MainView}"/>
-        </Tab>
-    </TabBar>
 </Shell>

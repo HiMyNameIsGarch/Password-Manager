@@ -35,5 +35,16 @@ namespace PassManager_UI.Droid
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+        public async override void OnBackPressed()
+        {
+            if(Xamarin.Forms.Shell.Current.CurrentState.Location.ToString().Contains("Create"))
+            {
+                await Xamarin.Forms.Shell.Current.GoToAsync("../..");
+            }
+            else
+            {
+                base.OnBackPressed();
+            }
+        }
     }
 }

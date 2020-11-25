@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             NavigationPage.HasNavigationBar="False"
+             x:Class="PassManager.Views.ListItemView" Title="Select item to add">
+    <Shell.TitleView>
+        <Label Text="Select item to add" FontSize="20" VerticalTextAlignment="Center"/>
+    </Shell.TitleView>
+    <ListView ItemsSource="{Binding ListItems}" SelectedItem="{Binding SelectedPage}" HasUnevenRows="True">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <StackLayout>
+                        <Label Text="{Binding Name}" FontSize="20" VerticalOptions="FillAndExpand" BackgroundColor="Transparent" 
+                               HorizontalOptions="Center" Padding="20" TextColor="{StaticResource FrameBottomColor}"/>
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+</ContentPage>
