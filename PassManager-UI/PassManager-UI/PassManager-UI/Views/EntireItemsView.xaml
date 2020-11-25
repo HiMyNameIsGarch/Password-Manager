@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PassManager.Views.EntireItemsView" BackgroundColor="{StaticResource PageBottomColor}">
-    <Label Text="Here will be all the items!"
+    <Label Text="Here will be all the items!" TextColor="{StaticResource TextColor}"
                 VerticalOptions="CenterAndExpand" 
                 HorizontalOptions="CenterAndExpand" />
 </ContentPage>

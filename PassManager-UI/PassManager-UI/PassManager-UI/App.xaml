@@ -3,11 +3,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PassManager_UI.App">
     <Application.Resources>
-            <!--#region Colors-->
-        <Color x:Key="PageTopColor">#84a98c</Color>
+            <!--#region Color pallete-->
         <Color x:Key="PageBottomColor">#cad2c5</Color>
-        <Color x:Key="FrameTopColor">#2f3e46</Color>
+        <Color x:Key="PageTopColor">#84a98c</Color>
+        <Color x:Key="TextColor">#52796f</Color>
         <Color x:Key="FrameBottomColor">#354f52</Color>
+        <Color x:Key="FrameTopColor">#2f3e46</Color>
             <!--#endregion-->    
         
             <!--#region Frames-->
@@ -28,6 +29,15 @@
             <Setter Property="Margin" Value="10,6,10,6"/>
         </Style>
             <!--#endregion-->
-        
+        <ResourceDictionary>
+            <ControlTemplate x:Key="ButtonToAddItem">
+                <StackLayout>
+                    <ContentPresenter />
+                    <Button Text="Add" FontSize="15" FontAttributes="Bold" BackgroundColor="{StaticResource FrameTopColor}" WidthRequest="66" 
+                            TextColor="{StaticResource PageTopColor}" HeightRequest="66" CornerRadius="33"
+                            HorizontalOptions="CenterAndExpand" Padding="10" Margin="15" Command="{TemplateBinding BindingContext.SelectItem}"/>
+                </StackLayout>
+            </ControlTemplate>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
