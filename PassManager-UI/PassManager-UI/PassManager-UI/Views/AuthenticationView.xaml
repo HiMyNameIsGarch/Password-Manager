@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage NavigationPage.HasNavigationBar="False" xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:CRender="clr-namespace:PassManager.CustomRenderer"
+             xmlns:MarkExt="clr-namespace:PassManager.MarkupExtensions"
+             x:Class="PassManager.Views.AuthenticationView">
+    <Grid>
+            <!--#region Main grid settings-->
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0,1">
+                <GradientStop Color="{StaticResource PageTopColor}" Offset="0.1"/>
+                <GradientStop Color="{StaticResource PageBottomColor}" Offset="1.0"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="10*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+            <!--#endregion-->
+        <StackLayout Grid.Row="2" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Start" Orientation="Horizontal">
+            <Label Text="{Binding QuestionForUser}" VerticalOptions="Center" FontSize="14" TextColor="#354f52"/>
+            <Button Text="{Binding AnotherPageText}" IsEnabled="{Binding ActionStatus}" CornerRadius="15"
+                    FontSize="12" Command="{Binding ChangePageCommand}" WidthRequest="90" HeightRequest="40"/>
+        </StackLayout>
+        <Grid Grid.Row="1" Grid.Column="1">
+                <!--#region Second grid settings-->
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0,1">
+                    <GradientStop Color="{StaticResource FrameTopColor}" Offset="0.1"/>
+                    <GradientStop Color="{StaticResource FrameBottomColor}" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="13*"/>
+            </Grid.RowDefinitions>
+                <!--#endregion-->
+            <Label Grid.Row="0" HorizontalOptions="CenterAndExpand" VerticalOptions="End" Text="{Binding PageTitle}" FontSize="26" 
+                   FontAttributes="Bold"/>
+            <Label Grid.Row="1" Text="{Binding ErrorMsg}" Padding="20,0,20,0" FontSize="16" TextColor="Red" VerticalOptions="End"
+                   HorizontalOptions="CenterAndExpand" IsVisible="{Binding IsError}"/>
+                <!--#region Fields-->
+            <StackLayout Grid.Row="2" VerticalOptions="StartAndExpand">
+                <StackLayout Padding="0,5,0,5">
+                    <!--Email-->
+                    <Frame Style="{StaticResource CustomFrame}">
+                        <StackLayout Orientation="Horizontal">
+                            <CRender:CustomeEntry Keyboard="Email" Placeholder="Email" HorizontalTextAlignment="Start"
+                                   Margin="15,0,15,0" FontSize="17" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent"
+                                   Text="{Binding Username, Mode=TwoWay}"/>
+                        </StackLayout>
+                    </Frame>
+                    <!--Password-->
+                    <Frame Style="{StaticResource CustomFrame}">
+                        <StackLayout x:Name="password" Orientation="Horizontal">
+                            <CRender:CustomeEntry IsPassword="True" Placeholder="Password" HorizontalTextAlignment="Start" 
+                                   Margin="15,0,0,0" FontSize="17" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent"
+                                    Text="{Binding Password, Mode=TwoWay}"/>
+                            <Frame Style="{StaticResource RoundFrame}">
+                                <Image Source="{MarkExt:EmbeddedImage PassManager-UI.Images.Locked.png}" Aspect="AspectFill" Margin="0">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ChangeVisCommand}"
+                                            CommandParameter="{Binding Source={x:Reference password}}" />
+                                    </Image.GestureRecognizers>
+                                </Image>
+                            </Frame>
+                    </StackLayout>
+                    </Frame>
+                    <!--Confirm password-->
+                    <Frame Style="{StaticResource CustomFrame}" IsEnabled="{Binding IsRegisterPage}" IsVisible="{Binding IsRegisterPage}">
+                        <StackLayout x:Name="confirmPass" Orientation="Horizontal">
+                            <CRender:CustomeEntry IsPassword="True" Placeholder="Confirm password" HorizontalTextAlignment="Start" 
+                                   Margin="15,0,0,0" FontSize="17" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent"
+                                   Text="{Binding ConfirmPass, Mode=TwoWay}"/>
+                            <Frame Style="{StaticResource RoundFrame}">
+                                <Image Source="{MarkExt:EmbeddedImage PassManager-UI.Images.Locked.png}" Aspect="AspectFill" Margin="0">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding ChangeVisCommand}"
+                                            CommandParameter="{Binding Source={x:Reference confirmPass}}" />
+                                    </Image.GestureRecognizers>
+                                </Image>
+                            </Frame>
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
+                    <!--#endregion-->
+                <Button Text="{Binding PageTitle}" IsEnabled="{Binding ActionStatus}" Command="{Binding ActionCommand}" 
+                        CornerRadius="20" HorizontalOptions="Center" FontSize="13" WidthRequest="90" HeightRequest="40" />
+            </StackLayout>
+        </Grid>
+    </Grid>
+</ContentPage>

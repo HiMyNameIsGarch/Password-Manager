@@ -7,15 +7,14 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace PassManager.Views
+namespace PassManager.Views.FlyoutItems
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class WifiPassView : ContentPage
+    public partial class SettingsView : ContentPage
     {
-        public WifiPassView()
+        public SettingsView()
         {
             InitializeComponent();
-            BindingContext = new ViewModels.WifiPassViewModel(new ViewModels.PageService());
         }
     }
 }

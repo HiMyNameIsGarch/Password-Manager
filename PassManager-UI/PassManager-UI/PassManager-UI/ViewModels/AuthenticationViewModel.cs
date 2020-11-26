@@ -1,24 +1,17 @@
 ﻿using PassManager.CustomRenderer;
 using PassManager.Enums;
-using PassManager.Models;
+using PassManager.Models.Interfaces;
 using PassManager.Models.Api;
 using PassManager.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace PassManager.Views
 {
-    public class MainViewModel : BaseViewModel
+    public class AuthenticationViewModel : BaseViewModel
     {
-        public MainViewModel(IPageService pageService) : base(pageService)
+        public AuthenticationViewModel(IPageService pageService) : base(pageService)
         {
             ApiHelper.InitializeClient();
             //set some default values
@@ -163,8 +156,8 @@ namespace PassManager.Views
         //methods
         private void Register()
         {
-            //if (CheckInternet())
-            //{
+            if (CheckInternet())
+            {
             //    //check if all fields are completed
             //    if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password) || String.IsNullOrWhiteSpace(ConfirmPass)) DisplayError("You need to complete all fields in order to register!");
             //    else
@@ -182,7 +175,7 @@ namespace PassManager.Views
             //                    if (!statusRegister.IsError)
             //                    {
             //                        Username = Password = ConfirmPass = string.Empty;
-                                    _pageService.ChangeMainPage(new ItemsView());
+                                    _pageService.ChangeMainPage(new MainView());
             //                    }
             //                    else DisplayError(statusRegister.Message);
             //                }
@@ -192,26 +185,26 @@ namespace PassManager.Views
             //        }
             //        else DisplayError(emailStatus.Message);
             //    }
-            //}
+            }
         }
         private void SignIn()
         {
-            //if (CheckInternet())
-            //{
-            //    //check if fields are completed
-            //    if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password)) DisplayError("You need to complete all fields in order to register!");
-            //    else
-            //    {
-            //        Models.TaskStatus statusLogin = await UserProcessor.LogIn(ApiHelper.ApiClient, Username, Password);
-            //        if (!statusLogin.IsError)
-            //        {
-            //            Username = Password = string.Empty;
-                        _pageService.ChangeMainPage(new ItemsView());
+            if (CheckInternet())
+            {
+                //    //check if fields are completed
+                //    if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password)) DisplayError("You need to complete all fields in order to register!");
+                //    else
+                //    {
+                //        Models.TaskStatus statusLogin = await UserProcessor.LogIn(ApiHelper.ApiClient, Username, Password);
+                //        if (!statusLogin.IsError)
+                //        {
+                //            Username = Password = string.Empty;
+                _pageService.ChangeMainPage(new MainView());
             //        }
             //        else
             //            DisplayError(statusLogin.Message);
             //    }
-            //}
+            }
         }
         private void SetNames(string title, string page, string question)
         {

@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using PassManager.Models;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace PassManager.Views
+namespace PassManager.Views.FlyoutItems
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class EntireItemsView : ContentPage
@@ -15,7 +10,7 @@ namespace PassManager.Views
         public EntireItemsView()
         {
             InitializeComponent();
-            BindingContext = new ViewModels.EntireItemsViewModel(new ViewModels.PageService());
+            BindingContext = new ViewModels.FlyoutItems.EntireItemsViewModel(new PageService());
         }
     }
 }
