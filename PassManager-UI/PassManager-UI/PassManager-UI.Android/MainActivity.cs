@@ -39,7 +39,7 @@ namespace PassManager_UI.Droid
         {
             if(Xamarin.Forms.Shell.Current.CurrentState.Location.ToString().Contains("Create"))
             {
-                await Xamarin.Forms.Shell.Current.GoToAsync("../..");
+                await Xamarin.Forms.Shell.Current.GoToAsync("../..",true);
             }
             else
             {

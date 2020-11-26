@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Xamarin.Forms;
+using PassManager.Models;
 using System.Windows.Input;
-using Xamarin.Forms;
 
-namespace PassManager.ViewModels
+namespace PassManager.ViewModels.Popups
 {
     internal class InternetErrorViewModel
     {

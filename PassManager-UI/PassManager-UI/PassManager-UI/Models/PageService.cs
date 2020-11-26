@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
-namespace PassManager.ViewModels
+namespace PassManager.Models
 {
-    internal class PageService : IPageService
+    internal class PageService : Interfaces.IPageService
     {
         public PageService(Page page)
         {
@@ -43,6 +43,11 @@ namespace PassManager.ViewModels
         public Task PopPopupAsync()
         {
            return MainPage.Navigation.PopPopupAsync();
+        }
+
+        public async Task PopAsync()
+        {
+            await MainPage.Navigation.PopAsync();
         }
     }
 }

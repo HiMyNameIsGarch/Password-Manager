@@ -1,21 +1,21 @@
 ﻿using PassManager.Models.Items;
-using System;
-using System.Collections.Generic;
+using PassManager.Models.Interfaces;
 using System.Collections.ObjectModel;
-using System.Text;
 
-namespace PassManager.ViewModels
+namespace PassManager.ViewModels.FlyoutItems
 {
-    public class EntireItemsViewModel : BaseListItemVM
+    public class PasswordViewModel : BaseListItemVM
     {
-        public EntireItemsViewModel(IPageService pageService) : base(pageService)
+        public PasswordViewModel(IPageService pageService) : base(pageService)
         {
             if (CheckInternet())
             {
+                //add data for page
                 AddDataForAndroid();
             }
-            PageTitle = "All items";
+            PageTitle = "Passwords";
         }
+        //this function is for android testing
         private void AddDataForAndroid()
         {
             Passwords = new ObservableCollection<ItemPreview>()
@@ -43,24 +43,6 @@ namespace PassManager.ViewModels
                     Id = 4,
                     Title = "League of legends",
                     SubTitle = "hanu70@yahoo.com"
-                },
-                new ItemPreview()
-                {
-                    Id = 1,
-                    Title = "Home",
-                    SubTitle = "Wifi"
-                },
-                new ItemPreview()
-                {
-                    Id = 2,
-                    Title = "Coffee shop",
-                    SubTitle = "Wifi"
-                },
-                new ItemPreview()
-                {
-                    Id = 3,
-                    Title = "My friends house",
-                    SubTitle = "Wifi"
                 }
             };
         }

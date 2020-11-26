@@ -34,11 +34,26 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\ItemsView.xaml.cs">
-      <DependentUpon>ItemsView.xaml</DependentUpon>
+    <Compile Update="Views\FlyoutItems\EntireItemsView.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FlyoutItems\PasswordView.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FlyoutItems\SettingsView.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <Compile Update="Views\FlyoutItems\WifiPassView.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
     <Compile Update="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\AuthenticationView.xaml.cs">
+      <DependentUpon>AuthenticationView.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Popups\InternetErrorView.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -55,19 +70,7 @@
     <EmbeddedResource Update="Views\CreateItems\CreateWifiView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\InternetErrorView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="Views\ListItemView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\PasswordView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\SettingsView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\WifiPassView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>

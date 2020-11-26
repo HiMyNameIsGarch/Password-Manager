@@ -1,9 +1,7 @@
 ﻿using PassManager.Models.Items;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using PassManager.Models.Interfaces;
 
-namespace PassManager.ViewModels
+namespace PassManager.ViewModels.FlyoutItems
 {
     public class WifiPassViewModel : BaseListItemVM
     {

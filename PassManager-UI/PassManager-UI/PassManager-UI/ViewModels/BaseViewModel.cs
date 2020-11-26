@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using PassManager.Models.Interfaces;
 using System.ComponentModel;
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.Essentials;
-using System.Windows.Input;
-using Xamarin.Forms;
 
 namespace PassManager.ViewModels
 {
@@ -40,7 +35,7 @@ namespace PassManager.ViewModels
             bool internet = Connectivity.NetworkAccess == NetworkAccess.Internet;
             if(!internet)
             {
-                _pageService.PushPopupAsync(new Views.InternetErrorView());
+                _pageService.PushPopupAsync(new Views.Popups.InternetErrorView());
             }
             return internet;
         }

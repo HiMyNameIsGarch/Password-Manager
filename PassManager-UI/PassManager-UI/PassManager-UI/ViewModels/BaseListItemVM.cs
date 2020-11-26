@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
+using PassManager.Models.Interfaces;
 
 namespace PassManager.ViewModels
 {
