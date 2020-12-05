@@ -53,7 +53,7 @@
                     <Frame Style="{StaticResource CustomFrame}">
                         <StackLayout Orientation="Horizontal">
                             <CRender:CustomeEntry Keyboard="Email" Placeholder="Email" HorizontalTextAlignment="Start"
-                                   Margin="15,0,15,0" FontSize="17" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent"
+                                   Margin="15,0,15,0" FontSize="17" HorizontalOptions="FillAndExpand" 
                                    Text="{Binding Username, Mode=TwoWay}"/>
                         </StackLayout>
                     </Frame>
@@ -61,7 +61,7 @@
                     <Frame Style="{StaticResource CustomFrame}">
                         <StackLayout x:Name="password" Orientation="Horizontal">
                             <CRender:CustomeEntry IsPassword="True" Placeholder="Password" HorizontalTextAlignment="Start" 
-                                   Margin="15,0,0,0" FontSize="17" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent"
+                                   Margin="15,0,0,0" FontSize="17" HorizontalOptions="FillAndExpand" 
                                     Text="{Binding Password, Mode=TwoWay}"/>
                             <Frame Style="{StaticResource RoundFrame}">
                                 <Image Source="{MarkExt:EmbeddedImage PassManager-UI.Images.Locked.png}" Aspect="AspectFill" Margin="0">
@@ -77,7 +77,7 @@
                     <Frame Style="{StaticResource CustomFrame}" IsEnabled="{Binding IsRegisterPage}" IsVisible="{Binding IsRegisterPage}">
                         <StackLayout x:Name="confirmPass" Orientation="Horizontal">
                             <CRender:CustomeEntry IsPassword="True" Placeholder="Confirm password" HorizontalTextAlignment="Start" 
-                                   Margin="15,0,0,0" FontSize="17" HorizontalOptions="FillAndExpand" BackgroundColor="Transparent"
+                                   Margin="15,0,0,0" FontSize="17" HorizontalOptions="FillAndExpand" 
                                    Text="{Binding ConfirmPass, Mode=TwoWay}"/>
                             <Frame Style="{StaticResource RoundFrame}">
                                 <Image Source="{MarkExt:EmbeddedImage PassManager-UI.Images.Locked.png}" Aspect="AspectFill" Margin="0">

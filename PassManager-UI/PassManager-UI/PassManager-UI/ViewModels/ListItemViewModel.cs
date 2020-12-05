@@ -22,7 +22,7 @@ namespace PassManager.ViewModels
         }
         private async void HandleSelectedItem()
         {
-            await Xamarin.Forms.Shell.Current.GoToAsync($"Create{SelectedPage.Name}", false);
+            await Xamarin.Forms.Shell.Current.GoToAsync($"Create{SelectedPage.Name}?pageType=Create", false);
         }
         public IEnumerable<CreateItem> ListItems
         {
