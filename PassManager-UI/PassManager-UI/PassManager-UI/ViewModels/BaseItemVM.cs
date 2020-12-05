@@ -17,6 +17,10 @@ namespace PassManager.ViewModels
         private bool _readOnly;
         private ICommand _save;
         //props
+        public bool IsUwp
+        {
+            get { return Device.RuntimePlatform == Device.UWP; }
+        }
         public string ActionBtnText
         {
             get { return _actionBtnText; }
