@@ -29,6 +29,7 @@
             <Setter Property="Margin" Value="10,6,10,6"/>
         </Style>
             <!--#endregion-->
+            <!--#region list items-->
         <ResourceDictionary>
             <ControlTemplate x:Key="ListViewItemTemplate">
                 <StackLayout>
@@ -57,5 +58,21 @@
                 </StackLayout>
             </ControlTemplate>
         </ResourceDictionary>
+            <!--#endregion-->
+        
+            <!--#region custom entry-->
+        <Style x:Key="CustomEntry" TargetType="Entry">
+            <Setter Property="TextColor" Value="{StaticResource FrameTopColor}"/>
+            <Setter Property="FontSize" Value="17"/>
+            <Setter Property="Margin" Value="9,0,9,0"/>
+        </Style>
+            <!--#endregion-->
+        
+            <!--#region Label for entries-->
+        <Style x:Key="LabelForEntries" TargetType="Label">
+            <Setter Property="TextColor" Value="{StaticResource TextColor}"/>
+            <Setter Property="FontSize" Value="17"/>
+        </Style>
+            <!--#endregion-->
     </Application.Resources>
 </Application>
