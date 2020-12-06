@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace PassManager_WebApi.ViewModels
+﻿namespace PassManager_WebApi.ViewModels
 {
     public class PasswordVM
     {
