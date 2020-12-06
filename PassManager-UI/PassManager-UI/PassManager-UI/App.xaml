@@ -39,7 +39,7 @@
                             FontSize="20" Padding="10"
                             VerticalOptions="End" TextColor="{StaticResource TextColor}"
                             HorizontalOptions="Center" IsVisible="False"/>
-                    <ListView ItemsSource="{TemplateBinding BindingContext.Passwords}" HasUnevenRows="True">
+                    <ListView ItemsSource="{TemplateBinding BindingContext.Passwords}" HasUnevenRows="True" SelectedItem="{TemplateBinding BindingContext.SelectedItem, Mode=TwoWay}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
@@ -54,7 +54,7 @@
                     </ListView>
                     <Button Text="Add" FontSize="15" FontAttributes="Bold" BackgroundColor="{StaticResource FrameTopColor}" WidthRequest="66" 
                             TextColor="{StaticResource PageTopColor}" HeightRequest="66" CornerRadius="33"
-                            HorizontalOptions="CenterAndExpand" Padding="10" Margin="15" Command="{TemplateBinding BindingContext.SelectItem}"/>
+                            HorizontalOptions="CenterAndExpand" Padding="10" Margin="15" Command="{TemplateBinding BindingContext.AddItem}"/>
                 </StackLayout>
             </ControlTemplate>
         </ResourceDictionary>

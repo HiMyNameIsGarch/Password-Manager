@@ -56,7 +56,7 @@ namespace PassManager.ViewModels.CreateItems
                         ReadOnly = false;
                         break;
                     case ItemPageState.View:
-                        PageTitle = "View Password";
+                        ChangeProps(ItemPageState.View, "Edit", "View Password", true);
                         break;
                     case ItemPageState.Edit:
                         PageTitle = "Edit Password";
@@ -80,12 +80,19 @@ namespace PassManager.ViewModels.CreateItems
         //implementation for commands
         public async void GoBackButton()
         {
-            await Shell.Current.GoToAsync("../..", true);
+            try
+            {
+                await Shell.Current.GoToAsync("../..", true);
+            }
+            catch
+            {
+                await Shell.Current.GoToAsync("..", true);
+            }
         }
         //functions
         private protected override void Create()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         private protected override void Delete()
@@ -95,7 +102,7 @@ namespace PassManager.ViewModels.CreateItems
 
         private protected override void Modify()
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
     }
 }
