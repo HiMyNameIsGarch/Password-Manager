@@ -33,7 +33,7 @@ namespace PassManager.ViewModels
         public bool ReadOnly
         {
             get { return _readOnly; }
-            set { _readOnly = value; NotifyPropertyChanged(); }
+            protected private set { _readOnly = value; NotifyPropertyChanged(); }
         }
         //commands
         public ICommand SaveChanges {
