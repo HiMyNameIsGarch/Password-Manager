@@ -9,7 +9,7 @@ namespace PassManager.ViewModels.FlyoutItems
 {
     public class EntireItemsViewModel : BaseListItemVM
     {
-        public EntireItemsViewModel(IPageService pageService) : base(pageService, "All items")
+        public EntireItemsViewModel() : base("All items")
         {
             if (CheckInternet())
             {

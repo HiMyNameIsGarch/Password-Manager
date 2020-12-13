@@ -10,7 +10,7 @@ namespace PassManager.ViewModels
     public abstract class BaseListItemVM : BaseViewModel
     {
         //constructors
-        public BaseListItemVM(IPageService pageService, string pageTitle) : base(pageService, pageTitle)
+        public BaseListItemVM(string pageTitle) : base(pageTitle)
         {
             _addItem = new Command(SelectItemToAdd);
             _refresh = new Command(RefreshPage);

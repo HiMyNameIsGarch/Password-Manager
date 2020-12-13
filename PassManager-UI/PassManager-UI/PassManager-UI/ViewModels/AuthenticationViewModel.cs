@@ -6,14 +6,14 @@ using PassManager.ViewModels;
 using System.Linq;
 using System.Windows.Input;
 using Xamarin.Forms;
+using System;
 
 namespace PassManager.Views
 {
     public class AuthenticationViewModel : BaseViewModel
     {
-        public AuthenticationViewModel(IPageService pageService) : base(pageService)
+        public AuthenticationViewModel()
         {
-            ApiHelper.InitializeClient();
             //set some default values
             ActionStatus = true;
             CurrentAction = TypeOfActions.Sign_In;
@@ -158,24 +158,24 @@ namespace PassManager.Views
         {
             if (CheckInternet())
             {
-            //    //check if all fields are completed
-            //    if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password) || String.IsNullOrWhiteSpace(ConfirmPass)) DisplayError("You need to complete all fields in order to register!");
-            //    else
-            //    {
-            //        //verify status of fields
-            //        Models.TaskStatus emailStatus = FieldsHelper.VerifyEmail(Username);
-            //        if (!emailStatus.IsError)
-            //        {
-            //            Models.TaskStatus passwordStatus = FieldsHelper.VerifyPassword(Password);
-            //            if (!passwordStatus.IsError)
-            //            {
-            //                if (ConfirmPass == Password)
-            //                {
-            //                    Models.TaskStatus statusRegister = await UserProcessor.Register(ApiHelper.ApiClient, Username, Password, ConfirmPass);
-            //                    if (!statusRegister.IsError)
-            //                    {
-            //                        Username = Password = ConfirmPass = string.Empty;
-                                    _pageService.ChangeMainPage(new MainView());
+                //    //check if all fields are completed
+                //    if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password) || String.IsNullOrWhiteSpace(ConfirmPass)) DisplayError("You need to complete all fields in order to register!");
+                //    else
+                //    {
+                //        //verify status of fields
+                //        Models.TaskStatus emailStatus = FieldsHelper.VerifyEmail(Username);
+                //        if (!emailStatus.IsError)
+                //        {
+                //            Models.TaskStatus passwordStatus = FieldsHelper.VerifyPassword(Password);
+                //            if (!passwordStatus.IsError)
+                //            {
+                //                if (ConfirmPass == Password)
+                //                {
+                //                    Models.TaskStatus statusRegister = await UserProcessor.Register(ApiHelper.ApiClient, Username, Password, ConfirmPass);
+                //                    if (!statusRegister.IsError)
+                //                    {
+                //                        Username = Password = ConfirmPass = string.Empty;
+                Models.PageService.ChangeMainPage(new MainView());
             //                    }
             //                    else DisplayError(statusRegister.Message);
             //                }
@@ -187,23 +187,23 @@ namespace PassManager.Views
             //    }
             }
         }
-        private void SignIn()
+        private async void SignIn()
         {
             if (CheckInternet())
             {
-                //    //check if fields are completed
-                //    if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password)) DisplayError("You need to complete all fields in order to register!");
-                //    else
-                //    {
-                //        Models.TaskStatus statusLogin = await UserProcessor.LogIn(ApiHelper.ApiClient, Username, Password);
-                //        if (!statusLogin.IsError)
-                //        {
-                //            Username = Password = string.Empty;
-                _pageService.ChangeMainPage(new MainView());
-            //        }
-            //        else
-            //            DisplayError(statusLogin.Message);
-            //    }
+                //check if fields are completed
+                if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password)) DisplayError("You need to complete all fields in order to register!");
+                else
+                {
+                    Models.TaskStatus statusLogin = await UserProcessor.LogIn(ApiHelper.ApiClient, Username, Password);
+                    if (!statusLogin.IsError)
+                    {
+                        Username = Password = string.Empty;
+                        Models.PageService.ChangeMainPage(new MainView());
+                    }
+                    else
+                        DisplayError(statusLogin.Message);
+                }
             }
         }
         private void SetNames(string title, string page, string question)

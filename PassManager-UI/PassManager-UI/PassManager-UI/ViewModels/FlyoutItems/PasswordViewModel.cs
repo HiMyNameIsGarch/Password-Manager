@@ -13,7 +13,7 @@ namespace PassManager.ViewModels.FlyoutItems
 {
     public class PasswordViewModel : BaseListItemVM
     {
-        public PasswordViewModel(IPageService pageService) : base(pageService, "Passwords")
+        public PasswordViewModel() : base("Passwords")
         {
             if (CheckInternet())
             {
