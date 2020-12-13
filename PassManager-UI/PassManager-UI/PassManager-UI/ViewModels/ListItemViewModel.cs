@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
+using PassManager.Models;
 using PassManager.Models.Items;
 
 namespace PassManager.ViewModels
 {
-    public class ListItemViewModel
+    public class ListItemViewModel : BaseViewModel
     {
         private CreateItem _selectedItem;
         public CreateItem SelectedPage {
@@ -15,12 +16,13 @@ namespace PassManager.ViewModels
                 if(_selectedItem != value) _selectedItem = value;
                 if(_selectedItem != null)
                 {
-                    HandleSelectedItem();
+                    HandleSelectedItem().Await();
                     _selectedItem = null;
+                    NotifyPropertyChanged();
                 }
             } 
         }
-        private async void HandleSelectedItem()
+        private async Task HandleSelectedItem()
         {
             await Xamarin.Forms.Shell.Current.GoToAsync($"Create{SelectedPage.Name}?pageType=Create", false);
         }

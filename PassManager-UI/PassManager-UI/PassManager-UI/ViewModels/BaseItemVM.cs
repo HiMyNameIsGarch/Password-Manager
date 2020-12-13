@@ -1,6 +1,10 @@
 ﻿using PassManager.Enums;
 using System.Windows.Input;
 using Xamarin.Forms;
+using PassManager.Models;
+using System.Threading.Tasks;
+using System;
+using System.Linq;
 
 namespace PassManager.ViewModels
 {
@@ -41,28 +45,55 @@ namespace PassManager.ViewModels
             switch (PageState)
             {
                 case ItemPageState.Create:
-                    Create();
-                    ChangeProps(ItemPageState.View, "Edit", "View item", true);
+                    Create().Await(HandleError);
                     break;
                 case ItemPageState.View:
                     ChangeProps(ItemPageState.Edit, "Save", "Edit the item", false);
                     break;
                 case ItemPageState.Edit:
-                    Modify();
-                    ChangeProps(ItemPageState.View, "Edit", "View item", true);
+                    Modify().Await(HandleError);
                     break;
             }
         }
         //basic actions for item page
-        private protected abstract void Create();
-        private protected abstract void Delete();
-        private protected abstract void Modify();
+        private protected abstract Task Create();
+        private protected abstract Task Delete();
+        private protected abstract Task Modify();
+        //functions
         private protected void ChangeProps(ItemPageState pageState, string btnText, string pageTitle, bool isReadOnly)
         {
             PageState = pageState;
             ActionBtnText = btnText;
             PageTitle = pageTitle;
             ReadOnly = isReadOnly;
+        }
+        private protected async Task GoTo(string itemPage)
+        {
+            string location = Shell.Current.CurrentState.Location.ToString();
+            location = location.Replace("//", "");
+            string[] path = location.Split('/');
+            int navigationMax = Shell.Current.Navigation.NavigationStack.Count() - 1;
+            string baseRoute = string.Empty;
+            for (int i = 0; i < navigationMax; i++)
+            {
+                if (i == 0)
+                    baseRoute += "..";
+                else
+                    baseRoute += "/..";
+            }
+            await Shell.Current.GoToAsync(baseRoute, false);
+            if (!path[path.Length - 1].Contains(path[0]))
+            {
+                await Shell.Current.GoToAsync($"///{itemPage}", false);
+            }
+            if (IsUwp)
+            {
+                await Task.WhenAll(Shell.Current.GoToAsync("///EntireItems", false), Shell.Current.GoToAsync($"///{itemPage}", false));
+            }
+        }
+        private void HandleError(Exception ex)
+        {
+
         }
     }
 }

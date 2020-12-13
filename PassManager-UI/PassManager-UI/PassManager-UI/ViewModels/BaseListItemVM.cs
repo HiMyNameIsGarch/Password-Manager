@@ -15,6 +15,7 @@ namespace PassManager.ViewModels
         }
         public BaseListItemVM(IPageService pageService, string pageTitle) : base(pageService,pageTitle)
         {
+            _addItem = new Command(SelectItemToAdd);
         }
         private ItemPreview _selectedItem;
         private ICommand _addItem;
