@@ -131,10 +131,10 @@ namespace PassManager.ViewModels.CreateItems
             {
                 if (int.TryParse(Id, out int newId))
                 {
-                    //bool isSuccess = await PasswordProcessor.Modify(ApiHelper.ApiClient, newId, Password);
-                    if (true)
+                    bool isSuccess = await PasswordProcessor.Modify(ApiHelper.ApiClient, newId, Password);
+                    if (isSuccess)
                     {
-                        await GoTo("Password");
+                        await GoTo("Password", "?update=true");
                     }
                     else
                     {

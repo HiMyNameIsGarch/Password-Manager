@@ -25,7 +25,7 @@ namespace PassManager.ViewModels
         public ObservableCollection<ItemPreview> Passwords
         {
             get { return _passwords; }
-            private protected set { _passwords = value; }
+            private protected set { _passwords = value; NotifyPropertyChanged(); }
         }
         public ItemPreview SelectedItem
         {
@@ -45,6 +45,10 @@ namespace PassManager.ViewModels
         {
             get { return _isRefreshing; }
             private protected set { _isRefreshing = value; NotifyPropertyChanged(); }
+        }
+        public bool IsUwp
+        {
+            get { return Device.RuntimePlatform == Device.UWP; }
         }
         //commands
         public ICommand Refresh

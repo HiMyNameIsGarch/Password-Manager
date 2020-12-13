@@ -1,5 +1,4 @@
 ﻿using PassManager.Models.Items;
-using PassManager.Models.Interfaces;
 using System.Collections.ObjectModel;
 using PassManager.Models.Api;
 using System.Collections.Generic;
@@ -8,9 +7,11 @@ using System;
 using PassManager.Models;
 using PassManager.Enums;
 using System.Linq;
+using Xamarin.Forms;
 
 namespace PassManager.ViewModels.FlyoutItems
 {
+    [QueryProperty("Update","update")]
     public class PasswordViewModel : BaseListItemVM
     {
         public PasswordViewModel() : base("Passwords")
@@ -22,6 +23,25 @@ namespace PassManager.ViewModels.FlyoutItems
                 //AddDataForAndroid();
             }
         }
+        //private variables
+        private string _update;
+        //parameters
+        public string Update
+        {
+            get { return _update; }
+            set
+            {
+                _update = Uri.UnescapeDataString(value ?? string.Empty);
+                if (Boolean.TryParse(_update, out bool refresh))
+                {
+                    if (refresh)
+                    {
+                        GetData().Await(ErrorCallBack);
+                    }
+                }
+            }
+        }
+        //functions
         private void ErrorCallBack(Exception ex)
         {
 
@@ -31,10 +51,7 @@ namespace PassManager.ViewModels.FlyoutItems
             IEnumerable<ItemPreview> previews = await PasswordProcessor.GetPreviews(ApiHelper.ApiClient);
             if(previews != null && previews.Count() > 0)
             {
-                foreach (var item in previews)
-                {
-                    Passwords.Add(item);
-                }
+                Passwords = new ObservableCollection<ItemPreview>(previews);
             }
         }
         //this function is for android testing
@@ -72,11 +89,10 @@ namespace PassManager.ViewModels.FlyoutItems
                 }
             };
         }
-
         private protected override void RefreshPage()
         {
             IsRefreshing = true;
-            //code here
+            GetData().Await(ErrorCallBack);
             IsRefreshing = false;
         }
     }

@@ -67,7 +67,7 @@ namespace PassManager.ViewModels
             PageTitle = pageTitle;
             ReadOnly = isReadOnly;
         }
-        private protected async Task GoTo(string itemPage)
+        private protected async Task GoTo(string itemPage, string parameters = "")
         {
             string location = Shell.Current.CurrentState.Location.ToString();
             location = location.Replace("//", "");
@@ -81,14 +81,15 @@ namespace PassManager.ViewModels
                 else
                     baseRoute += "/..";
             }
+            baseRoute += parameters;
             await Shell.Current.GoToAsync(baseRoute, false);
             if (!path[path.Length - 1].Contains(path[0]))
             {
-                await Shell.Current.GoToAsync($"///{itemPage}", false);
+                await Shell.Current.GoToAsync($"///{itemPage}{parameters}", false);
             }
             if (IsUwp)
             {
-                await Task.WhenAll(Shell.Current.GoToAsync("///EntireItems", false), Shell.Current.GoToAsync($"///{itemPage}", false));
+                await Task.WhenAll(Shell.Current.GoToAsync("///EntireItems", false), Shell.Current.GoToAsync($"///{itemPage}{parameters}", false));
             }
         }
         private void HandleError(Exception ex)
