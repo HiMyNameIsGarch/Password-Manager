@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System;
 using PassManager.Models;
 using PassManager.Enums;
+using System.Linq;
 
 namespace PassManager.ViewModels.FlyoutItems
 {
@@ -28,9 +29,12 @@ namespace PassManager.ViewModels.FlyoutItems
         private async Task GetData()
         {
             IEnumerable<ItemPreview> previews = await PasswordProcessor.GetPreviews(ApiHelper.ApiClient);
-            foreach (var item in previews)
+            if(previews != null && previews.Count() > 0)
             {
-                Passwords.Add(item);
+                foreach (var item in previews)
+                {
+                    Passwords.Add(item);
+                }
             }
         }
         //this function is for android testing
@@ -67,6 +71,13 @@ namespace PassManager.ViewModels.FlyoutItems
                     ItemType = TypeOfItems.Password
                 }
             };
+        }
+
+        private protected override void RefreshPage()
+        {
+            IsRefreshing = true;
+            //code here
+            IsRefreshing = false;
         }
     }
 }

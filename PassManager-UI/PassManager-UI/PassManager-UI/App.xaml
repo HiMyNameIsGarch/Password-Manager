@@ -39,7 +39,8 @@
                             FontSize="20" Padding="10"
                             VerticalOptions="End" TextColor="{StaticResource TextColor}"
                             HorizontalOptions="Center" IsVisible="False"/>
-                    <ListView ItemsSource="{TemplateBinding BindingContext.Passwords}" HasUnevenRows="True" SelectedItem="{TemplateBinding BindingContext.SelectedItem, Mode=TwoWay}">
+                    <ListView ItemsSource="{TemplateBinding BindingContext.Passwords}" HasUnevenRows="True" SelectedItem="{TemplateBinding BindingContext.SelectedItem, Mode=TwoWay}"
+                              IsPullToRefreshEnabled="True" RefreshCommand="{TemplateBinding BindingContext.Refresh}" IsRefreshing="{TemplateBinding BindingContext.IsRefreshing}">
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>
