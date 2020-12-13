@@ -25,7 +25,6 @@ namespace PassManager.Models.Api
                         },
                     } , false
                 );
-                //_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization", "TOKEN");
                 return _httpClient;
             }
         }

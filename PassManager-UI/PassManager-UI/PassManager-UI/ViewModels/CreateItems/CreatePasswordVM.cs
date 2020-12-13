@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Input;
 using PassManager.Models.Interfaces;
 using PassManager.Models.Items;
 using Xamarin.Forms;
 using PassManager.Enums;
 using PassManager.Models.Api;
+using System.Threading.Tasks;
+using PassManager.Models;
 
 namespace PassManager.ViewModels.CreateItems
 {
@@ -24,6 +24,7 @@ namespace PassManager.ViewModels.CreateItems
         private string _id;
         private Password _password = new Password();
         private string _pageType;
+        private ICommand _goBack;
         //props
         public string Id
         {
@@ -33,10 +34,18 @@ namespace PassManager.ViewModels.CreateItems
                 _id = Uri.UnescapeDataString(value ?? string.Empty);
                 if(PageState != ItemPageState.Null)
                 {
-                    //get data
+                    if(int.TryParse(_id, out int newId))
+                    {
+                        GetData(newId).Await();
+                    }
+                    else
+                    {
+                        //handle error from id
+                    }
                 }
                 else
                 {
+                    //handle error
                     PageTitle = "Your item is invalid!";
                 }
             }
@@ -72,7 +81,6 @@ namespace PassManager.ViewModels.CreateItems
             set { _password = value; } 
         }
         //commands
-        private ICommand _goBack;
         public ICommand GoBack
         {
             get { return _goBack; }
@@ -90,19 +98,57 @@ namespace PassManager.ViewModels.CreateItems
             }
         }
         //functions
-        private protected override void Create()
+        private async Task GetData(int id)
         {
-            //throw new NotImplementedException();
+            Password password = await PasswordProcessor.GetPassword(ApiHelper.ApiClient,id);
+            if(password != null)
+            {
+                Password = password;
+                NotifyPropertyChanged("Password");
+            }
         }
-
-        private protected override void Delete()
+        //override basic actions for password
+        private protected async override Task Create()
+        {
+            bool isSuccess = await PasswordProcessor.CreatePassword(ApiHelper.ApiClient,Password);
+            if (true)
+            {
+                await GoTo("Password");
+            }
+            else
+            {
+                //handle error(password not good or exception)
+            }
+        }
+        private protected override Task Delete()
         {
             throw new NotImplementedException();
         }
-
-        private protected override void Modify()
+        private protected async override Task Modify()
         {
-            //throw new NotImplementedException();
+            if(Id != string.Empty)
+            {
+                if (int.TryParse(Id, out int newId))
+                {
+                    //bool isSuccess = await PasswordProcessor.Modify(ApiHelper.ApiClient, newId, Password);
+                    if (true)
+                    {
+                        await GoTo("Password");
+                    }
+                    else
+                    {
+                        //handle errors
+                    }
+                }
+                else
+                {
+                    //handle errors
+                }
+            }
+            else
+            {
+                //handle errors
+            }
         }
     }
 }

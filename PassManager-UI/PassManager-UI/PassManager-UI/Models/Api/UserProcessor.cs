@@ -56,8 +56,6 @@ namespace PassManager.Models.Api
             {
                 try
                 {
-                    await SecureStorage.SetAsync("token_auth", token.access_token);
-                    await SecureStorage.SetAsync("token_type", token.token_type);
                     ApiHelper.AddAuthorization(token.token_type, token.access_token);
                 }
                 catch (Exception ex)

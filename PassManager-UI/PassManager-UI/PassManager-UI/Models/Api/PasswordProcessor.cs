@@ -101,7 +101,7 @@ namespace PassManager.Models.Api
         {
             return new FormUrlEncodedContent(new[]
             {
-                 //new KeyValuePair<string, string>("Id", password.Id.ToString()),
+                 new KeyValuePair<string, string>("Id", password.Id.ToString()),
                  new KeyValuePair<string, string>("Name", password.Name),
                  new KeyValuePair<string, string>("Username", password.Username),
                  new KeyValuePair<string, string>("PasswordEncrypted", password.PasswordEncrypted),
