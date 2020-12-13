@@ -10,7 +10,7 @@ namespace PassManager.Views.FlyoutItems
         public PasswordView()
         {
             InitializeComponent();
-            BindingContext = new ViewModels.FlyoutItems.PasswordViewModel(new PageService());
+            BindingContext = new ViewModels.FlyoutItems.PasswordViewModel();
         }
     }
 }

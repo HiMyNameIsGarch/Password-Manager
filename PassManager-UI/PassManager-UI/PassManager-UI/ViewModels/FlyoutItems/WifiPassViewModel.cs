@@ -1,12 +1,11 @@
 ﻿using PassManager.Models.Items;
-using PassManager.Models.Interfaces;
 using PassManager.Enums;
 
 namespace PassManager.ViewModels.FlyoutItems
 {
     public class WifiPassViewModel : BaseListItemVM
     {
-        public WifiPassViewModel(IPageService pageService) : base(pageService,"Wifi")
+        public WifiPassViewModel() : base("Wifi")
         {
             if (CheckInternet())
             {

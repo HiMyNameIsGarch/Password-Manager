@@ -1,6 +1,6 @@
 ﻿using Xamarin.Forms;
-using PassManager.Models;
 using PassManager.Views;
+using PassManager.Models.Api;
 
 namespace PassManager_UI
 {
@@ -10,7 +10,7 @@ namespace PassManager_UI
         {
             InitializeComponent();
             MainPage = new AuthenticationView();
-            PageService.SetMainPage();
+            ApiHelper.InitializeClient();
         }
 
         protected override void OnStart()

@@ -1,5 +1,4 @@
 ﻿using Xamarin.Forms;
-using PassManager.Models;
 using System.Windows.Input;
 
 namespace PassManager.ViewModels.Popups
@@ -24,7 +23,7 @@ namespace PassManager.ViewModels.Popups
         private void Refresh()
         {
             bool internet = Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.Internet;
-            if (internet) new PageService().PopPopupAsync();
+            if (internet) Models.PageService.PopPopupAsync();
         }
         private void Quit()
         {

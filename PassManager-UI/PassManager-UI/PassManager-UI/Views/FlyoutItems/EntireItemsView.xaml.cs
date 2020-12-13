@@ -10,7 +10,7 @@ namespace PassManager.Views.FlyoutItems
         public EntireItemsView()
         {
             InitializeComponent();
-            BindingContext = new ViewModels.FlyoutItems.EntireItemsViewModel(new PageService());
+            BindingContext = new ViewModels.FlyoutItems.EntireItemsViewModel();
         }
     }
 }

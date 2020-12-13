@@ -1,4 +1,5 @@
 ﻿using PassManager.Models.Interfaces;
+using PassManager_UI;
 using System.ComponentModel;
 using Xamarin.Essentials;
 
@@ -7,18 +8,13 @@ namespace PassManager.ViewModels
     public class BaseViewModel : INotifyPropertyChanged
     {
         //constructors
-        public BaseViewModel()
+        public BaseViewModel(string pageTitle = "")
         {
-        }
-        public BaseViewModel(IPageService pageService, string pageTitle = "")
-        {
-            _pageService = pageService;
             PageTitle = pageTitle;
         }
         //variables
         public event PropertyChangedEventHandler PropertyChanged;
         private string _pageTitle;
-        protected private IPageService _pageService;
         //props
         public string PageTitle
         {
@@ -38,7 +34,7 @@ namespace PassManager.ViewModels
             bool internet = Connectivity.NetworkAccess == NetworkAccess.Internet;
             if(!internet)
             {
-                _pageService.PushPopupAsync(new Views.Popups.InternetErrorView());
+                Models.PageService.PushPopupAsync(new Views.Popups.InternetErrorView());
             }
             return internet;
         }

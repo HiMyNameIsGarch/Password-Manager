@@ -10,7 +10,7 @@ namespace PassManager.Views.FlyoutItems
         public WifiPassView()
         {
             InitializeComponent();
-            BindingContext = new ViewModels.FlyoutItems.WifiPassViewModel(new PageService());
+            BindingContext = new ViewModels.FlyoutItems.WifiPassViewModel();
         }
     }
 }

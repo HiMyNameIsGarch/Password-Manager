@@ -3,7 +3,7 @@ using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
 using Android.Views;
-using Android.Widget;
+using Xamarin.Forms;
 using Android.OS;
 
 namespace PassManager_UI.Droid
@@ -37,9 +37,9 @@ namespace PassManager_UI.Droid
         }
         public async override void OnBackPressed()
         {
-            if(Xamarin.Forms.Shell.Current.CurrentState.Location.ToString().Contains("Create"))
+            if(Shell.Current != null)
             {
-                await Xamarin.Forms.Shell.Current.GoToAsync("../..",true);
+                await Shell.Current.Navigation.PopToRootAsync(true);
             }
             else
             {

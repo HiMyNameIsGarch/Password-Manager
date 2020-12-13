@@ -1,8 +1,5 @@
-﻿using PassManager.ViewModels;
-using System.ComponentModel;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using PassManager.Models;
 
 namespace PassManager.Views
 {
@@ -12,7 +9,7 @@ namespace PassManager.Views
         public AuthenticationView()
         {
             InitializeComponent();
-            BindingContext = new AuthenticationViewModel(new PageService());
+            BindingContext = new AuthenticationViewModel();
         }
     }
 }
