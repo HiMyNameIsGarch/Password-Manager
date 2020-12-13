@@ -18,7 +18,7 @@ namespace PassManager_WebApi.Controllers
         {
             IEnumerable<ItemPreview> passwords = GetCurrentUser().Passwords
                 .OrderBy(p => p.LastVisited)
-                .Select(item => new ItemPreview(item.Id, item.Name, item.Username, Enum.TypeOfItems.Password))
+                .Select(item => new ItemPreview(item.Id, item.Name, item.Username, Enums.TypeOfItems.Password))
                 .ToList();
             if (passwords.Count() == 0) return BadRequest("You don't have any accounts!");
             return Ok(passwords);

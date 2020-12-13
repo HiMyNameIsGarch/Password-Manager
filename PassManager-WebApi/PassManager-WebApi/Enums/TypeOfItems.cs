@@ -1,4 +1,4 @@
-﻿namespace PassManager_WebApi.Enum
+﻿namespace PassManager_WebApi.Enums
 {
     public enum TypeOfItems
     {

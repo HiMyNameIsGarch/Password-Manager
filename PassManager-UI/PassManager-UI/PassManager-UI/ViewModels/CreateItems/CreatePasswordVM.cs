@@ -10,6 +10,7 @@ using PassManager.Models;
 
 namespace PassManager.ViewModels.CreateItems
 {
+    //parameters
     [QueryProperty("PageType", "pageType")]
     [QueryProperty("Id","id")]
     public class CreatePasswordVM : BaseItemVM, IBackButtonBehavior

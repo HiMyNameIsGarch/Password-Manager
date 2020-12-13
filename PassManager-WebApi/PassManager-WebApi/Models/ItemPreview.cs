@@ -1,4 +1,4 @@
-﻿using PassManager_WebApi.Enum;
+﻿using PassManager_WebApi.Enums;
 
 namespace PassManager_WebApi.Models
 {

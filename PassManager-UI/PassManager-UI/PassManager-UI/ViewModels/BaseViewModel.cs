@@ -6,23 +6,19 @@ namespace PassManager.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
+        //constructors
         public BaseViewModel()
         {
         }
-        public BaseViewModel(IPageService pageService, string pageTitle)
+        public BaseViewModel(IPageService pageService, string pageTitle = "")
         {
             _pageService = pageService;
             PageTitle = pageTitle;
-        }
-        public BaseViewModel(IPageService pageService)
-        {
-            _pageService = pageService;
         }
         //variables
         public event PropertyChangedEventHandler PropertyChanged;
         private string _pageTitle;
         protected private IPageService _pageService;
-        //commands
         //props
         public string PageTitle
         {

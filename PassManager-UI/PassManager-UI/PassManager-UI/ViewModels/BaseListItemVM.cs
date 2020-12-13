@@ -10,21 +10,18 @@ namespace PassManager.ViewModels
     public abstract class BaseListItemVM : BaseViewModel
     {
         //constructors
-        public BaseListItemVM(IPageService pageService) : base(pageService)
+        public BaseListItemVM(IPageService pageService, string pageTitle) : base(pageService, pageTitle)
         {
             _addItem = new Command(SelectItemToAdd);
             _refresh = new Command(RefreshPage);
         }
-        public BaseListItemVM(IPageService pageService, string pageTitle) : base(pageService,pageTitle)
-        {
-            _addItem = new Command(SelectItemToAdd);
-            _refresh = new Command(RefreshPage);
-        }
+        //private variables
         private bool _isRefreshing;
         private ItemPreview _selectedItem;
         private ICommand _addItem;
         private ICommand _refresh;
         private ObservableCollection<ItemPreview> _passwords = new ObservableCollection<ItemPreview>();
+        //props for binding
         public ObservableCollection<ItemPreview> Passwords
         {
             get { return _passwords; }
@@ -49,6 +46,7 @@ namespace PassManager.ViewModels
             get { return _isRefreshing; }
             private protected set { _isRefreshing = value; NotifyPropertyChanged(); }
         }
+        //commands
         public ICommand Refresh
         {
             get { return _refresh; }
@@ -57,15 +55,17 @@ namespace PassManager.ViewModels
         {
             get { return _addItem; }
         }
-        private async System.Threading.Tasks.Task ViewSelectedItem(int id, Enums.TypeOfItems itemType)
-        {
-            await Shell.Current.GoToAsync($"Create{itemType}?pageType=View&id={id}");
-        }
-        private protected abstract void RefreshPage();
+        //actions for commands
         private async void SelectItemToAdd()
         {
             if (Shell.Current != null)
                 await Shell.Current.GoToAsync("ListItem");
+        }
+        private protected abstract void RefreshPage();
+        //methods
+        private async System.Threading.Tasks.Task ViewSelectedItem(int id, Enums.TypeOfItems itemType)
+        {
+            await Shell.Current.GoToAsync($"Create{itemType}?pageType=View&id={id}");
         }
     }
 }
