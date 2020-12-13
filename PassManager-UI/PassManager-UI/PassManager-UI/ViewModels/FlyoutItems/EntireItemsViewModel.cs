@@ -2,6 +2,8 @@
 using System.Collections.ObjectModel;
 using PassManager.Models.Interfaces;
 using PassManager.Enums;
+using System;
+using System.Threading;
 
 namespace PassManager.ViewModels.FlyoutItems
 {
@@ -14,6 +16,14 @@ namespace PassManager.ViewModels.FlyoutItems
                 AddDataForAndroid();
             }
         }
+
+        private protected override void RefreshPage()
+        {
+            IsRefreshing = true;
+            //code here
+            IsRefreshing = false;
+        }
+
         private void AddDataForAndroid()
         {
             Passwords = new ObservableCollection<ItemPreview>()
@@ -38,6 +48,34 @@ namespace PassManager.ViewModels.FlyoutItems
                     Title = "Champion gg",
                     SubTitle = "gabriel70@yahoo.com",
                     ItemType = TypeOfItems.Password
+                },
+                new ItemPreview()
+                {
+                    Id = 4,
+                    Title = "League of legends",
+                    SubTitle = "hanu70@yahoo.com",
+                    ItemType = TypeOfItems.Password
+                },
+                new ItemPreview()
+                {
+                    Id = 1,
+                    Title = "Home",
+                    SubTitle = "Wifi",
+                    ItemType = TypeOfItems.Wifi
+                },
+                new ItemPreview()
+                {
+                    Id = 2,
+                    Title = "Coffee shop",
+                    SubTitle = "Wifi",
+                    ItemType = TypeOfItems.Wifi
+                },
+                new ItemPreview()
+                {
+                    Id = 3,
+                    Title = "My friends house",
+                    SubTitle = "Wifi",
+                    ItemType = TypeOfItems.Wifi
                 },
                 new ItemPreview()
                 {

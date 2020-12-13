@@ -6,7 +6,7 @@
     <Shell.TitleView>
         <Label Text="Select item to add" FontSize="20" VerticalTextAlignment="Center"/>
     </Shell.TitleView>
-    <ListView ItemsSource="{Binding ListItems}" SelectedItem="{Binding SelectedPage}" HasUnevenRows="True">
+    <ListView ItemsSource="{Binding ListItems}" SelectedItem="{Binding SelectedPage, Mode=TwoWay}" HasUnevenRows="True">
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell>

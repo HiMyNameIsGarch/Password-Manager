@@ -14,6 +14,14 @@ namespace PassManager.ViewModels.FlyoutItems
                 AddDataForAndroid();
             }
         }
+
+        private protected override void RefreshPage()
+        {
+            IsRefreshing = true;
+            //code here
+            IsRefreshing = false;
+        }
+
         //function for android testing
         private void AddDataForAndroid()
         {
