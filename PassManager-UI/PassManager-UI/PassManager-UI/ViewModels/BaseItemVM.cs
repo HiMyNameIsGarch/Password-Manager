@@ -8,19 +8,59 @@ using System.Linq;
 
 namespace PassManager.ViewModels
 {
+    [QueryProperty("PageType", "pageType")]
+    [QueryProperty("Id", "id")]
     public abstract class BaseItemVM : BaseViewModel
     {
         //constructors
-        public BaseItemVM()
+        public BaseItemVM(string title = "") : base(title)
         {
+            //set defaults values in case no parameter passed
+            ChangeProps(ItemPageState.Null, "Create", "No data provided", true);
             _save = new Command(ChangePageType);
+            _displayMoreActions = new Command(DisplayMore);
         }
         //variables
         protected private ItemPageState PageState;
         private string _actionBtnText;
         private bool _readOnly;
         private ICommand _save;
+        private ICommand _displayMoreActions;
+        private bool _needMoreActions = false;
+        private string _actionsText = "More";
+        private string _pageType;
+        private string _id;
         //props
+        public string ActionsText
+        {
+            get { return _actionsText; }
+            private set { _actionsText = value; NotifyPropertyChanged(); }
+        }
+        public bool NeedMoreActions
+        {
+            get { return _needMoreActions; }
+            private set { _needMoreActions = value; NotifyPropertyChanged(); }
+        }
+        public string Id
+        {
+            private protected get { return _id; }
+            set
+            {
+                _id = Uri.UnescapeDataString(value ?? string.Empty);
+                AfterSettingId();
+            }
+        }
+        public string PageType
+        {
+            private protected get { return _pageType; }
+            set
+            {
+                _pageType = Uri.UnescapeDataString(value ?? string.Empty);
+                Enum.TryParse(_pageType, out ItemPageState pageState);
+                PageState = pageState;
+                AfterSettingPageType();
+            }
+        }
         public bool IsUwp
         {
             get { return Device.RuntimePlatform == Device.UWP; }
@@ -39,7 +79,24 @@ namespace PassManager.ViewModels
         public ICommand SaveChanges {
             get { return _save; }
         }
+        public ICommand DisplayMoreActions
+        {
+            get { return _displayMoreActions; }
+        }
         //functions for commands
+        private void DisplayMore()
+        {
+            if (NeedMoreActions)
+            {
+                NeedMoreActions = false;
+                ActionsText = "More";
+            }
+            else
+            {
+                NeedMoreActions = true;
+                ActionsText = "Hide";
+            }
+        }
         private void ChangePageType()
         {
             switch (PageState)
@@ -60,6 +117,8 @@ namespace PassManager.ViewModels
         private protected abstract Task Delete();
         private protected abstract Task Modify();
         //functions
+        private protected abstract void AfterSettingId();
+        private protected abstract void AfterSettingPageType();
         private protected void ChangeProps(ItemPageState pageState, string btnText, string pageTitle, bool isReadOnly)
         {
             PageState = pageState;
