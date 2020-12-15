@@ -29,10 +29,16 @@ namespace PassManager.ViewModels
         private ICommand _displayMoreActions;
         private ICommand _deleteItem;
         private bool _needMoreActions = false;
+        private bool _canDelete;
         private string _actionsText = "More";
         private string _pageType;
         private string _id;
         //props
+        public bool CanDelete
+        {
+            get { return _canDelete; }
+            private set { _canDelete = value; NotifyPropertyChanged(); }
+        }
         public string ActionsText
         {
             get { return _actionsText; }
@@ -142,6 +148,14 @@ namespace PassManager.ViewModels
         private protected abstract void AfterSettingPageType();
         private protected void ChangeProps(ItemPageState pageState, string btnText, string pageTitle, bool isReadOnly)
         {
+            if(pageState == ItemPageState.View || pageState == ItemPageState.Edit)
+            {
+                CanDelete = true;
+            }
+            else
+            {
+                CanDelete = false;
+            }
             PageState = pageState;
             ActionBtnText = btnText;
             PageTitle = pageTitle;
