@@ -78,7 +78,7 @@ namespace PassManager.Models.Api
             {
                 return true;
             }
-            return false;
+            throw new Exception("Error from modifying a password");
         }
         internal static async Task<bool> Delete(HttpClient httpClient, int id)
         {
@@ -95,7 +95,7 @@ namespace PassManager.Models.Api
             {
                 return true;
             }
-            return false;
+            throw new Exception("Error from deleting a password");
         }
         private static HttpContent ConvertToHttpContent(Password password)
         {

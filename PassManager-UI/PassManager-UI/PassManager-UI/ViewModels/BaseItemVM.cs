@@ -19,6 +19,7 @@ namespace PassManager.ViewModels
             ChangeProps(ItemPageState.Null, "Create", "No data provided", true);
             _save = new Command(ChangePageType);
             _displayMoreActions = new Command(DisplayMore);
+            _deleteItem = new Command(AskToDeleteItem);
         }
         //variables
         protected private ItemPageState PageState;
@@ -26,6 +27,7 @@ namespace PassManager.ViewModels
         private bool _readOnly;
         private ICommand _save;
         private ICommand _displayMoreActions;
+        private ICommand _deleteItem;
         private bool _needMoreActions = false;
         private string _actionsText = "More";
         private string _pageType;
@@ -76,6 +78,10 @@ namespace PassManager.ViewModels
             protected private set { _readOnly = value; NotifyPropertyChanged(); }
         }
         //commands
+        public ICommand DeleteItem
+        {
+            get { return _deleteItem; }
+        }
         public ICommand SaveChanges {
             get { return _save; }
         }
@@ -84,6 +90,21 @@ namespace PassManager.ViewModels
             get { return _displayMoreActions; }
         }
         //functions for commands
+        private async void AskToDeleteItem()
+        {
+            bool accept = await PageService.DisplayAlert("Delete","Do you really want to delete this item?","Yes","No");
+            if (accept)
+            {
+                try
+                {
+                    await Delete();
+                }
+                catch(Exception ex)
+                {
+                    HandleError(ex);
+                }
+            }
+        }
         private void DisplayMore()
         {
             if (NeedMoreActions)

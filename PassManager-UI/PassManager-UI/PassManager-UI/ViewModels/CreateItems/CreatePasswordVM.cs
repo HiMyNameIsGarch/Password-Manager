@@ -64,9 +64,17 @@ namespace PassManager.ViewModels.CreateItems
                 //handle error(password not good or exception)
             }
         }
-        private protected override Task Delete()
+        private protected async override Task Delete()
         {
-            throw new NotImplementedException();
+            bool isSuccess = await PasswordProcessor.Delete(ApiHelper.ApiClient, Password.Id);
+            if (isSuccess)
+            {
+                await GoTo("Password", "?update=true");
+            }
+            else
+            {
+                //handle error(password not deleted)
+            }
         }
         private protected async override Task Modify()
         {
@@ -97,25 +105,6 @@ namespace PassManager.ViewModels.CreateItems
 
         private protected override void AfterSettingId()
         {
-            switch (PageState)
-            {
-                case ItemPageState.Create:
-                    PageTitle = "Create Password!";
-                    ReadOnly = false;
-                    break;
-                case ItemPageState.View:
-                    ChangeProps(ItemPageState.View, "Edit", "View Password", true);
-                    break;
-                case ItemPageState.Edit:
-                    PageTitle = "Edit Password";
-                    break;
-                default:
-                    PageTitle = "Your item is invalid!";
-                    break;
-            }
-        }
-        private protected override void AfterSettingPageType()
-        {
             if (PageState != ItemPageState.Null)
             {
                 if (int.TryParse(Id, out int newId))
@@ -131,6 +120,25 @@ namespace PassManager.ViewModels.CreateItems
             {
                 //handle error
                 PageTitle = "Your item is invalid!";
+            }
+        }
+        private protected override void AfterSettingPageType()
+        {
+            switch (PageState)
+            {
+                case ItemPageState.Create:
+                    PageTitle = "Create Password!";
+                    ReadOnly = false;
+                    break;
+                case ItemPageState.View:
+                    ChangeProps(ItemPageState.View, "Edit", "View Password", true);
+                    break;
+                case ItemPageState.Edit:
+                    PageTitle = "Edit Password";
+                    break;
+                default:
+                    PageTitle = "Your item is invalid!";
+                    break;
             }
         }
     }
