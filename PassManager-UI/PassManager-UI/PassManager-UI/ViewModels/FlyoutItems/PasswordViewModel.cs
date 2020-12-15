@@ -89,11 +89,9 @@ namespace PassManager.ViewModels.FlyoutItems
                 }
             };
         }
-        private protected override void RefreshPage()
+        private protected override Task RefreshPage()
         {
-            IsRefreshing = true;
-            GetData().Await(ErrorCallBack);
-            IsRefreshing = false;
+            throw new NotImplementedException();
         }
     }
 }
