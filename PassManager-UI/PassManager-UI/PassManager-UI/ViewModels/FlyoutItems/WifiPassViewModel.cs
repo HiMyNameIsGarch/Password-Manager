@@ -1,5 +1,7 @@
-﻿using PassManager.Models.Items;
+﻿using System;
+using PassManager.Models.Items;
 using PassManager.Enums;
+using System.Threading.Tasks;
 
 namespace PassManager.ViewModels.FlyoutItems
 {
@@ -14,11 +16,9 @@ namespace PassManager.ViewModels.FlyoutItems
             }
         }
 
-        private protected override void RefreshPage()
+        private protected override Task RefreshPage()
         {
-            IsRefreshing = true;
-            //code here
-            IsRefreshing = false;
+            throw new NotImplementedException();
         }
 
         //function for android testing
