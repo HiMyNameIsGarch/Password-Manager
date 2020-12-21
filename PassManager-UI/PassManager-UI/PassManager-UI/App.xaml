@@ -40,7 +40,7 @@
                             VerticalOptions="End" TextColor="{StaticResource TextColor}"
                             HorizontalOptions="Center" IsVisible="False"/>
                     <Button Text="Refresh" Command="{TemplateBinding BindingContext.Refresh}" IsVisible="{TemplateBinding BindingContext.IsUwp}"/>
-                    <ListView ItemsSource="{TemplateBinding BindingContext.Passwords}" HasUnevenRows="True" SelectedItem="{TemplateBinding BindingContext.SelectedItem, Mode=TwoWay}"
+                    <ListView ItemsSource="{TemplateBinding BindingContext.Items}" HasUnevenRows="True" SelectedItem="{TemplateBinding BindingContext.SelectedItem, Mode=TwoWay}"
                               IsPullToRefreshEnabled="True" RefreshCommand="{TemplateBinding BindingContext.Refresh}" IsRefreshing="{TemplateBinding BindingContext.IsRefreshing}">
                         <ListView.ItemTemplate>
                             <DataTemplate>

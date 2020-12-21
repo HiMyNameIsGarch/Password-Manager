@@ -7,7 +7,7 @@ namespace PassManager.ViewModels.CreateItems
 {
     public class CreateWifiVM : BaseItemVM, IBackButtonBehavior
     {
-        public CreateWifiVM()
+        public CreateWifiVM() : base(Enums.TypeOfItems.Wifi)
         {
             _goBack = new Command(GoBackButton);
         }
@@ -34,13 +34,7 @@ namespace PassManager.ViewModels.CreateItems
         {
             throw new System.NotImplementedException();
         }
-
-        private protected override void AfterSettingId()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        private protected override void AfterSettingPageType()
+        private protected override Task GetData(int id)
         {
             throw new System.NotImplementedException();
         }

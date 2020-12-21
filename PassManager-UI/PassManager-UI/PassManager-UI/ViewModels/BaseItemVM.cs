@@ -13,15 +13,17 @@ namespace PassManager.ViewModels
     public abstract class BaseItemVM : BaseViewModel
     {
         //constructors
-        public BaseItemVM(string title = "") : base(title)
+        public BaseItemVM(TypeOfItems itemType)
         {
             //set defaults values in case no parameter passed
             ChangeProps(ItemPageState.Null, "Create", "No data provided", true);
+            ItemType = itemType.ToString();
             _save = new Command(ChangePageType);
             _displayMoreActions = new Command(DisplayMore);
             _deleteItem = new Command(AskToDeleteItem);
         }
         //variables
+        private readonly string ItemType;
         protected private ItemPageState PageState;
         private string _actionBtnText;
         private bool _readOnly;
@@ -33,6 +35,57 @@ namespace PassManager.ViewModels
         private string _actionsText = "More";
         private string _pageType;
         private string _id;
+        //parameters
+        public string Id
+        {
+            private protected get { return _id; }
+            set
+            {
+                _id = Uri.UnescapeDataString(value ?? string.Empty);
+                if (PageState != ItemPageState.Null)
+                {
+                    if (int.TryParse(Id, out int newId))
+                    {
+                        GetData(newId).Await(HandleError, true, true, false);
+                    }
+                    else
+                    {
+                        //handle error from id
+                    }
+                }
+                else
+                {
+                    //handle error
+                    PageTitle = "Your item is invalid!";
+                }
+            }
+        }
+        public string PageType
+        {
+            private protected get { return _pageType; }
+            set
+            {
+                _pageType = Uri.UnescapeDataString(value ?? string.Empty);
+                Enum.TryParse(_pageType, out ItemPageState pageState);
+                PageState = pageState;
+                switch (PageState)
+                {
+                    case ItemPageState.Create:
+                        PageTitle = $"Create {ItemType}!";
+                        ReadOnly = false;
+                        break;
+                    case ItemPageState.View:
+                        ChangeProps(ItemPageState.View, "Edit", $"View {ItemType}", true);
+                        break;
+                    case ItemPageState.Edit:
+                        PageTitle = $"Edit {ItemType}";
+                        break;
+                    default:
+                        PageTitle = $"Your {ItemType} is invalid!";
+                        break;
+                }
+            }
+        }
         //props
         public bool CanDelete
         {
@@ -48,26 +101,6 @@ namespace PassManager.ViewModels
         {
             get { return _needMoreActions; }
             private set { _needMoreActions = value; NotifyPropertyChanged(); }
-        }
-        public string Id
-        {
-            private protected get { return _id; }
-            set
-            {
-                _id = Uri.UnescapeDataString(value ?? string.Empty);
-                AfterSettingId();
-            }
-        }
-        public string PageType
-        {
-            private protected get { return _pageType; }
-            set
-            {
-                _pageType = Uri.UnescapeDataString(value ?? string.Empty);
-                Enum.TryParse(_pageType, out ItemPageState pageState);
-                PageState = pageState;
-                AfterSettingPageType();
-            }
         }
         public bool IsUwp
         {
@@ -138,7 +171,7 @@ namespace PassManager.ViewModels
                     Create().Await(HandleError);
                     break;
                 case ItemPageState.View:
-                    ChangeProps(ItemPageState.Edit, "Save", "Edit the item", false);
+                    ChangeProps(ItemPageState.Edit, "Save", $"Edit {ItemType}", false);
                     break;
                 case ItemPageState.Edit:
                     Modify().Await(HandleError);
@@ -150,8 +183,7 @@ namespace PassManager.ViewModels
         private protected abstract Task Delete();
         private protected abstract Task Modify();
         //functions
-        private protected abstract void AfterSettingId();
-        private protected abstract void AfterSettingPageType();
+        private protected abstract Task GetData(int id);
         private protected void ChangeProps(ItemPageState pageState, string btnText, string pageTitle, bool isReadOnly)
         {
             if(pageState == ItemPageState.View || pageState == ItemPageState.Edit)

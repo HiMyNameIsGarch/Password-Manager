@@ -29,7 +29,7 @@ namespace PassManager.ViewModels.FlyoutItems
         //function for android testing
         private void AddDataForAndroid()
         {
-            Passwords = new System.Collections.ObjectModel.ObservableCollection<ItemPreview>()
+            Items = new System.Collections.ObjectModel.ObservableCollection<ItemPreview>()
             {
                 new ItemPreview()
                 {
