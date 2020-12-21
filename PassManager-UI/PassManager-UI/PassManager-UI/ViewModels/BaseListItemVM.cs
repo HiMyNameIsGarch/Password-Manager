@@ -8,18 +8,39 @@ using System;
 
 namespace PassManager.ViewModels
 {
+    [QueryProperty("Update", "update")]
     public abstract class BaseListItemVM : BaseViewModel
     {
         //constructors
         public BaseListItemVM(string pageTitle) : base(pageTitle)
         {
+            ManageFlyoutItems.Add(pageTitle, true);
             _addItem = new Command(SelectItemToAdd);
+            _passwords = new ObservableCollection<ItemPreview>();
         }
         //private variables
         private bool _isRefreshing;
         private ItemPreview _selectedItem;
         private ICommand _addItem;
-        private ObservableCollection<ItemPreview> _passwords = new ObservableCollection<ItemPreview>();
+        private string _update;
+        private ObservableCollection<ItemPreview> _passwords;
+        //parameters
+        public string Update
+        {
+            get { return _update; }
+            set
+            {
+                _update = Uri.UnescapeDataString(value ?? string.Empty);
+                if (Boolean.TryParse(_update, out bool refresh))
+                {
+                    if (refresh)
+                    {
+                        GetData().Await(HandleError,false,true,false);
+                    }
+                }
+            }
+        }
+        private protected abstract Task GetData();
         //props for binding
         public ObservableCollection<ItemPreview> Passwords
         {

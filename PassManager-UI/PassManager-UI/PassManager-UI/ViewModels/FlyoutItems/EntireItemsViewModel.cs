@@ -18,6 +18,13 @@ namespace PassManager.ViewModels.FlyoutItems
             }
         }
 
+        private protected override Task GetData()
+        {
+            return new Task(new Action(AddDataForAndroid));
+            //return null;
+            //throw new NotImplementedException();
+        }
+
         private protected override Task RefreshPage()
         {
             throw new NotImplementedException();

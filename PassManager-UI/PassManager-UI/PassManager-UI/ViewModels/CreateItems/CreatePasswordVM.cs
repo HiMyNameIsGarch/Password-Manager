@@ -57,7 +57,7 @@ namespace PassManager.ViewModels.CreateItems
             bool isSuccess = await PasswordProcessor.CreatePassword(ApiHelper.ApiClient,Password);
             if (isSuccess)
             {
-                await GoTo("Password", "?update=true");
+                await GoTo("Password", $"?update={ManageFlyoutItems.GetValue("Passwords")}");
             }
             else
             {
@@ -102,14 +102,14 @@ namespace PassManager.ViewModels.CreateItems
                 //handle errors
             }
         }
-
+        //after setting some parameters
         private protected override void AfterSettingId()
         {
             if (PageState != ItemPageState.Null)
             {
                 if (int.TryParse(Id, out int newId))
                 {
-                    GetData(newId).Await();
+                    GetData(newId).Await(HandleError,true,true,false);
                 }
                 else
                 {
