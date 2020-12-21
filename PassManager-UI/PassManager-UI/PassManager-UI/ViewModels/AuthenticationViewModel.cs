@@ -195,14 +195,19 @@ namespace PassManager.Views
                 if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password)) DisplayError("You need to complete all fields in order to register!");
                 else
                 {
+                    await Models.PageService.PushPopupAsync(new Popups.WaitForActionView());
                     Models.TaskStatus statusLogin = await UserProcessor.LogIn(ApiHelper.ApiClient, Username, Password);
                     if (!statusLogin.IsError)
                     {
                         Username = Password = string.Empty;
                         Models.PageService.ChangeMainPage(new MainView());
+                        await Models.PageService.PopPopupAsync();
                     }
                     else
+                    {
+                        await Models.PageService.PopPopupAsync();
                         DisplayError(statusLogin.Message);
+                    }
                 }
             }
         }

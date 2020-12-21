@@ -16,6 +16,11 @@ namespace PassManager.ViewModels.FlyoutItems
             }
         }
 
+        private protected override Task GetData()
+        {
+            throw new NotImplementedException();
+        }
+
         private protected override Task RefreshPage()
         {
             throw new NotImplementedException();

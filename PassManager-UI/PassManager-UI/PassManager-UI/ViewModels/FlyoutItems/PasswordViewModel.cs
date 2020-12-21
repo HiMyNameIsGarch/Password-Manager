@@ -11,34 +11,16 @@ using Xamarin.Forms;
 
 namespace PassManager.ViewModels.FlyoutItems
 {
-    [QueryProperty("Update","update")]
     public class PasswordViewModel : BaseListItemVM
     {
         public PasswordViewModel() : base("Passwords")
         {
             if (CheckInternet())
             {
-                GetData().Await(ErrorCallBack);
+                GetData().Await(ErrorCallBack,true,true,false);
+                //Update = "true";
                 //add data for page
                 //AddDataForAndroid();
-            }
-        }
-        //private variables
-        private string _update;
-        //parameters
-        public string Update
-        {
-            get { return _update; }
-            set
-            {
-                _update = Uri.UnescapeDataString(value ?? string.Empty);
-                if (Boolean.TryParse(_update, out bool refresh))
-                {
-                    if (refresh)
-                    {
-                        GetData().Await(ErrorCallBack);
-                    }
-                }
             }
         }
         //functions
@@ -46,7 +28,7 @@ namespace PassManager.ViewModels.FlyoutItems
         {
 
         }
-        private async Task GetData()
+        private protected override async Task GetData()
         {
             IEnumerable<ItemPreview> previews = await PasswordProcessor.GetPreviews(ApiHelper.ApiClient);
             if(previews != null && previews.Count() > 0)

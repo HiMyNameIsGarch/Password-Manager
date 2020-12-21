@@ -101,6 +101,7 @@ namespace PassManager.ViewModels
             bool accept = await PageService.DisplayAlert("Delete","Do you really want to delete this item?","Yes","No");
             if (accept)
             {
+                await PageService.PushPopupAsync(new Views.Popups.WaitForActionView());
                 try
                 {
                     await Delete();
@@ -124,8 +125,13 @@ namespace PassManager.ViewModels
                 ActionsText = "Hide";
             }
         }
-        private void ChangePageType()
+        private async void ChangePageType()
         {
+            //open popup
+            if(PageState == ItemPageState.Create || PageState == ItemPageState.Edit)
+            {
+                await PageService.PushPopupAsync(new Views.Popups.WaitForActionView(),false); 
+            }
             switch (PageState)
             {
                 case ItemPageState.Create:
@@ -175,7 +181,14 @@ namespace PassManager.ViewModels
                 else
                     baseRoute += "/..";
             }
-            baseRoute += parameters;
+            if(path[0] == "EntireItems")
+            {
+                baseRoute += "?update=true";
+            }
+            else
+            {    
+                baseRoute += parameters;
+            }
             await Shell.Current.GoToAsync(baseRoute, false);
             if (!path[path.Length - 1].Contains(path[0]))
             {
@@ -183,10 +196,10 @@ namespace PassManager.ViewModels
             }
             if (IsUwp)
             {
-                await Task.WhenAll(Shell.Current.GoToAsync("///EntireItems", false), Shell.Current.GoToAsync($"///{itemPage}{parameters}", false));
+                await Task.WhenAll(Shell.Current.GoToAsync("///EntireItems", false), Shell.Current.GoToAsync($"///{itemPage}", false));
             }
         }
-        private void HandleError(Exception ex)
+        private protected void HandleError(Exception ex)
         {
 
         }

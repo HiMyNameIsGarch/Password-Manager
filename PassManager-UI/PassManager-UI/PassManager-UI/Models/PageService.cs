@@ -15,13 +15,13 @@ namespace PassManager.Models
         {
             Application.Current.MainPage = page;
         }
-        public static Task PushPopupAsync(PopupPage page)
+        public static Task PushPopupAsync(PopupPage page, bool animate = true)
         {
-            return MainPage.Navigation.PushPopupAsync(page);
+            return MainPage.Navigation.PushPopupAsync(page,animate);
         }
-        public static Task PopPopupAsync()
+        public static Task PopPopupAsync(bool animate = true)
         {
-           return MainPage.Navigation.PopPopupAsync();
+           return MainPage.Navigation.PopPopupAsync(animate);
         }
         //test only
         public async static Task<bool> DisplayAlert(string title, string message, string accept, string cancel)
