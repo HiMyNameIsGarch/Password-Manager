@@ -1,9 +1,7 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using PassManager.Models.Interfaces;
 using PassManager.Models.Items;
 using Xamarin.Forms;
-using PassManager.Enums;
 using PassManager.Models.Api;
 using System.Threading.Tasks;
 using PassManager.Models;
@@ -13,12 +11,13 @@ namespace PassManager.ViewModels.CreateItems
     //parameters
     public class CreatePasswordVM : BaseItemVM, IBackButtonBehavior
     {
-        public CreatePasswordVM()
+        public CreatePasswordVM() : base(Enums.TypeOfItems.Password)
         {
             _goBack = new Command(GoBackButton);
+            _password = new Password();
         }
         //variables
-        private Password _password = new Password();
+        private Password _password;
         private ICommand _goBack;
         //props
         public Password Password {
@@ -33,17 +32,10 @@ namespace PassManager.ViewModels.CreateItems
         //implementation for commands
         public async void GoBackButton()
         {
-            try
-            {
-                await Shell.Current.GoToAsync("../..", true);
-            }
-            catch
-            {
-                await Shell.Current.GoToAsync("..", true);
-            }
+            await Shell.Current.Navigation.PopToRootAsync();
         }
         //functions
-        private async Task GetData(int id)
+        private protected async override Task GetData(int id)
         {
             Password password = await PasswordProcessor.GetPassword(ApiHelper.ApiClient,id);
             if(password != null)
@@ -100,45 +92,6 @@ namespace PassManager.ViewModels.CreateItems
             else
             {
                 //handle errors
-            }
-        }
-        //after setting some parameters
-        private protected override void AfterSettingId()
-        {
-            if (PageState != ItemPageState.Null)
-            {
-                if (int.TryParse(Id, out int newId))
-                {
-                    GetData(newId).Await(HandleError,true,true,false);
-                }
-                else
-                {
-                    //handle error from id
-                }
-            }
-            else
-            {
-                //handle error
-                PageTitle = "Your item is invalid!";
-            }
-        }
-        private protected override void AfterSettingPageType()
-        {
-            switch (PageState)
-            {
-                case ItemPageState.Create:
-                    PageTitle = "Create Password!";
-                    ReadOnly = false;
-                    break;
-                case ItemPageState.View:
-                    ChangeProps(ItemPageState.View, "Edit", "View Password", true);
-                    break;
-                case ItemPageState.Edit:
-                    PageTitle = "Edit Password";
-                    break;
-                default:
-                    PageTitle = "Your item is invalid!";
-                    break;
             }
         }
     }

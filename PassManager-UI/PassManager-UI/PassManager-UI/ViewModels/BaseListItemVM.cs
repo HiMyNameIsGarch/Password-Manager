@@ -16,14 +16,14 @@ namespace PassManager.ViewModels
         {
             ManageFlyoutItems.Add(pageTitle, true);
             _addItem = new Command(SelectItemToAdd);
-            _passwords = new ObservableCollection<ItemPreview>();
+            _items = new ObservableCollection<ItemPreview>();
         }
         //private variables
         private bool _isRefreshing;
         private ItemPreview _selectedItem;
         private ICommand _addItem;
         private string _update;
-        private ObservableCollection<ItemPreview> _passwords;
+        private ObservableCollection<ItemPreview> _items;
         //parameters
         public string Update
         {
@@ -40,12 +40,11 @@ namespace PassManager.ViewModels
                 }
             }
         }
-        private protected abstract Task GetData();
         //props for binding
-        public ObservableCollection<ItemPreview> Passwords
+        public ObservableCollection<ItemPreview> Items
         {
-            get { return _passwords; }
-            private protected set { _passwords = value; NotifyPropertyChanged(); }
+            get { return _items; }
+            private protected set { _items = value; NotifyPropertyChanged(); }
         }
         public ItemPreview SelectedItem
         {
@@ -76,7 +75,6 @@ namespace PassManager.ViewModels
             get { return new Command(async () => 
             {
                 IsRefreshing = true;
-
                 try
                 {
                     await RefreshPage();
@@ -85,7 +83,6 @@ namespace PassManager.ViewModels
                 {
                     HandleError(ex);
                 }
-
                 IsRefreshing = false;
             }); }
         }
@@ -100,12 +97,14 @@ namespace PassManager.ViewModels
                 await Shell.Current.GoToAsync("ListItem");
         }
         private protected abstract Task RefreshPage();
+        //abstract functions
+        private protected abstract Task GetData();
         //methods
         private async Task ViewSelectedItem(int id, Enums.TypeOfItems itemType)
         {
             await Shell.Current.GoToAsync($"Create{itemType}?pageType=View&id={id}");
         }
-        private void HandleError(Exception ex)
+        private protected void HandleError(Exception ex)
         {
 
         }

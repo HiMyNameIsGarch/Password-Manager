@@ -1,9 +1,7 @@
 ﻿using PassManager.Models.Items;
 using System.Collections.ObjectModel;
-using PassManager.Models.Interfaces;
 using PassManager.Enums;
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace PassManager.ViewModels.FlyoutItems
@@ -21,7 +19,6 @@ namespace PassManager.ViewModels.FlyoutItems
         private protected override Task GetData()
         {
             return new Task(new Action(AddDataForAndroid));
-            //return null;
             //throw new NotImplementedException();
         }
 
@@ -32,7 +29,7 @@ namespace PassManager.ViewModels.FlyoutItems
 
         private void AddDataForAndroid()
         {
-            Passwords = new ObservableCollection<ItemPreview>()
+            Items = new ObservableCollection<ItemPreview>()
             {
                 new ItemPreview()
                 {

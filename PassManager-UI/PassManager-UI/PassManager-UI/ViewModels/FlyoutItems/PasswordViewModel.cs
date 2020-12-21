@@ -7,7 +7,6 @@ using System;
 using PassManager.Models;
 using PassManager.Enums;
 using System.Linq;
-using Xamarin.Forms;
 
 namespace PassManager.ViewModels.FlyoutItems
 {
@@ -17,29 +16,29 @@ namespace PassManager.ViewModels.FlyoutItems
         {
             if (CheckInternet())
             {
-                GetData().Await(ErrorCallBack,true,true,false);
+                GetData().Await(HandleError,true,true,false);
                 //Update = "true";
                 //add data for page
                 //AddDataForAndroid();
             }
         }
         //functions
-        private void ErrorCallBack(Exception ex)
-        {
-
-        }
         private protected override async Task GetData()
         {
             IEnumerable<ItemPreview> previews = await PasswordProcessor.GetPreviews(ApiHelper.ApiClient);
             if(previews != null && previews.Count() > 0)
             {
-                Passwords = new ObservableCollection<ItemPreview>(previews);
+                Items = new ObservableCollection<ItemPreview>(previews);
+            }
+            else if(previews.Count() == 0)
+            {
+                //display notification
             }
         }
         //this function is for android testing
         private void AddDataForAndroid()
         {
-            Passwords = new ObservableCollection<ItemPreview>()
+            Items = new ObservableCollection<ItemPreview>()
             {
                 new ItemPreview()
                 {
