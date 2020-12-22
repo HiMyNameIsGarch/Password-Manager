@@ -17,9 +17,6 @@ namespace PassManager.ViewModels.FlyoutItems
             if (CheckInternet())
             {
                 GetData().Await(HandleError,true,true,false);
-                //Update = "true";
-                //add data for page
-                //AddDataForAndroid();
             }
         }
         //functions
@@ -28,11 +25,12 @@ namespace PassManager.ViewModels.FlyoutItems
             IEnumerable<ItemPreview> previews = await PasswordProcessor.GetPreviews(ApiHelper.ApiClient);
             if(previews != null && previews.Count() > 0)
             {
+                DisplayMsg(string.Empty, false);
                 Items = new ObservableCollection<ItemPreview>(previews);
             }
             else if(previews.Count() == 0)
             {
-                //display notification
+                DisplayMsg("You have no passwords yet, click on button below to add a new one!", true);
             }
         }
         //this function is for android testing
