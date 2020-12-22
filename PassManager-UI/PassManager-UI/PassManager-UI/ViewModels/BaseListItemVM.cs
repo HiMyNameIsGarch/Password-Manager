@@ -23,6 +23,8 @@ namespace PassManager.ViewModels
         private ItemPreview _selectedItem;
         private ICommand _addItem;
         private string _update;
+        private bool _hasItems;
+        private string _noItemsText;
         private ObservableCollection<ItemPreview> _items;
         //parameters
         public string Update
@@ -59,6 +61,16 @@ namespace PassManager.ViewModels
                     NotifyPropertyChanged();
                 }
             }
+        }
+        public string NoItemsText
+        {
+            get { return _noItemsText; }
+            private set { _noItemsText = value; NotifyPropertyChanged(); }
+        }
+        public bool HasItems
+        {
+            get { return _hasItems; }
+            private set { _hasItems = value; NotifyPropertyChanged(); }
         }
         public bool IsRefreshing
         {
@@ -100,6 +112,11 @@ namespace PassManager.ViewModels
         //abstract functions
         private protected abstract Task GetData();
         //methods
+        private protected void DisplayMsg(string text, bool hasItems)
+        {
+            NoItemsText = text;
+            HasItems = hasItems;
+        }
         private async Task ViewSelectedItem(int id, Enums.TypeOfItems itemType)
         {
             await Shell.Current.GoToAsync($"Create{itemType}?pageType=View&id={id}");

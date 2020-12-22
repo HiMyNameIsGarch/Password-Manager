@@ -35,11 +35,11 @@
                 <StackLayout>
                     <SearchBar Placeholder="Search passwords..." PlaceholderColor="{StaticResource FrameTopColor}"
                                 TextColor="{StaticResource FrameTopColor}" BackgroundColor="{StaticResource PageTopColor}"/>
-                    <Label Text="You don't have a password yet, press the button to add a new one!"
-                            FontSize="20" Padding="10"
-                            VerticalOptions="End" TextColor="{StaticResource TextColor}"
-                            HorizontalOptions="Center" IsVisible="False"/>
                     <Button Text="Refresh" Command="{TemplateBinding BindingContext.Refresh}" IsVisible="{TemplateBinding BindingContext.IsUwp}"/>
+                    <Label Text="{TemplateBinding BindingContext.NoItemsText}"
+                            FontSize="20" Padding="10"
+                            VerticalOptions="End" TextColor="IndianRed"
+                            HorizontalOptions="Center" IsVisible="{TemplateBinding BindingContext.HasItems}"/>
                     <ListView ItemsSource="{TemplateBinding BindingContext.Items}" HasUnevenRows="True" SelectedItem="{TemplateBinding BindingContext.SelectedItem, Mode=TwoWay}"
                               IsPullToRefreshEnabled="True" RefreshCommand="{TemplateBinding BindingContext.Refresh}" IsRefreshing="{TemplateBinding BindingContext.IsRefreshing}">
                         <ListView.ItemTemplate>
