@@ -46,7 +46,7 @@ namespace PassManager.ViewModels
                 {
                     if (int.TryParse(Id, out int newId))
                     {
-                        GetData(newId).Await(HandleError, true, true, false);
+                        GetData(newId).Await(HandleException, true, true, false);
                     }
                     else
                     {
@@ -141,7 +141,7 @@ namespace PassManager.ViewModels
                 }
                 catch(Exception ex)
                 {
-                    HandleError(ex);
+                    HandleException(ex);
                 }
             }
         }
@@ -168,13 +168,13 @@ namespace PassManager.ViewModels
             switch (PageState)
             {
                 case ItemPageState.Create:
-                    Create().Await(HandleError);
+                    Create().Await(HandleException);
                     break;
                 case ItemPageState.View:
                     ChangeProps(ItemPageState.Edit, "Save", $"Edit {ItemType}", false);
                     break;
                 case ItemPageState.Edit:
-                    Modify().Await(HandleError);
+                    Modify().Await(HandleException);
                     break;
             }
         }
@@ -230,10 +230,6 @@ namespace PassManager.ViewModels
             {
                 await Task.WhenAll(Shell.Current.GoToAsync("///EntireItems", false), Shell.Current.GoToAsync($"///{itemPage}", false));
             }
-        }
-        private protected void HandleError(Exception ex)
-        {
-
         }
     }
 }

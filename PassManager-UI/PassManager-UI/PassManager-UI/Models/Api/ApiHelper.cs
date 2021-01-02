@@ -42,7 +42,7 @@ namespace PassManager.Models.Api
             string msg = ex.InnerException.Message;
             return (msg.Contains("connection") && msg.Contains("server") && msg.Contains("not") && msg.Contains("established"))
                 ? new TaskStatus(true, "Our server is down, please try again later!")
-                : new TaskStatus(true, "Something went wrong, try again!");
+                : new TaskStatus(false, "Something went wrong, try again!");
         }
         internal static void AddAuthorization(string tokenType, string token)
         {

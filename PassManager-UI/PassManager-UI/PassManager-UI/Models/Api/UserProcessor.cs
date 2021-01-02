@@ -25,7 +25,8 @@ namespace PassManager.Models.Api
             }
             catch (Exception ex)
             {
-                return ApiHelper.ServerIsOpen(ex);
+                TaskStatus status = ApiHelper.ServerIsOpen(ex);
+                return status.IsError ? status : new TaskStatus(true, status.Message);
             }
             if (responseMessage.IsSuccessStatusCode)
                 return await LogIn(httpClient, username, password);
@@ -49,7 +50,8 @@ namespace PassManager.Models.Api
             }
             catch(Exception ex)
             {
-                return ApiHelper.ServerIsOpen(ex);
+                TaskStatus status = ApiHelper.ServerIsOpen(ex);
+                return status.IsError ? status : new TaskStatus(true, status.Message);
             }
             ResponseToken token = await responseMessage.Content.ReadAsAsync<ResponseToken>();
             if (responseMessage.IsSuccessStatusCode)
