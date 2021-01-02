@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PassManager.Models
+﻿namespace PassManager.Models
 {
     public class TaskStatus
     {
@@ -11,7 +7,7 @@ namespace PassManager.Models
             IsError = error;
             Message = errorMsg;
         }
-        public bool IsError { get; set; }
-        public string Message { get; set; }
+        public bool IsError { get; }
+        public string Message { get; }
     }
 }

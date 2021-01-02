@@ -37,7 +37,7 @@ namespace PassManager.ViewModels
                 {
                     if (refresh)
                     {
-                        GetData().Await(HandleError,false,true,false);
+                        GetData().Await(HandleException,false,true,false);
                     }
                 }
             }
@@ -93,7 +93,7 @@ namespace PassManager.ViewModels
                 }
                 catch(Exception ex)
                 {
-                    HandleError(ex);
+                    HandleException(ex);
                 }
                 IsRefreshing = false;
             }); }
@@ -120,10 +120,6 @@ namespace PassManager.ViewModels
         private async Task ViewSelectedItem(int id, Enums.TypeOfItems itemType)
         {
             await Shell.Current.GoToAsync($"Create{itemType}?pageType=View&id={id}");
-        }
-        private protected void HandleError(Exception ex)
-        {
-
         }
     }
 }

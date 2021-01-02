@@ -7,10 +7,8 @@
     <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Margin="20" Padding="20" BackgroundColor="{StaticResource FrameTopColor}">
         <Label FontSize="Medium" Text="You don't have internet connection!" TextColor="#e63946"/>
         <StackLayout Orientation="Horizontal" Padding="20">
-            <Button Text="Quit" BackgroundColor="{StaticResource PageTopColor}" TextColor="{StaticResource FrameTopColor}"
-                    Padding="5" Command="{Binding QuitApp}" HorizontalOptions="StartAndExpand" CornerRadius="30" />
-            <Button Text="Refresh" BackgroundColor="{StaticResource PageTopColor}" TextColor="{StaticResource FrameTopColor}" 
-                    Padding="5" Command="{Binding RefreshPage}" HorizontalOptions="EndAndExpand" CornerRadius="30"/>
+            <Button Text="Quit" Command="{Binding QuitApp}" Style="{StaticResource Key=PopupBtn}"/>
+            <Button Text="Refresh" Command="{Binding RefreshPage}" Style="{StaticResource Key=PopupBtn}"/>
         </StackLayout>
     </StackLayout>
 </pages:PopupPage>

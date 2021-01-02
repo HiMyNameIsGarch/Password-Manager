@@ -1,7 +1,10 @@
-﻿using PassManager.Models.Interfaces;
-using PassManager_UI;
+﻿using System;
+using System.Runtime.CompilerServices;
 using System.ComponentModel;
 using Xamarin.Essentials;
+using PassManager.Models;
+using PassManager.Views.Popups;
+using Rg.Plugins.Popup.Services;
 
 namespace PassManager.ViewModels
 {
@@ -22,7 +25,7 @@ namespace PassManager.ViewModels
             protected private set { _pageTitle = value; NotifyPropertyChanged(); }
         }
         //methods
-        protected private void NotifyPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = "")
+        protected private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (this.PropertyChanged != null)
             {
@@ -34,9 +37,22 @@ namespace PassManager.ViewModels
             bool internet = Connectivity.NetworkAccess == NetworkAccess.Internet;
             if(!internet)
             {
-                Models.PageService.PushPopupAsync(new Views.Popups.InternetErrorView());
+                PageService.PushPopupAsync(new InternetErrorView());
             }
             return internet;
+        }
+        protected private async void HandleException(Exception ex)
+        {
+            Models.TaskStatus status = Models.Api.ApiHelper.ServerIsOpen(ex);
+            await PopupNavigation.Instance.PopAllAsync(false);
+            if (status.IsError)
+            {
+                await PageService.PushPopupAsync(new ErrorView("Oops... We couldn't connect to server, try again later!", true), true);
+            }
+            else
+            {
+                await PageService.PushPopupAsync(new ErrorView("Oops... Something went wrong, try again!", false), true);
+            }
         }
     }
 }

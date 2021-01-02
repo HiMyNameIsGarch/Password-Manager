@@ -16,7 +16,7 @@ namespace PassManager.ViewModels.FlyoutItems
         {
             if (CheckInternet())
             {
-                GetData().Await(HandleError,true,true,false);
+                GetData().Await(HandleException,true,true,false);
             }
         }
         //functions
