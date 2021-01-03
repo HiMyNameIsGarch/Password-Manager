@@ -38,5 +38,10 @@ namespace PassManager.ViewModels.CreateItems
         {
             throw new System.NotImplementedException();
         }
+
+        private protected override Task<bool> IsModelValid()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

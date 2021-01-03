@@ -5,6 +5,8 @@ using Xamarin.Forms;
 using PassManager.Models.Api;
 using System.Threading.Tasks;
 using PassManager.Models;
+using PassManager.Views.Popups;
+using Rg.Plugins.Popup.Services;
 
 namespace PassManager.ViewModels.CreateItems
 {
@@ -92,6 +94,39 @@ namespace PassManager.ViewModels.CreateItems
             else
             {
                 //handle errors
+            }
+        }
+        private protected async override Task<bool> IsModelValid()
+        {
+            string msgToDisplay = string.Empty;
+            //string.IsNullOrEmpty(Password.Name)
+            if(string.IsNullOrEmpty(Password.Name) || string.IsNullOrEmpty(Password.Username) || string.IsNullOrEmpty(Password.PasswordEncrypted))
+            {
+                msgToDisplay = "You need to complete at least 'name', 'username' and 'password' in order to save!";
+            }
+            else if (Password.Name.Length > 64)
+            {
+                msgToDisplay = "Your name must be max 64 characters long!";
+            }
+            else if (Password.Username.Length > 64)
+            {
+                msgToDisplay = "Your username must be max 64 characters long!";
+            }
+            else if (Password.Url?.Length > 256)
+            {
+                msgToDisplay = "Your URL must be max 264 characters long!";
+            }
+            if (string.IsNullOrEmpty(msgToDisplay))
+            {
+                return true;
+            }
+            else
+            {
+                //pop all popups
+                await PopupNavigation.Instance.PopAllAsync();
+                //push main
+                await PageService.PushPopupAsync(new ErrorView(msgToDisplay));
+                return false;
             }
         }
     }
