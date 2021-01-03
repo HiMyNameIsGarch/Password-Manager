@@ -168,13 +168,19 @@ namespace PassManager.ViewModels
             switch (PageState)
             {
                 case ItemPageState.Create:
-                    Create().Await(HandleException);
+                    if (await IsModelValid())
+                    {
+                        Create().Await(HandleException);
+                    }
                     break;
                 case ItemPageState.View:
                     ChangeProps(ItemPageState.Edit, "Save", $"Edit {ItemType}", false);
                     break;
                 case ItemPageState.Edit:
-                    Modify().Await(HandleException);
+                    if (await IsModelValid())
+                    {
+                        Modify().Await(HandleException);
+                    }
                     break;
             }
         }
@@ -182,6 +188,7 @@ namespace PassManager.ViewModels
         private protected abstract Task Create();
         private protected abstract Task Delete();
         private protected abstract Task Modify();
+        private protected abstract Task<bool> IsModelValid();//this function will check if the item is valid(title not to be more than 25 char etc etc) other wise will display a popup with the info
         //functions
         private protected abstract Task GetData(int id);
         private protected void ChangeProps(ItemPageState pageState, string btnText, string pageTitle, bool isReadOnly)

@@ -28,7 +28,7 @@ namespace PassManager.ViewModels.Popups
         public bool CanQuit
         {
             get { return _canQuit; }
-            set { _canQuit = value; NotifyPropertyChanged(); }
+            private set { _canQuit = value; NotifyPropertyChanged(); }
         }
         //functions for commands
         private async void Close()
