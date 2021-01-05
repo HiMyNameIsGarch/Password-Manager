@@ -1,4 +1,5 @@
-﻿using PassManager.Models.Items;
+﻿using PassManager.Enums;
+using PassManager.Models.Items;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -8,7 +9,7 @@ namespace PassManager.Models.Api
 {
     public class PasswordProcessor
     {
-        internal static async Task<IEnumerable<ItemPreview>> GetPreviews(HttpClient httpClient)
+        internal static async Task<IEnumerable<Grouping<TypeOfItems, ItemPreview>>> GetPreviews(HttpClient httpClient)
         {
             HttpResponseMessage responseMessage = null;
             try
@@ -21,7 +22,7 @@ namespace PassManager.Models.Api
             }
             if (responseMessage.IsSuccessStatusCode)
             {
-                IEnumerable<ItemPreview> itemList = await responseMessage.Content.ReadAsAsync<IEnumerable<ItemPreview>>();
+                IEnumerable<Grouping<TypeOfItems, ItemPreview>> itemList = await responseMessage.Content.ReadAsAsync<IEnumerable<Grouping<TypeOfItems, ItemPreview>>>();
                 return itemList;
             }
             return null;

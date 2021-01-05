@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using PassManager_WebApi.ViewModels;
+using System;
+using PassManager_WebApi.Enums;
+using System.Diagnostics;
 
 namespace PassManager_WebApi.Controllers
 {
@@ -16,21 +19,26 @@ namespace PassManager_WebApi.Controllers
         //GET api/Passwords
         public IHttpActionResult Get()//get latest passwords preview
         {
-            IEnumerable<ItemPreview> passwords = GetCurrentUser().Passwords
+            //bring from db just the passwords
+            IEnumerable<ItemPreview> unGroupedPasswords = GetCurrentUser().Passwords
                 .OrderBy(p => p.LastVisited)
                 .ThenBy(p => p.LastModified)
-                .Select(item => new ItemPreview(item.Id, item.Name, item.Username, Enums.TypeOfItems.Password))
-                .ToList();
-            if (passwords.Count() == 0) return BadRequest("You don't have any accounts!");
-            return Ok(passwords);
+                .Select(item => new ItemPreview(item.Id, item.Name, item.Username, TypeOfItems.Password)).ToList();
+            //group it by type
+            IEnumerable<Grouping<TypeOfItems, ItemPreview>> groupedPasswords = unGroupedPasswords
+                .GroupBy(item => item.ItemType)
+                .Select(item => new Grouping<TypeOfItems, ItemPreview>(TypeOfItems.Password, item));
+            return Ok(groupedPasswords);
         }
         //GET api/Passwords/id
         public IHttpActionResult Get(int id)
         {
             if (id <= 0) return BadRequest("Id is invalid");
-            PasswordVM password = GetCurrentUser().Passwords.Select(pass => new PasswordVM(pass)).FirstOrDefault(pass => pass.Id == id);
-            if (password is null) return BadRequest("Password does not exist!");
-            return Ok(password);
+            Password password = GetCurrentUser().Passwords.FirstOrDefault(pass => pass.Id == id);//get the current password from user
+            if (password is null) return BadRequest("Password does not exist!");//check if that exists
+            password.LastVisited = DateTime.Now;//modify when is last visited
+            db.SaveChanges();//save the changes
+            return Ok(new PasswordVM(password));//send
         }
         //POST api/Passwords
         public IHttpActionResult Post([FromBody] PasswordVM password)

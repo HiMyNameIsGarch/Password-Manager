@@ -286,6 +286,7 @@
     <Compile Include="Models\C__MigrationHistory.cs">
       <DependentUpon>PassManager.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Grouping.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ItemPreview.cs" />
     <Compile Include="Models\PassManager.Context.cs">

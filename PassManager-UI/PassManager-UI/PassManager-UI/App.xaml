@@ -41,7 +41,15 @@
                             VerticalOptions="End" TextColor="IndianRed"
                             HorizontalOptions="Center" IsVisible="{TemplateBinding BindingContext.HasItems}"/>
                     <ListView ItemsSource="{TemplateBinding BindingContext.Items}" HasUnevenRows="True" SelectedItem="{TemplateBinding BindingContext.SelectedItem, Mode=TwoWay}"
-                              IsPullToRefreshEnabled="True" RefreshCommand="{TemplateBinding BindingContext.Refresh}" IsRefreshing="{TemplateBinding BindingContext.IsRefreshing}">
+                              IsPullToRefreshEnabled="True" RefreshCommand="{TemplateBinding BindingContext.Refresh}" IsRefreshing="{TemplateBinding BindingContext.IsRefreshing}"
+                              IsGroupingEnabled="True">
+                        <ListView.GroupHeaderTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Label Text="{Binding Key}"/>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.GroupHeaderTemplate>
                         <ListView.ItemTemplate>
                             <DataTemplate>
                                 <ViewCell>

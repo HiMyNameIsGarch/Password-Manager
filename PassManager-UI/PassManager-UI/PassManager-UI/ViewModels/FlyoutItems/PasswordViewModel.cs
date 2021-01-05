@@ -22,13 +22,13 @@ namespace PassManager.ViewModels.FlyoutItems
         //functions
         private protected override async Task GetData()
         {
-            IEnumerable<ItemPreview> previews = await PasswordProcessor.GetPreviews(ApiHelper.ApiClient);
-            if(previews != null && previews.Count() > 0)
+            IEnumerable<Grouping<TypeOfItems, ItemPreview>> previews = await PasswordProcessor.GetPreviews(ApiHelper.ApiClient);
+            if(previews != null && previews.FirstOrDefault().Count() > 0)
             {
                 DisplayMsg(string.Empty, false);
-                Items = new ObservableCollection<ItemPreview>(previews);
+                Items = new ObservableCollection<Grouping<TypeOfItems, ItemPreview>>(previews);
             }
-            else if(previews.Count() == 0)
+            else if(previews.FirstOrDefault().Count() == 0)
             {
                 DisplayMsg("You have no passwords yet, click on button below to add a new one!", true);
             }
@@ -36,37 +36,37 @@ namespace PassManager.ViewModels.FlyoutItems
         //this function is for android testing
         private void AddDataForAndroid()
         {
-            Items = new ObservableCollection<ItemPreview>()
-            {
-                new ItemPreview()
-                {
-                    Id = 1,
-                    Title = "Facebook",
-                    SubTitle = "gabrielhanu70@yahoo.com",
-                    ItemType = TypeOfItems.Password
-                },
-                new ItemPreview()
-                {
-                    Id = 2,
-                    Title = "Instagram",
-                    SubTitle = "gabihanu23@yahoo.com",
-                    ItemType = TypeOfItems.Password
-                },
-                new ItemPreview()
-                {
-                    Id = 3,
-                    Title = "Champion gg",
-                    SubTitle = "gabriel70@yahoo.com",
-                    ItemType = TypeOfItems.Password
-                },
-                new ItemPreview()
-                {
-                    Id = 4,
-                    Title = "League of legends",
-                    SubTitle = "hanu70@yahoo.com",
-                    ItemType = TypeOfItems.Password
-                }
-            };
+            //Items = new ObservableCollection<ItemPreview>()
+            //{
+            //    new ItemPreview()
+            //    {
+            //        Id = 1,
+            //        Title = "Facebook",
+            //        SubTitle = "gabrielhanu70@yahoo.com",
+            //        ItemType = TypeOfItems.Password
+            //    },
+            //    new ItemPreview()
+            //    {
+            //        Id = 2,
+            //        Title = "Instagram",
+            //        SubTitle = "gabihanu23@yahoo.com",
+            //        ItemType = TypeOfItems.Password
+            //    },
+            //    new ItemPreview()
+            //    {
+            //        Id = 3,
+            //        Title = "Champion gg",
+            //        SubTitle = "gabriel70@yahoo.com",
+            //        ItemType = TypeOfItems.Password
+            //    },
+            //    new ItemPreview()
+            //    {
+            //        Id = 4,
+            //        Title = "League of legends",
+            //        SubTitle = "hanu70@yahoo.com",
+            //        ItemType = TypeOfItems.Password
+            //    }
+            //};
         }
         private protected override Task RefreshPage()
         {

@@ -5,6 +5,7 @@ using Xamarin.Forms;
 using System.Threading.Tasks;
 using PassManager.Models;
 using System;
+using PassManager.Enums;
 
 namespace PassManager.ViewModels
 {
@@ -16,7 +17,7 @@ namespace PassManager.ViewModels
         {
             ManageFlyoutItems.Add(pageTitle, true);
             _addItem = new Command(SelectItemToAdd);
-            _items = new ObservableCollection<ItemPreview>();
+            _items = new ObservableCollection<Grouping<TypeOfItems, ItemPreview>>();
         }
         //private variables
         private bool _isRefreshing;
@@ -25,7 +26,7 @@ namespace PassManager.ViewModels
         private string _update;
         private bool _hasItems;
         private string _noItemsText;
-        private ObservableCollection<ItemPreview> _items;
+        private ObservableCollection<Grouping<TypeOfItems, ItemPreview>> _items;
         //parameters
         public string Update
         {
@@ -43,7 +44,7 @@ namespace PassManager.ViewModels
             }
         }
         //props for binding
-        public ObservableCollection<ItemPreview> Items
+        public ObservableCollection<Grouping<TypeOfItems, ItemPreview>> Items
         {
             get { return _items; }
             private protected set { _items = value; NotifyPropertyChanged(); }
