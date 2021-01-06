@@ -3,6 +3,10 @@ using System.Collections.ObjectModel;
 using PassManager.Enums;
 using System;
 using System.Threading.Tasks;
+using PassManager.Models;
+using System.Collections.Generic;
+using PassManager.Models.Api;
+using System.Linq;
 
 namespace PassManager.ViewModels.FlyoutItems
 {
@@ -12,14 +16,22 @@ namespace PassManager.ViewModels.FlyoutItems
         {
             if (CheckInternet())
             {
-                AddDataForAndroid();
+                GetData().Await(HandleException, true, true, false);
             }
         }
 
-        private protected override Task GetData()
+        private protected async override Task GetData()
         {
-            return new Task(new Action(AddDataForAndroid));
-            //throw new NotImplementedException();
+            IEnumerable<Grouping<TypeOfItems, ItemPreview>> previews = await EntireItemsProcessor.GetPreviews(ApiHelper.ApiClient);
+            if(previews != null && previews.Count() > 0)
+            {
+                DisplayMsg(string.Empty, false);
+                Items = new ObservableCollection<Grouping<TypeOfItems, ItemPreview>>(previews);
+            }
+            else if (previews.Count() == 0)
+            {
+                DisplayMsg("You have no items yet, click on button below to add a new one!",true);
+            }
         }
 
         private protected override Task RefreshPage()
@@ -29,86 +41,86 @@ namespace PassManager.ViewModels.FlyoutItems
 
         private void AddDataForAndroid()
         {
-            Items = new ObservableCollection<ItemPreview>()
-            {
-                new ItemPreview()
-                {
-                    Id = 1,
-                    Title = "Facebook",
-                    SubTitle = "gabrielhanu70@yahoo.com",
-                    ItemType = TypeOfItems.Password
-                },
-                new ItemPreview()
-                {
-                    Id = 2,
-                    Title = "Instagram",
-                    SubTitle = "gabihanu23@yahoo.com",
-                    ItemType = TypeOfItems.Password
-                },
-                new ItemPreview()
-                {
-                    Id = 3,
-                    Title = "Champion gg",
-                    SubTitle = "gabriel70@yahoo.com",
-                    ItemType = TypeOfItems.Password
-                },
-                new ItemPreview()
-                {
-                    Id = 4,
-                    Title = "League of legends",
-                    SubTitle = "hanu70@yahoo.com",
-                    ItemType = TypeOfItems.Password
-                },
-                new ItemPreview()
-                {
-                    Id = 1,
-                    Title = "Home",
-                    SubTitle = "Wifi",
-                    ItemType = TypeOfItems.Wifi
-                },
-                new ItemPreview()
-                {
-                    Id = 2,
-                    Title = "Coffee shop",
-                    SubTitle = "Wifi",
-                    ItemType = TypeOfItems.Wifi
-                },
-                new ItemPreview()
-                {
-                    Id = 3,
-                    Title = "My friends house",
-                    SubTitle = "Wifi",
-                    ItemType = TypeOfItems.Wifi
-                },
-                new ItemPreview()
-                {
-                    Id = 4,
-                    Title = "League of legends",
-                    SubTitle = "hanu70@yahoo.com",
-                    ItemType = TypeOfItems.Password
-                },
-                new ItemPreview()
-                {
-                    Id = 1,
-                    Title = "Home",
-                    SubTitle = "Wifi",
-                    ItemType = TypeOfItems.Wifi
-                },
-                new ItemPreview()
-                {
-                    Id = 2,
-                    Title = "Coffee shop",
-                    SubTitle = "Wifi",
-                    ItemType = TypeOfItems.Wifi
-                },
-                new ItemPreview()
-                {
-                    Id = 3,
-                    Title = "My friends house",
-                    SubTitle = "Wifi",
-                    ItemType = TypeOfItems.Wifi
-                }
-            };
+            //Items = new ObservableCollection<ItemPreview>()
+            //{
+            //    new ItemPreview()
+            //    {
+            //        Id = 1,
+            //        Title = "Facebook",
+            //        SubTitle = "gabrielhanu70@yahoo.com",
+            //        ItemType = TypeOfItems.Password
+            //    },
+            //    new ItemPreview()
+            //    {
+            //        Id = 2,
+            //        Title = "Instagram",
+            //        SubTitle = "gabihanu23@yahoo.com",
+            //        ItemType = TypeOfItems.Password
+            //    },
+            //    new ItemPreview()
+            //    {
+            //        Id = 3,
+            //        Title = "Champion gg",
+            //        SubTitle = "gabriel70@yahoo.com",
+            //        ItemType = TypeOfItems.Password
+            //    },
+            //    new ItemPreview()
+            //    {
+            //        Id = 4,
+            //        Title = "League of legends",
+            //        SubTitle = "hanu70@yahoo.com",
+            //        ItemType = TypeOfItems.Password
+            //    },
+            //    new ItemPreview()
+            //    {
+            //        Id = 1,
+            //        Title = "Home",
+            //        SubTitle = "Wifi",
+            //        ItemType = TypeOfItems.Wifi
+            //    },
+            //    new ItemPreview()
+            //    {
+            //        Id = 2,
+            //        Title = "Coffee shop",
+            //        SubTitle = "Wifi",
+            //        ItemType = TypeOfItems.Wifi
+            //    },
+            //    new ItemPreview()
+            //    {
+            //        Id = 3,
+            //        Title = "My friends house",
+            //        SubTitle = "Wifi",
+            //        ItemType = TypeOfItems.Wifi
+            //    },
+            //    new ItemPreview()
+            //    {
+            //        Id = 4,
+            //        Title = "League of legends",
+            //        SubTitle = "hanu70@yahoo.com",
+            //        ItemType = TypeOfItems.Password
+            //    },
+            //    new ItemPreview()
+            //    {
+            //        Id = 1,
+            //        Title = "Home",
+            //        SubTitle = "Wifi",
+            //        ItemType = TypeOfItems.Wifi
+            //    },
+            //    new ItemPreview()
+            //    {
+            //        Id = 2,
+            //        Title = "Coffee shop",
+            //        SubTitle = "Wifi",
+            //        ItemType = TypeOfItems.Wifi
+            //    },
+            //    new ItemPreview()
+            //    {
+            //        Id = 3,
+            //        Title = "My friends house",
+            //        SubTitle = "Wifi",
+            //        ItemType = TypeOfItems.Wifi
+            //    }
+            //};
         }
     }
 }

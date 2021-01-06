@@ -27,7 +27,7 @@ namespace PassManager_WebApi.Controllers
             //group it by type
             IEnumerable<Grouping<TypeOfItems, ItemPreview>> groupedPasswords = unGroupedPasswords
                 .GroupBy(item => item.ItemType)
-                .Select(item => new Grouping<TypeOfItems, ItemPreview>(TypeOfItems.Password, item));
+                .Select(item => new Grouping<TypeOfItems, ItemPreview>(item.Key, item));
             return Ok(groupedPasswords);
         }
         //GET api/Passwords/id
