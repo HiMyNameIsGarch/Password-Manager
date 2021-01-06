@@ -23,12 +23,12 @@ namespace PassManager.ViewModels.FlyoutItems
         private protected override async Task GetData()
         {
             IEnumerable<Grouping<TypeOfItems, ItemPreview>> previews = await PasswordProcessor.GetPreviews(ApiHelper.ApiClient);
-            if(previews != null && previews.FirstOrDefault().Count() > 0)
+            if(previews != null && previews.Count() > 0)
             {
                 DisplayMsg(string.Empty, false);
                 Items = new ObservableCollection<Grouping<TypeOfItems, ItemPreview>>(previews);
             }
-            else if(previews.FirstOrDefault().Count() == 0)
+            else if(previews.Count() == 0)
             {
                 DisplayMsg("You have no passwords yet, click on button below to add a new one!", true);
             }
