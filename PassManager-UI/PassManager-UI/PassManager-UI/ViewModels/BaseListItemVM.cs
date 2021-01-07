@@ -7,7 +7,6 @@ using PassManager.Models;
 using System;
 using PassManager.Enums;
 using System.Collections.Generic;
-using PassManager.Models.Api;
 using System.Linq;
 
 namespace PassManager.ViewModels
@@ -41,7 +40,7 @@ namespace PassManager.ViewModels
                 {
                     if (refresh)
                     {
-                        GetData().Await(HandleException,false,true,false);
+                        GetDataAsync().Await(HandleException,false,true,false);
                     }
                 }
             }
@@ -93,7 +92,7 @@ namespace PassManager.ViewModels
                 IsRefreshing = true;
                 try
                 {
-                    await RefreshPage();
+                    await RefreshPageAsync();
                 }
                 catch(Exception ex)
                 {
@@ -112,9 +111,9 @@ namespace PassManager.ViewModels
             if (Shell.Current != null)
                 await Shell.Current.GoToAsync("ListItem");
         }
-        private protected abstract Task RefreshPage();
+        private protected abstract Task RefreshPageAsync();
         //abstract functions
-        private protected abstract Task GetData();
+        private protected abstract Task GetDataAsync();
         //methods
         private protected void DisplayMsg(string text, bool hasItems)
         {

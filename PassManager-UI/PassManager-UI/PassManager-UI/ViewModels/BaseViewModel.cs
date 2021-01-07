@@ -35,7 +35,7 @@ namespace PassManager.ViewModels
         protected private bool CheckInternet()
         {
             bool internet = Connectivity.NetworkAccess == NetworkAccess.Internet;
-            if(!internet)
+            if (!internet)
             {
                 PageService.PushPopupAsync(new InternetErrorView());
             }

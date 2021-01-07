@@ -37,7 +37,7 @@ namespace PassManager.ViewModels.CreateItems
             await Shell.Current.Navigation.PopToRootAsync();
         }
         //functions
-        private protected async override Task GetData(int id)
+        private protected async override Task GetDataAsync(int id)
         {
             Password password = await PasswordProcessor.GetPassword(ApiHelper.ApiClient,id);
             if(password != null)
