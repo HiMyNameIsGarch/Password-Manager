@@ -39,7 +39,7 @@ namespace PassManager.ViewModels.FlyoutItems
             IEnumerable<Grouping<TypeOfItems, ItemPreview>> previews = await EntireItemsProcessor.GetPreviews(ApiHelper.ApiClient);
             if (IsListChanged(previews))
             {
-                Items = new ObservableCollection<Grouping<TypeOfItems, ItemPreview>>(previews);
+                Items = UpdateItems(previews);
             }
             else
             {
