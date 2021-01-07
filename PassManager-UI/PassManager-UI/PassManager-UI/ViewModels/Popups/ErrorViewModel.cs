@@ -8,8 +8,15 @@ namespace PassManager.ViewModels.Popups
     {
         public ErrorViewModel(string errorMsg, bool canQuit = false) : base(errorMsg)
         {
-            _closePopup = new Command(Close);
-            _quit = new Command(QuitApp);
+            _closePopup = new Command(async () =>
+            {
+                await PageService.PopPopupAsync();
+            });
+
+            _quit = new Command(() => 
+            {
+                System.Diagnostics.Process.GetCurrentProcess().Kill();
+            });
             CanQuit = canQuit;
         }
         //private props
@@ -29,15 +36,6 @@ namespace PassManager.ViewModels.Popups
         {
             get { return _canQuit; }
             private set { _canQuit = value; NotifyPropertyChanged(); }
-        }
-        //functions for commands
-        private async void Close()
-        {
-            await PageService.PopPopupAsync();
-        }
-        private void QuitApp()
-        {
-            System.Diagnostics.Process.GetCurrentProcess().Kill();
         }
     }
 }

@@ -6,5 +6,14 @@
         public string Title { get; set; }
         public string SubTitle { get; set; }
         public Enums.TypeOfItems ItemType { get; set; }
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+        public override bool Equals(object obj)
+        {
+            ItemPreview item = (ItemPreview)obj;
+            return (this.Id == item.Id) && (this.Title == item.Title) && (this.SubTitle == item.SubTitle) && (this.ItemType == item.ItemType);
+        }
     }
 }

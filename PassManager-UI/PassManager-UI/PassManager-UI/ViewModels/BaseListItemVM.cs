@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using PassManager.Models;
 using System;
 using PassManager.Enums;
+using System.Collections.Generic;
+using PassManager.Models.Api;
+using System.Linq;
 
 namespace PassManager.ViewModels
 {
@@ -118,9 +121,40 @@ namespace PassManager.ViewModels
             NoItemsText = text;
             HasItems = hasItems;
         }
-        private async Task ViewSelectedItem(int id, Enums.TypeOfItems itemType)
+        private async Task ViewSelectedItem(int id, TypeOfItems itemType)
         {
             await Shell.Current.GoToAsync($"Create{itemType}?pageType=View&id={id}");
+        }
+        private protected bool IsListChanged(IEnumerable<Grouping<TypeOfItems, ItemPreview>> newList)
+        {
+            int previewsCount = newList.Count();
+            int itemsCount = Items.Count();
+            bool needUpdate = false;
+            if (previewsCount > 0 && itemsCount > 0)//if all the lists have items in them do:
+            {
+                if (itemsCount != previewsCount)//if their length aren't the same set 'needUpdate' to true
+                {
+                    needUpdate = true;
+                }
+                else if (itemsCount == previewsCount)//if their length are the same do:
+                {
+                    for (int i = 0; i < itemsCount && !needUpdate; i++)//loop thru all the grouping lists
+                    {
+                        //convert the 2 grouping lists in normal lists
+                        var itemsList = Items[i].ToList();
+                        var previewsList = newList.ToList()[i].ToList();
+                        for (int j = 0; j < itemsList.Count(); j++)//loop thru all the items in the lists and check if their are equals
+                        {
+                            if (!itemsList[j].Equals(previewsList[j]))
+                            {
+                                needUpdate = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            return needUpdate;
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using Xamarin.Forms;
 using System.Windows.Input;
+using PassManager.Models;
+using Xamarin.Essentials;
 
 namespace PassManager.ViewModels.Popups
 {
@@ -7,7 +9,10 @@ namespace PassManager.ViewModels.Popups
     {
         public InternetErrorViewModel()
         {
-            _quit = new Command(Quit);
+            _quit = new Command(async () =>
+            {
+                await PageService.PopPopupAsync();
+            });
             _refresh = new Command(Refresh);
         }
         private ICommand _quit;
@@ -20,14 +25,10 @@ namespace PassManager.ViewModels.Popups
         {
             get { return _refresh; }
         }
-        private void Refresh()
+        private async void Refresh()
         {
-            bool internet = Xamarin.Essentials.Connectivity.NetworkAccess == Xamarin.Essentials.NetworkAccess.Internet;
-            if (internet) Models.PageService.PopPopupAsync();
-        }
-        private void Quit()
-        {
-            System.Diagnostics.Process.GetCurrentProcess().Kill();
+            bool internet = Connectivity.NetworkAccess == NetworkAccess.Internet;
+            if (internet) await PageService.PopPopupAsync();
         }
     }
 }
