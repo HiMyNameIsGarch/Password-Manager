@@ -85,6 +85,16 @@ namespace PassManager.ViewModels
             get { return Device.RuntimePlatform == Device.UWP; }
         }
         //commands
+        public ICommand Search
+        {
+            get
+            {
+                return new Command(async () => 
+                {
+                    await Shell.Current.GoToAsync("SearchItem");
+                });
+            }
+        }
         public ICommand Refresh
         {
             get { return new Command(async () => 

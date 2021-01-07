@@ -6,7 +6,8 @@
     <Shell.TitleView>
         <StackLayout Orientation="Horizontal" Padding="10">
             <Label Text="{Binding PageTitle}" FontSize="20" VerticalTextAlignment="Center"/>
-            <Button Text="Search" FontSize="10" WidthRequest="60" CornerRadius="40" HorizontalOptions="EndAndExpand"/>
+            <Button Text="Search" FontSize="10" WidthRequest="60" CornerRadius="40" HorizontalOptions="EndAndExpand"
+                     Command="{Binding Search}" />
         </StackLayout>
     </Shell.TitleView>
 </ContentPage>

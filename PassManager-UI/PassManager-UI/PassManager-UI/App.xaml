@@ -29,13 +29,19 @@
             <Setter Property="Margin" Value="10,6,10,6"/>
         </Style>
             <!--#endregion-->
+        
             <!--#region list items-->
         <ResourceDictionary>
             <ControlTemplate x:Key="ListViewItemTemplate">
                 <StackLayout>
-                    <SearchBar Placeholder="Search passwords..." PlaceholderColor="{StaticResource FrameTopColor}"
-                                TextColor="{StaticResource FrameTopColor}" BackgroundColor="{StaticResource PageTopColor}"/>
-                    <Button Text="Refresh" Command="{TemplateBinding BindingContext.Refresh}" IsVisible="{TemplateBinding BindingContext.IsUwp}"/>
+                    <StackLayout Orientation="Horizontal" IsVisible="{TemplateBinding BindingContext.IsUwp}">
+                        <Button Text="Search" Command="{TemplateBinding BindingContext.Search}" HorizontalOptions="FillAndExpand"
+                                TextColor="{StaticResource PageTopColor}" BackgroundColor="{StaticResource FrameBottomColor}"
+                                Margin="5" FontSize="15"/>
+                        <Button Text="Refresh" Command="{TemplateBinding BindingContext.Refresh}" HorizontalOptions="FillAndExpand"
+                                TextColor="{StaticResource PageTopColor}" BackgroundColor="{StaticResource FrameBottomColor}"
+                                Margin="5" FontSize="15"/>
+                    </StackLayout>
                     <Label Text="{TemplateBinding BindingContext.NoItemsText}"
                             FontSize="20" Padding="10"
                             VerticalOptions="End" TextColor="IndianRed"
