@@ -20,6 +20,7 @@ namespace PassManager.ViewModels.CreateItems
         }
         //variables
         private Password _password;
+        private Password _tempPassword;
         private ICommand _goBack;
         //props
         public Password Password {
@@ -42,6 +43,7 @@ namespace PassManager.ViewModels.CreateItems
             Password password = await PasswordProcessor.GetPassword(ApiHelper.ApiClient,id);
             if(password != null)
             {
+                _tempPassword = (Password)password.Clone();//store a temp password for future verifications
                 Password = password;
             }
         }
@@ -79,7 +81,7 @@ namespace PassManager.ViewModels.CreateItems
                     bool isSuccess = await PasswordProcessor.Modify(ApiHelper.ApiClient, newId, Password);
                     if (isSuccess)
                     {
-                        await GoTo("Password", "?update=true");
+                        await GoTo("Password", ((_tempPassword.Name != Password.Name) || (_tempPassword.Username != Password.Username)) ? "?update=true" : string.Empty);
                     }
                     else
                     {
@@ -99,7 +101,6 @@ namespace PassManager.ViewModels.CreateItems
         private protected async override Task<bool> IsModelValid()
         {
             string msgToDisplay = string.Empty;
-            //string.IsNullOrEmpty(Password.Name)
             if(string.IsNullOrEmpty(Password.Name) || string.IsNullOrEmpty(Password.Username) || string.IsNullOrEmpty(Password.PasswordEncrypted))
             {
                 msgToDisplay = "You need to complete at least 'name', 'username' and 'password' in order to save!";

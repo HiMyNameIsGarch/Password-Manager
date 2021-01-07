@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PassManager.Models.Items
 {
-    public  class Password
+    public  class Password : ICloneable
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -12,5 +10,9 @@ namespace PassManager.Models.Items
         public string PasswordEncrypted { get; set; }
         public string Url { get; set; }
         public string Notes { get; set; }
+        public object Clone()
+        {
+            return this.MemberwiseClone();
+        }
     }
 }

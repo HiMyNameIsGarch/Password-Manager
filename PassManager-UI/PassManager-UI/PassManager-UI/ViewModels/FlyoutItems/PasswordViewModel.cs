@@ -3,10 +3,10 @@ using System.Collections.ObjectModel;
 using PassManager.Models.Api;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System;
 using PassManager.Models;
 using PassManager.Enums;
 using System.Linq;
+using PassManager.Views.Popups;
 
 namespace PassManager.ViewModels.FlyoutItems
 {
@@ -37,9 +37,17 @@ namespace PassManager.ViewModels.FlyoutItems
         private void AddDataForAndroid()
         {
         }
-        private protected override Task RefreshPageAsync()
+        private protected override async Task RefreshPageAsync()
         {
-            throw new NotImplementedException();
+            IEnumerable<Grouping<TypeOfItems, ItemPreview>> newList = await PasswordProcessor.GetPreviews(ApiHelper.ApiClient);
+            if (IsListChanged(newList))
+            {
+                Items = UpdateItems(newList);
+            }
+            else
+            {
+                await PageService.PushPopupAsync(new WarningView("Your passwords are up to date!"));
+            }
         }
     }
 }

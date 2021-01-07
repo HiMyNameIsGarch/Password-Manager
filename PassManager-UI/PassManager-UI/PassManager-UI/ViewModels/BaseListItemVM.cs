@@ -155,5 +155,9 @@ namespace PassManager.ViewModels
             }
             return needUpdate;
         }
+        private protected ObservableCollection<Grouping<TypeOfItems, ItemPreview>> UpdateItems(IEnumerable<Grouping<TypeOfItems, ItemPreview>> newList)
+        {
+            return new ObservableCollection<Grouping<TypeOfItems, ItemPreview>>(newList);
+        }
     }
 }
