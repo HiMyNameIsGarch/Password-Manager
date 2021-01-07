@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Xamarin.Forms;
+﻿using PassManager.Enums;
 
 namespace PassManager.Models.Items
 {
     public class CreateItem
     {
-        public CreateItem(string name, string imageUrl)
+        public CreateItem(TypeOfItems item, string imageUrl)
         {
-            Name = name;
+            Name = item;
             ImageUrl = imageUrl;
         }
-        public string Name { get; set; }
+        public TypeOfItems Name { get; set; }
         public string ImageUrl { get; set; }
     }
 }

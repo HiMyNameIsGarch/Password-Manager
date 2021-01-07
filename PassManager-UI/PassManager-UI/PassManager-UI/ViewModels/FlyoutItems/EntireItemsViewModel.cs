@@ -16,11 +16,11 @@ namespace PassManager.ViewModels.FlyoutItems
         {
             if (CheckInternet())
             {
-                GetData().Await(HandleException, true, true, false);
+                GetDataAsync().Await(HandleException, true, true, false);
             }
         }
 
-        private protected async override Task GetData()
+        private protected async override Task GetDataAsync()
         {
             IEnumerable<Grouping<TypeOfItems, ItemPreview>> previews = await EntireItemsProcessor.GetPreviews(ApiHelper.ApiClient);
             if(previews != null && previews.Count() > 0)
@@ -34,7 +34,7 @@ namespace PassManager.ViewModels.FlyoutItems
             }
         }
 
-        private protected override async Task RefreshPage()
+        private protected override async Task RefreshPageAsync()
         {
             IEnumerable<Grouping<TypeOfItems, ItemPreview>> previews = await EntireItemsProcessor.GetPreviews(ApiHelper.ApiClient);
             if (IsListChanged(previews))

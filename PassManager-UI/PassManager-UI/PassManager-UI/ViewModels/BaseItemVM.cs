@@ -20,7 +20,7 @@ namespace PassManager.ViewModels
             ItemType = itemType.ToString();
             _save = new Command(ChangePageType);
             _displayMoreActions = new Command(DisplayMore);
-            _deleteItem = new Command(AskToDeleteItem);
+            _deleteItem = new Command(AskToDeleteItemAsync);
         }
         //variables
         private readonly string ItemType;
@@ -46,7 +46,7 @@ namespace PassManager.ViewModels
                 {
                     if (int.TryParse(Id, out int newId))
                     {
-                        GetData(newId).Await(HandleException, true, true, false);
+                        GetDataAsync(newId).Await(HandleException, true, true, false);
                     }
                     else
                     {
@@ -129,7 +129,7 @@ namespace PassManager.ViewModels
             get { return _displayMoreActions; }
         }
         //functions for commands
-        private async void AskToDeleteItem()
+        private async void AskToDeleteItemAsync()
         {
             bool accept = await PageService.DisplayAlert("Delete","Do you really want to delete this item?","Yes","No");
             if (accept)
@@ -190,7 +190,7 @@ namespace PassManager.ViewModels
         private protected abstract Task Modify();
         private protected abstract Task<bool> IsModelValid();//this function will check if the item is valid(title not to be more than 25 char etc etc) other wise will display a popup with the info
         //functions
-        private protected abstract Task GetData(int id);
+        private protected abstract Task GetDataAsync(int id);
         private protected void ChangeProps(ItemPageState pageState, string btnText, string pageTitle, bool isReadOnly)
         {
             if(pageState == ItemPageState.View || pageState == ItemPageState.Edit)
