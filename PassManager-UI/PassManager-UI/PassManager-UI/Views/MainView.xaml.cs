@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PassManager.Views.CreateItems;
+﻿using PassManager.Views.CreateItems;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -19,6 +14,7 @@ namespace PassManager.Views
             Routing.RegisterRoute("ListItem", typeof(ListItemView));
             Routing.RegisterRoute("CreatePassword", typeof(CreatePasswordView));
             Routing.RegisterRoute("CreateWifi", typeof(CreateWifiView));
+            Routing.RegisterRoute("SearchItem", typeof(SearchView));
         }
     }
 }
