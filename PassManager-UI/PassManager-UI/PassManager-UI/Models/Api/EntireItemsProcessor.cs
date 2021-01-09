@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using PassManager.Enums;
+﻿using PassManager.Enums;
 using PassManager.Models.Items;
 using System;
 using System.Collections.Generic;
@@ -11,12 +10,14 @@ namespace PassManager.Models.Api
 {
     public class EntireItemsProcessor
     {
-        internal static async Task<IEnumerable<Grouping<TypeOfItems, ItemPreview>>> GetPreviews(HttpClient httpClient)
+        internal static async Task<IEnumerable<Grouping<TypeOfItems, ItemPreview>>> GetPreviews(HttpClient httpClient, string searchString = "")
         {
+            bool isSearch = false;
+            if (searchString != "") isSearch = true; 
             HttpResponseMessage responseMessage = null;
             try
             {
-                responseMessage = await httpClient.GetAsync("api/EntireItems");
+                responseMessage = await httpClient.GetAsync($"api/EntireItems{(isSearch ? "?searchString=" + searchString : string.Empty)}");
             }
             catch (Exception ex)
             {
