@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    
+    <Style x:Key="PopupBtn" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{DynamicResource PageTopColor}"/>
+        <Setter Property="TextColor" Value="{DynamicResource FrameTopColor}"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="Margin" Value="10"/>
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="CornerRadius" Value="{OnPlatform Android=30, UWP=15}"/>
+    </Style>
+</ResourceDictionary>

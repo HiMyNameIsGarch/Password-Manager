@@ -5,7 +5,7 @@
              x:Class="PassManager.Views.Popups.WarningView">
     <StackLayout Orientation="Vertical" VerticalOptions="Center" HorizontalOptions="Center" 
                  BackgroundColor="{StaticResource FrameTopColor}" Padding="30" Margin="30">
-        <Label Text="{Binding PageTitle}" TextColor="#e76f51" FontSize="Medium" VerticalTextAlignment="Center"/>
+        <Label Text="{Binding PageTitle}" TextColor="{StaticResource WarningColor}" FontSize="Medium" VerticalTextAlignment="Center"/>
         <Button Text="Ok" Command="{Binding ClosePopup}" Style="{StaticResource Key=PopupBtn}"/>
     </StackLayout>
 </pages:PopupPage>

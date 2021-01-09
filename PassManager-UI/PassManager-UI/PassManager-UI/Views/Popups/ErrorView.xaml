@@ -5,7 +5,7 @@
              x:Class="PassManager.Views.Popups.ErrorView"
              CloseWhenBackgroundIsClicked="False">
     <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Margin="20" Padding="20" BackgroundColor="{StaticResource FrameTopColor}">
-        <Label FontSize="Medium" Text="{Binding PageTitle}" TextColor="#e63946"/>
+        <Label FontSize="Medium" Text="{Binding PageTitle}" TextColor="{StaticResource ErrorColor}"/>
         <StackLayout Orientation="Horizontal" Padding="20">
             <Button IsVisible="{Binding CanQuit}" Text="Quit" Command="{Binding Quit}" Style="{StaticResource Key=PopupBtn}"/>
             <Button Text="Ok" Command="{Binding ClosePopup}" Style="{StaticResource Key=PopupBtn}"/>

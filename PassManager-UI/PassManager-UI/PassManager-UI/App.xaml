@@ -3,103 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="PassManager_UI.App">
     <Application.Resources>
-            <!--#region Color pallete-->
-        <Color x:Key="PageBottomColor">#cad2c5</Color>
-        <Color x:Key="PageTopColor">#84a98c</Color>
-        <Color x:Key="TextColor">#52796f</Color>
-        <Color x:Key="FrameBottomColor">#354f52</Color>
-        <Color x:Key="FrameTopColor">#2f3e46</Color>
-            <!--#endregion-->    
         
-            <!--#region Frames-->
-        <Style x:Key="RoundFrame" TargetType="Frame">
-            <Setter Property="BackgroundColor" Value="Transparent"/>
-            <Setter Property="HeightRequest" Value="35"/>
-            <Setter Property="WidthRequest" Value="35"/>
-            <Setter Property="CornerRadius" Value="30"/>
-            <Setter Property="Margin" Value="5"/>
-            <Setter Property="Padding" Value="0"/>
-        </Style>
-        <Style x:Key="CustomFrame" TargetType="Frame">
-            <Setter Property="BackgroundColor" Value="Transparent"/>
-            <Setter Property="BorderColor" Value="DarkGray"/>
-            <Setter Property="Padding" Value="0"/>
-            <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
-            <Setter Property="CornerRadius" Value="30"/>
-            <Setter Property="Margin" Value="10,6,10,6"/>
-        </Style>
-            <!--#endregion-->
+        <!--Colors-->
+        <ResourceDictionary Source="Styles/Colors.xaml"/>
+        <!--Frames-->
+        <ResourceDictionary Source="Styles/Frames.xaml"/>
+        <!--Lists-->
+        <ResourceDictionary Source="Styles/Lists.xaml"/>
+        <!--Entries-->
+        <ResourceDictionary Source="Styles/Entries.xaml"/>
+        <!--Labels-->
+        <ResourceDictionary Source="Styles/Labels.xaml"/>
+        <!--Buttons-->
+        <ResourceDictionary Source="Styles/Buttons.xaml"/>
         
-            <!--#region list items-->
-        <ResourceDictionary>
-            <ControlTemplate x:Key="ListViewItemTemplate">
-                <StackLayout>
-                    <StackLayout Orientation="Horizontal" IsVisible="{TemplateBinding BindingContext.IsUwp}">
-                        <Button Text="Search" Command="{TemplateBinding BindingContext.Search}" HorizontalOptions="FillAndExpand"
-                                TextColor="{StaticResource PageTopColor}" BackgroundColor="{StaticResource FrameBottomColor}"
-                                Margin="5" FontSize="15"/>
-                        <Button Text="Refresh" Command="{TemplateBinding BindingContext.Refresh}" HorizontalOptions="FillAndExpand"
-                                TextColor="{StaticResource PageTopColor}" BackgroundColor="{StaticResource FrameBottomColor}"
-                                Margin="5" FontSize="15"/>
-                    </StackLayout>
-                    <Label Text="{TemplateBinding BindingContext.NoItemsText}"
-                            FontSize="20" Padding="10"
-                            VerticalOptions="End" TextColor="IndianRed"
-                            HorizontalOptions="Center" IsVisible="{TemplateBinding BindingContext.HasItems}"/>
-                    <ListView ItemsSource="{TemplateBinding BindingContext.Items}" HasUnevenRows="True" SelectedItem="{TemplateBinding BindingContext.SelectedItem, Mode=TwoWay}"
-                              IsPullToRefreshEnabled="True" RefreshCommand="{TemplateBinding BindingContext.Refresh}" IsRefreshing="{TemplateBinding BindingContext.IsRefreshing}"
-                              IsGroupingEnabled="True">
-                        <ListView.GroupHeaderTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <Label Text="{Binding Key}"/>
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.GroupHeaderTemplate>
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <ViewCell>
-                                    <StackLayout Padding="10" Orientation="Vertical">
-                                        <Label Text="{Binding Title}" FontSize="17" FontAttributes="Bold" TextColor="{StaticResource TextColor}" 
-                                                   HorizontalTextAlignment="Center"/>
-                                        <Label Text="{Binding SubTitle}" FontSize="15" TextColor="{StaticResource PageTopColor}" HorizontalTextAlignment="Center"/>
-                                    </StackLayout>
-                                </ViewCell>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                    <Button Text="Add" FontSize="15" FontAttributes="Bold" BackgroundColor="{StaticResource FrameTopColor}" WidthRequest="66" 
-                            TextColor="{StaticResource PageTopColor}" HeightRequest="66" CornerRadius="33"
-                            HorizontalOptions="CenterAndExpand" Padding="10" Margin="15" Command="{TemplateBinding BindingContext.AddItem}"/>
-                </StackLayout>
-            </ControlTemplate>
-        </ResourceDictionary>
-            <!--#endregion-->
-        
-            <!--#region custom entry-->
-        <Style x:Key="CustomEntry" TargetType="Entry">
-            <Setter Property="TextColor" Value="{StaticResource FrameTopColor}"/>
-            <Setter Property="FontSize" Value="17"/>
-            <Setter Property="Margin" Value="9,0,9,0"/>
-        </Style>
-            <!--#endregion-->
-        
-            <!--#region Label for entries-->
-        <Style x:Key="LabelForEntries" TargetType="Label">
-            <Setter Property="TextColor" Value="{StaticResource TextColor}"/>
-            <Setter Property="FontSize" Value="17"/>
-        </Style>
-            <!--#endregion-->
-        
-            <!--#region Button for popups-->
-        <Style x:Key="PopupBtn" TargetType="Button">
-            <Setter Property="BackgroundColor" Value="{StaticResource PageTopColor}"/>
-            <Setter Property="TextColor" Value="{StaticResource FrameTopColor}"/>
-            <Setter Property="Padding" Value="5"/>
-            <Setter Property="Margin" Value="10"/>
-            <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
-            <Setter Property="CornerRadius" Value="{OnPlatform Android=30, UWP=15}"/>
-        </Style>    
-            <!--#endregion-->
     </Application.Resources>
 </Application>
