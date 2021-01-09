@@ -2,8 +2,10 @@
 using PassManager.Models;
 using PassManager.Models.Api;
 using PassManager.Models.Items;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -18,24 +20,43 @@ namespace PassManager.ViewModels
         private ItemPreview _selectedItem;
         private string _searchString;
         private int _maxLength = int.MaxValue;
+        private Timer _timer;
         public string SearchString
         {
             get { return _searchString; }
             set
             {
-                _searchString = value; 
+                //set the value for search string
+                _searchString = value;
                 NotifyPropertyChanged();
-                if (!string.IsNullOrEmpty(_searchString) && _searchString.Length < _maxLength)
-                {
-                    DisplayItems(_searchString).Await(HandleException, false, false, false);
-                    _searchString = null;
-                }
-                else
-                {
-                    _maxLength = int.MaxValue;
-                    Items = null;
-                }
+
+                //when the items is changed, if the times is not null, dispose(reset)
+                if (_timer != null)
+                    _timer.Dispose();
+                //create a new timer, after 500 miliseconds the functions will be called
+                _timer = new Timer(OnTimerElapsed, null, 500, 0);
             }
+        }
+        private async void OnTimerElapsed(object sender)
+        {
+            if (!string.IsNullOrEmpty(_searchString) && _searchString.Length < _maxLength)
+            {
+                try
+                {
+                    await DisplayItems(_searchString);
+                }
+                catch(Exception ex)
+                {
+                    HandleException(ex);
+                }
+                _searchString = null;
+            }
+            else
+            {
+                _maxLength = int.MaxValue;
+                Items = null;
+            }
+            _timer.Dispose();
         }
         private async Task DisplayItems(string searchString)
         {
