@@ -1,7 +1,9 @@
 ﻿using PassManager.Enums;
 using PassManager.Models;
+using PassManager.Models.Api;
 using PassManager.Models.Items;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -14,6 +16,39 @@ namespace PassManager.ViewModels
             _items = new ObservableCollection<Grouping<TypeOfItems, ItemPreview>>();
         }
         private ItemPreview _selectedItem;
+        private string _searchString;
+        private int _maxLength = int.MaxValue;
+        public string SearchString
+        {
+            get { return _searchString; }
+            set
+            {
+                _searchString = value; 
+                NotifyPropertyChanged();
+                if (!string.IsNullOrEmpty(_searchString) && _searchString.Length < _maxLength)
+                {
+                    DisplayItems(_searchString).Await(HandleException, false, false, false);
+                    _searchString = null;
+                }
+                else
+                {
+                    _maxLength = int.MaxValue;
+                    Items = null;
+                }
+            }
+        }
+        private async Task DisplayItems(string searchString)
+        {
+            var items = await EntireItemsProcessor.GetPreviews(ApiHelper.ApiClient, searchString.ToLower());
+            if(items.Count() > 0)
+            {
+                Items = new ObservableCollection<Grouping<TypeOfItems, ItemPreview>>(items);
+            }
+            else
+            {
+                _maxLength = searchString.Length;
+            }
+        }
         private ObservableCollection<Grouping<TypeOfItems, ItemPreview>> _items;
         public ObservableCollection<Grouping<TypeOfItems, ItemPreview>> Items
         {
