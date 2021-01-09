@@ -19,8 +19,6 @@ namespace PassManager.Models
             var page = new WaitForActionView();
             if (displayPopup && !CheckIfPageExists(page.ToString()))
                 await PageService.PushPopupAsync(page,animate);
-            else
-                page = null;
             try
             {
                 await task;

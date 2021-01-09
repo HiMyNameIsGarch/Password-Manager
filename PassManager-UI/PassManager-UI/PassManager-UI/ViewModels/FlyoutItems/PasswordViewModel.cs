@@ -46,7 +46,7 @@ namespace PassManager.ViewModels.FlyoutItems
             }
             else
             {
-                await PageService.PushPopupAsync(new WarningView("Your passwords are up to date!"));
+                await PageService.PushPopupAsync(new WarningView("Your passwords are up to date!"), popupAllPages: true);
             }
         }
     }

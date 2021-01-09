@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using PassManager.Models.Api;
 using System.Linq;
 using PassManager.Views.Popups;
+using Rg.Plugins.Popup.Services;
 
 namespace PassManager.ViewModels.FlyoutItems
 {
@@ -43,7 +44,7 @@ namespace PassManager.ViewModels.FlyoutItems
             }
             else
             {
-                await PageService.PushPopupAsync(new WarningView("Your items are up to date!"));
+                await PageService.PushPopupAsync(new WarningView("Your items are up to date!"),false, true);
             }
         }
         private void AddDataForAndroid()
