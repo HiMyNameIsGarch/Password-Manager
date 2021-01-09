@@ -8,6 +8,7 @@ using System;
 using PassManager.Enums;
 using System.Collections.Generic;
 using System.Linq;
+using PassManager.Views.Popups;
 
 namespace PassManager.ViewModels
 {
@@ -99,6 +100,7 @@ namespace PassManager.ViewModels
         {
             get { return new Command(async () => 
             {
+                await PageService.PushPopupAsync(new WaitForActionView(),false);
                 IsRefreshing = true;
                 try
                 {

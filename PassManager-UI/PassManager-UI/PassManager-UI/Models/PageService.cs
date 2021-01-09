@@ -15,8 +15,12 @@ namespace PassManager.Models
         {
             Application.Current.MainPage = page;
         }
-        public static Task PushPopupAsync(PopupPage page, bool animate = true)
+        public static Task PushPopupAsync(PopupPage page, bool animate = true, bool popupAllPages = false)
         {
+            if (popupAllPages)
+            {
+                MainPage.Navigation.PopAllPopupAsync(false);
+            }
             return MainPage.Navigation.PushPopupAsync(page,animate);
         }
         public static Task PopPopupAsync(bool animate = true)
