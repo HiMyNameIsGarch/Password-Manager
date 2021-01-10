@@ -31,5 +31,23 @@ namespace PassManager.Models.Api
             }
             return null;
         }
+        internal static async Task<ItemPreview> GetUpdate(HttpClient httpClient, TypeOfUpdates updateType)
+        {
+            HttpResponseMessage responseMessage = null;
+            try
+            {
+                responseMessage = await httpClient.GetAsync($"api/EntireItems?updateType={updateType}");
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                ItemPreview newItem = await responseMessage.Content.ReadAsAsync<ItemPreview>();
+                return newItem;
+            }
+            return null;
+        }
     }
 }

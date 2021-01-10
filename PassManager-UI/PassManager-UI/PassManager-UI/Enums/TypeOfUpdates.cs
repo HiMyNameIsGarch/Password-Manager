@@ -1,10 +1,10 @@
 ﻿namespace PassManager.Enums
 {
-    public enum ItemPageState
+    public enum TypeOfUpdates
     {
         Null,//in case a conversion fails, this value will be setted
         Create,
-        View,
-        Edit
+        Modify,
+        Delete
     }
 }

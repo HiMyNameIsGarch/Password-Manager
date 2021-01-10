@@ -266,6 +266,7 @@
     <Compile Include="Controllers\PasswordsController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Enums\TypeOfItems.cs" />
+    <Compile Include="Enums\TypeOfUpdates.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using PassManager.Models;
 using PassManager.Views.Popups;
 using Rg.Plugins.Popup.Services;
+using Newtonsoft.Json;
 
 namespace PassManager.ViewModels.CreateItems
 {
@@ -53,7 +54,9 @@ namespace PassManager.ViewModels.CreateItems
             bool isSuccess = await PasswordProcessor.CreatePassword(ApiHelper.ApiClient,Password);
             if (isSuccess)
             {
-                await GoTo("Password", $"?update={ManageFlyoutItems.GetValue("Passwords")}");
+                UpdateModel Model = new UpdateModel(Enums.TypeOfUpdates.Create);
+                string stringModel = JsonConvert.SerializeObject(Model);
+                await GoTo("Password", $"?update={stringModel}");
             }
             else
             {
@@ -65,7 +68,9 @@ namespace PassManager.ViewModels.CreateItems
             bool isSuccess = await PasswordProcessor.Delete(ApiHelper.ApiClient, Password.Id);
             if (isSuccess)
             {
-                await GoTo("Password", "?update=true");
+                UpdateModel Model = new UpdateModel(Enums.TypeOfUpdates.Delete, Password.Id);
+                string stringModel = JsonConvert.SerializeObject(Model);
+                await GoTo("Password", $"?update={stringModel}");
             }
             else
             {
@@ -81,7 +86,16 @@ namespace PassManager.ViewModels.CreateItems
                     bool isSuccess = await PasswordProcessor.Modify(ApiHelper.ApiClient, newId, Password);
                     if (isSuccess)
                     {
-                        await GoTo("Password", ((_tempPassword.Name != Password.Name) || (_tempPassword.Username != Password.Username)) ? "?update=true" : string.Empty);
+                        if((_tempPassword.Name != Password.Name) || (_tempPassword.Username != Password.Username))//if some props from itempreviews changed, then update the item
+                        {
+                            UpdateModel Model = new UpdateModel(Enums.TypeOfUpdates.Modify);
+                            string stringModel = JsonConvert.SerializeObject(Model);
+                            await GoTo("Password", $"?update={stringModel}");
+                        }
+                        else
+                        {
+                            await GoTo("Password");
+                        }
                     }
                     else
                     {
