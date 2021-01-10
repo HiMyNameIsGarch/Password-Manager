@@ -9,6 +9,8 @@ using PassManager.Enums;
 using System.Collections.Generic;
 using System.Linq;
 using PassManager.Views.Popups;
+using Newtonsoft.Json;
+using PassManager.Models.Api;
 
 namespace PassManager.ViewModels
 {
@@ -30,6 +32,7 @@ namespace PassManager.ViewModels
         private bool _hasItems;
         private string _noItemsText;
         private ObservableCollection<Grouping<TypeOfItems, ItemPreview>> _items;
+        private UpdateModel _updateModel;
         //parameters
         public string Update
         {
@@ -37,11 +40,26 @@ namespace PassManager.ViewModels
             set
             {
                 _update = Uri.UnescapeDataString(value ?? string.Empty);
-                if (Boolean.TryParse(_update, out bool refresh))
+                _updateModel = JsonConvert.DeserializeObject<UpdateModel>(_update);
+                if(_updateModel != null)
                 {
-                    if (refresh)
+                    if (Items.Count() > 0)
                     {
-                        GetDataAsync().Await(HandleException,false,true,false);
+                        switch (_updateModel.UpdateType)
+                        {
+                            case TypeOfUpdates.Null:
+                                //log
+                                break;
+                            case TypeOfUpdates.Create:
+                                UpdateItems(_updateModel.UpdateType).Await(HandleException, false, true, false);
+                                break;
+                            case TypeOfUpdates.Modify:
+                                UpdateItems(_updateModel.UpdateType).Await(HandleException, false, true, false);
+                                break;
+                            case TypeOfUpdates.Delete:
+                                Delete(_updateModel.IdToDelete);
+                                break;
+                        }
                     }
                 }
             }
@@ -125,6 +143,39 @@ namespace PassManager.ViewModels
         }
         private protected abstract Task RefreshPageAsync();
         //abstract functions
+        private async Task UpdateItems(TypeOfUpdates updateType)
+        {
+            ItemPreview newItem = await EntireItemsProcessor.GetUpdate(ApiHelper.ApiClient, updateType);
+            var currentItems = Items.Where(s => s.Key == newItem.ItemType).FirstOrDefault();
+            if(updateType == TypeOfUpdates.Create)
+            {
+                currentItems.Add(newItem);
+            }
+            else if(updateType == TypeOfUpdates.Modify)
+            {
+                foreach (var item in currentItems)
+                {
+                    if(item.Id == newItem.Id)
+                    {
+                        item.Title = newItem.Title;
+                        item.SubTitle = newItem.SubTitle;
+                        break;
+                    }
+                }
+            }
+        }
+        private void Delete(int id)
+        {
+            foreach (var item in Items)
+            {
+                var itemToDelete = item.Where(s => s.Id == id).FirstOrDefault();
+                if(itemToDelete != null)
+                {
+                    item.Remove(itemToDelete);
+                    break;
+                }
+            }
+        }
         private protected abstract Task GetDataAsync();
         //methods
         private protected void DisplayMsg(string text, bool hasItems)
