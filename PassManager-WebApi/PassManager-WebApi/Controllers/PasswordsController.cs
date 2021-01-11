@@ -21,8 +21,7 @@ namespace PassManager_WebApi.Controllers
         {
             //bring from db just the passwords
             IEnumerable<ItemPreview> unGroupedPasswords = GetCurrentUser().Passwords
-                .OrderBy(p => p.LastVisited)
-                .ThenBy(p => p.LastModified)
+                .OrderByDescending(p => p.LastVisited)
                 .Select(item => new ItemPreview(item.Id, item.Name, item.Username, TypeOfItems.Password)).ToList();
             //group it by type
             IEnumerable<Grouping<TypeOfItems, ItemPreview>> groupedPasswords = unGroupedPasswords

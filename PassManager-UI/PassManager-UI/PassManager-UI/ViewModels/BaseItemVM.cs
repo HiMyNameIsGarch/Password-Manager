@@ -143,6 +143,7 @@ namespace PassManager.ViewModels
                 {
                     HandleException(ex);
                 }
+                await PageService.PopPopupAsync(false);
             }
         }
         private void DisplayMore()
@@ -170,7 +171,7 @@ namespace PassManager.ViewModels
                 case ItemPageState.Create:
                     if (await IsModelValid())
                     {
-                        Create().Await(HandleException);
+                        Create().Await(HandleException, false, true, false);
                     }
                     break;
                 case ItemPageState.View:
@@ -179,7 +180,7 @@ namespace PassManager.ViewModels
                 case ItemPageState.Edit:
                     if (await IsModelValid())
                     {
-                        Modify().Await(HandleException);
+                        Modify().Await(HandleException, false, true, false);
                     }
                     break;
             }
@@ -211,27 +212,16 @@ namespace PassManager.ViewModels
             string location = Shell.Current.CurrentState.Location.ToString();
             location = location.Replace("//", "");
             string[] path = location.Split('/');
-            int navigationMax = Shell.Current.Navigation.NavigationStack.Count() - 1;
-            string baseRoute = string.Empty;
-            for (int i = 0; i < navigationMax; i++)
+            if (path[0] == "EntireItems")
             {
-                if (i == 0)
-                    baseRoute += "..";
-                else
-                    baseRoute += "/..";
-            }
-            if(path[0] == "EntireItems")
-            {
-                baseRoute += "?update=true";
+                await Shell.Current.GoToAsync($"///EntireItems{parameters}", false);
+                await Shell.Current.GoToAsync($"///{itemPage}{parameters}", false);
             }
             else
-            {    
-                baseRoute += parameters;
-            }
-            await Shell.Current.GoToAsync(baseRoute, false);
-            if (!path[path.Length - 1].Contains(path[0]))
             {
-                await Shell.Current.GoToAsync($"///{itemPage}{parameters}", false);
+                await Task.WhenAll(Shell.Current.GoToAsync($"///{itemPage}{parameters}", false),
+                    Shell.Current.GoToAsync($"///EntireItems{parameters}", false),
+                    Shell.Current.GoToAsync($"///{itemPage}", false));
             }
             if (IsUwp)
             {

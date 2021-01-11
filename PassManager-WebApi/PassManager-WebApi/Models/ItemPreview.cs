@@ -4,6 +4,10 @@ namespace PassManager_WebApi.Models
 {
     public class ItemPreview
     {
+        public ItemPreview()
+        {
+
+        }
         public ItemPreview(int id, string title, string subTitle, TypeOfItems itemType)
         {
             Id = id;
