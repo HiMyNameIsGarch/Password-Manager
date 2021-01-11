@@ -33,6 +33,26 @@ namespace PassManager_WebApi.Controllers
             IEnumerable<ItemPreview> previews = GetAllItems(GetCurrentUser(), searchString);
             return Ok(previews);
         }
+        public IHttpActionResult Get(TypeOfUpdates updateType)
+        {
+            var user = GetCurrentUser();
+            if (updateType != TypeOfUpdates.Create && updateType != TypeOfUpdates.Modify)
+            {
+                return BadRequest("UpdateType is invalid!");
+            }
+            //take passwords
+            var passwords = user.Passwords
+            .OrderByDescending(s => updateType == TypeOfUpdates.Create ? s.CreateDate : updateType == TypeOfUpdates.Modify ? s.LastModified : s.LastVisited)
+            .Select(item => new ItemPreview(item.Id, item.Name, item.Username, TypeOfItems.Password))
+            .Union(user.Wifis
+                .OrderByDescending(s => updateType == TypeOfUpdates.Create ? s.CreateDate : updateType == TypeOfUpdates.Modify ? s.LastModified : s.LastVisited)
+                .Select(item => new ItemPreview(item.Id, item.Name, TypeOfItems.Wifi.ToString(), TypeOfItems.Wifi))).FirstOrDefault();
+            if (passwords is null)
+            {
+                return BadRequest("No item were updated!");
+            }
+            return Ok(passwords);
+        }
         private IEnumerable<ItemPreview> GetAllItems(AspNetUser user, string searchString = "")
         {
             if(user != null)
@@ -42,11 +62,11 @@ namespace PassManager_WebApi.Controllers
 
                 //take passwords
                 var passwords = user.Passwords
-                .OrderBy(p => p.LastVisited)
+                .OrderByDescending(p => p.LastVisited)
                 .Select(item => new ItemPreview(item.Id, item.Name, item.Username, TypeOfItems.Password));
                 //Take wifis
                 var wifis = user.Wifis
-                    .OrderBy(p => p.LastVisited)
+                    .OrderByDescending(p => p.LastVisited)
                     .Select(item => new ItemPreview(item.Id, item.Name, TypeOfItems.Wifi.ToString(), TypeOfItems.Wifi));
                 items = ConcatLists(items, new IEnumerable<ItemPreview>[] { passwords, wifis});
 

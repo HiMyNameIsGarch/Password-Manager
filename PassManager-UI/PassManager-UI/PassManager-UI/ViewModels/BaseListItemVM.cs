@@ -149,18 +149,15 @@ namespace PassManager.ViewModels
             var currentItems = Items.Where(s => s.Key == newItem.ItemType).FirstOrDefault();
             if(updateType == TypeOfUpdates.Create)
             {
-                currentItems.Add(newItem);
+                currentItems.InsertNewItem(0, newItem);
             }
             else if(updateType == TypeOfUpdates.Modify)
             {
-                foreach (var item in currentItems)
+                var itemToBeModified = currentItems.FirstOrDefault(s => s.Id == newItem.Id);
+                if(itemToBeModified != null)
                 {
-                    if(item.Id == newItem.Id)
-                    {
-                        item.Title = newItem.Title;
-                        item.SubTitle = newItem.SubTitle;
-                        break;
-                    }
+                    int index = currentItems.IndexOf(itemToBeModified);
+                    currentItems.SetNewItem(index, newItem);
                 }
             }
         }

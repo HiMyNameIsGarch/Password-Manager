@@ -20,7 +20,6 @@ namespace PassManager.ViewModels.FlyoutItems
                 GetDataAsync().Await(HandleException, true, true, false);
             }
         }
-
         private protected async override Task GetDataAsync()
         {
             IEnumerable<Grouping<TypeOfItems, ItemPreview>> previews = await EntireItemsProcessor.GetPreviews(ApiHelper.ApiClient);
@@ -34,21 +33,18 @@ namespace PassManager.ViewModels.FlyoutItems
                 DisplayMsg("You have no items yet, click on button below to add a new one!",true);
             }
         }
-
         private protected override async Task RefreshPageAsync()
         {
             IEnumerable<Grouping<TypeOfItems, ItemPreview>> previews = await EntireItemsProcessor.GetPreviews(ApiHelper.ApiClient);
+            await PageService.PopAllAsync(false);
             if (IsListChanged(previews))
             {
                 Items = UpdateItems(previews);
             }
             else
             {
-                await PageService.PushPopupAsync(new WarningView("Your items are up to date!"),false, true);
+                await PageService.PushPopupAsync(new WarningView("Your items are up to date!"),false);
             }
-        }
-        private void AddDataForAndroid()
-        {
         }
     }
 }

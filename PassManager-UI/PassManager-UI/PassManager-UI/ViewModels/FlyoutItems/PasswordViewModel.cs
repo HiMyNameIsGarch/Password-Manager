@@ -40,13 +40,14 @@ namespace PassManager.ViewModels.FlyoutItems
         private protected override async Task RefreshPageAsync()
         {
             IEnumerable<Grouping<TypeOfItems, ItemPreview>> newList = await PasswordProcessor.GetPreviews(ApiHelper.ApiClient);
+            await PageService.PopAllAsync(false);
             if (IsListChanged(newList))
             {
                 Items = UpdateItems(newList);
             }
             else
             {
-                await PageService.PushPopupAsync(new WarningView("Your passwords are up to date!"), popupAllPages: true);
+                await PageService.PushPopupAsync(new WarningView("Your passwords are up to date!"));
             }
         }
     }
