@@ -41,11 +41,14 @@ namespace PassManager.ViewModels.CreateItems
         //functions
         private protected async override Task GetDataAsync(int id)
         {
-            Password password = await PasswordProcessor.GetPassword(ApiHelper.ApiClient,id);
-            if(password != null)
+            if (IsInternet())
             {
-                _tempPassword = (Password)password.Clone();//store a temp password for future verifications
-                Password = password;
+                Password password = await PasswordProcessor.GetPassword(ApiHelper.ApiClient, id);
+                if (password != null)
+                {
+                    _tempPassword = (Password)password.Clone();//store a temp password for future verifications
+                    Password = password;
+                }
             }
         }
         //override basic actions for password
@@ -82,7 +85,7 @@ namespace PassManager.ViewModels.CreateItems
             bool isSuccess = await PasswordProcessor.Modify(ApiHelper.ApiClient, id, Password);
             if (isSuccess)
             {
-                if((_tempPassword.Name != Password.Name) || (_tempPassword.Username != Password.Username))//if some props from itempreviews changed, then update the item
+                if ((_tempPassword.Name != Password.Name) || (_tempPassword.Username != Password.Username))//if some props from itempreviews changed, then update the item
                 {
                     UpdateModel Model = new UpdateModel(Enums.TypeOfUpdates.Modify);
                     string stringModel = JsonConvert.SerializeObject(Model);

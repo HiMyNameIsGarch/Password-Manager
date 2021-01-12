@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using PassManager.Models;
 using PassManager.Models.Items;
 using Xamarin.Forms;
+using Newtonsoft.Json;
 
 namespace PassManager.ViewModels
 {
@@ -25,7 +26,15 @@ namespace PassManager.ViewModels
         }
         private async Task HandleSelectedItem()
         {
-            await Shell.Current.GoToAsync($"Create{SelectedPage.Name}?pageType=Create", false);
+            if (IsInternet())
+            {
+                //create object
+                CreatePage pageToCreate = new CreatePage(ItemPageState.Create, -1);
+                //serialize it
+                string pageToCreateString = JsonConvert.SerializeObject(pageToCreate);
+                //send it
+                await Shell.Current.GoToAsync($"Create{SelectedPage.Name}?createPage={pageToCreateString}", false);
+            }
         }
         public IEnumerable<CreateItem> ListItems
         {

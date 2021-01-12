@@ -118,17 +118,24 @@ namespace PassManager.ViewModels
         {
             get { return new Command(async () => 
             {
-                await PageService.PushPopupAsync(new WaitForActionView(),false);
-                IsRefreshing = true;
-                try
+                if (IsInternet())
                 {
-                    await RefreshPageAsync();
+                    await PageService.PushPopupAsync(new WaitForActionView(),false);
+                    IsRefreshing = true;
+                    try
+                    {
+                        await RefreshPageAsync();
+                    }
+                    catch(Exception ex)
+                    {
+                        HandleException(ex);
+                    }
+                    IsRefreshing = false;
                 }
-                catch(Exception ex)
+                else
                 {
-                    HandleException(ex);
+                    IsRefreshing = false;
                 }
-                IsRefreshing = false;
             }); }
         }
         public ICommand AddItem
@@ -145,19 +152,22 @@ namespace PassManager.ViewModels
         //abstract functions
         private async Task UpdateItems(TypeOfUpdates updateType)
         {
-            ItemPreview newItem = await EntireItemsProcessor.GetUpdate(ApiHelper.ApiClient, updateType);
-            var currentItems = Items.Where(s => s.Key == newItem.ItemType).FirstOrDefault();
-            if(updateType == TypeOfUpdates.Create)
+            if (IsInternet())
             {
-                currentItems.InsertNewItem(0, newItem);
-            }
-            else if(updateType == TypeOfUpdates.Modify)
-            {
-                var itemToBeModified = currentItems.FirstOrDefault(s => s.Id == newItem.Id);
-                if(itemToBeModified != null)
+                ItemPreview newItem = await EntireItemsProcessor.GetUpdate(ApiHelper.ApiClient, updateType);
+                var currentItems = Items.Where(s => s.Key == newItem.ItemType).FirstOrDefault();
+                if(updateType == TypeOfUpdates.Create)
                 {
-                    int index = currentItems.IndexOf(itemToBeModified);
-                    currentItems.SetNewItem(index, newItem);
+                    currentItems.InsertNewItem(0, newItem);
+                }
+                else if(updateType == TypeOfUpdates.Modify)
+                {
+                    var itemToBeModified = currentItems.FirstOrDefault(s => s.Id == newItem.Id);
+                    if(itemToBeModified != null)
+                    {
+                        int index = currentItems.IndexOf(itemToBeModified);
+                        currentItems.SetNewItem(index, newItem);
+                    }
                 }
             }
         }
@@ -182,12 +192,15 @@ namespace PassManager.ViewModels
         }
         private async Task ViewSelectedItem(int id, TypeOfItems itemType)
         {
-            //create object
-            CreatePage pageToCreate = new CreatePage(ItemPageState.View, id);
-            //serialize it
-            string pageToCreateString = JsonConvert.SerializeObject(pageToCreate);
-            //send it
-            await Shell.Current.GoToAsync($"Create{itemType}?createPage={pageToCreateString}");
+            if (IsInternet())
+            {
+                //create object
+                CreatePage pageToCreate = new CreatePage(ItemPageState.View, id);
+                //serialize it
+                string pageToCreateString = JsonConvert.SerializeObject(pageToCreate);
+                //send it
+                await Shell.Current.GoToAsync($"Create{itemType}?createPage={pageToCreateString}");
+            }
         }
         private protected bool IsListChanged(IEnumerable<Grouping<TypeOfItems, ItemPreview>> newList)
         {

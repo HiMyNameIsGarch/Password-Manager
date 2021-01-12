@@ -1,4 +1,5 @@
-﻿using PassManager.Enums;
+﻿using Newtonsoft.Json;
+using PassManager.Enums;
 using PassManager.Models;
 using PassManager.Models.Api;
 using PassManager.Models.Items;
@@ -60,14 +61,17 @@ namespace PassManager.ViewModels
         }
         private async Task DisplayItems(string searchString)
         {
-            var items = await EntireItemsProcessor.GetPreviews(ApiHelper.ApiClient, searchString.ToLower());
-            if(items.Count() > 0)
+            if (IsInternet())
             {
-                Items = new ObservableCollection<Grouping<TypeOfItems, ItemPreview>>(items);
-            }
-            else
-            {
-                _maxLength = searchString.Length;
+                var items = await EntireItemsProcessor.GetPreviews(ApiHelper.ApiClient, searchString.ToLower());
+                if(items.Count() > 0)
+                {
+                    Items = new ObservableCollection<Grouping<TypeOfItems, ItemPreview>>(items);
+                }
+                else
+                {
+                    _maxLength = searchString.Length;
+                }
             }
         }
         private ObservableCollection<Grouping<TypeOfItems, ItemPreview>> _items;
@@ -96,7 +100,15 @@ namespace PassManager.ViewModels
         }
         private async Task ViewSelectedItem(int id, TypeOfItems itemType)
         {
-            await Shell.Current.GoToAsync($"Create{itemType}?pageType=View&id={id}");
+            if (IsInternet())
+            {
+                //create object
+                CreatePage pageToCreate = new CreatePage(ItemPageState.View, id);
+                //serialize it
+                string pageToCreateString = JsonConvert.SerializeObject(pageToCreate);
+                //send it
+                await Shell.Current.GoToAsync($"Create{itemType}?createPage={pageToCreateString}");
+            }
         }
     }
 }

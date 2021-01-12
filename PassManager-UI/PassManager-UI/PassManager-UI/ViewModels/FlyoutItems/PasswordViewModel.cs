@@ -14,7 +14,7 @@ namespace PassManager.ViewModels.FlyoutItems
     {
         public PasswordViewModel() : base("Passwords")
         {
-            if (CheckInternet())
+            if (IsInternet())
             {
                 GetDataAsync().Await(HandleException,true,true,false);
             }
@@ -22,32 +22,34 @@ namespace PassManager.ViewModels.FlyoutItems
         //functions
         private protected override async Task GetDataAsync()
         {
-            IEnumerable<Grouping<TypeOfItems, ItemPreview>> previews = await PasswordProcessor.GetPreviews(ApiHelper.ApiClient);
-            if(previews != null && previews.Count() > 0)
+            if (IsInternet())
             {
-                DisplayMsg(string.Empty, false);
-                Items = new ObservableCollection<Grouping<TypeOfItems, ItemPreview>>(previews);
+                IEnumerable<Grouping<TypeOfItems, ItemPreview>> previews = await PasswordProcessor.GetPreviews(ApiHelper.ApiClient);
+                if(previews != null && previews.Count() > 0)
+                {
+                    DisplayMsg(string.Empty, false);
+                    Items = new ObservableCollection<Grouping<TypeOfItems, ItemPreview>>(previews);
+                }
+                else if(previews.Count() == 0)
+                {
+                    DisplayMsg("You have no passwords yet, click on button below to add a new one!", true);
+                }
             }
-            else if(previews.Count() == 0)
-            {
-                DisplayMsg("You have no passwords yet, click on button below to add a new one!", true);
-            }
-        }
-        //this function is for android testing
-        private void AddDataForAndroid()
-        {
         }
         private protected override async Task RefreshPageAsync()
         {
-            IEnumerable<Grouping<TypeOfItems, ItemPreview>> newList = await PasswordProcessor.GetPreviews(ApiHelper.ApiClient);
-            await PageService.PopAllAsync(false);
-            if (IsListChanged(newList))
+            if (IsInternet())
             {
-                Items = UpdateItems(newList);
-            }
-            else
-            {
-                await PageService.PushPopupAsync(new WarningView("Your passwords are up to date!"));
+                IEnumerable<Grouping<TypeOfItems, ItemPreview>> newList = await PasswordProcessor.GetPreviews(ApiHelper.ApiClient);
+                await PageService.PopAllAsync(false);
+                if (IsListChanged(newList))
+                {
+                    Items = UpdateItems(newList);
+                }
+                else
+                {
+                    await PageService.PushPopupAsync(new WarningView("Your passwords are up to date!"));
+                }
             }
         }
     }
