@@ -32,7 +32,7 @@ namespace PassManager.ViewModels
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-        protected private bool CheckInternet()
+        protected private bool IsInternet()
         {
             bool internet = Connectivity.NetworkAccess == NetworkAccess.Internet;
             if (!internet)

@@ -47,8 +47,6 @@ namespace PassManager.ViewModels
                 {
                     PageState = page.PageState;
                     _itemId = page.IdForItem;
-                    //get data from api
-                    GetDataAsync(_itemId).Await(HandleException, true, true, false);
                     //change page based on state
                     switch (PageState)
                     {
@@ -57,6 +55,11 @@ namespace PassManager.ViewModels
                             ReadOnly = false;
                             break;
                         case ItemPageState.View:
+                            if(_itemId > 0)//check if id is valid
+                            {
+                                //get data from api
+                                GetDataAsync(_itemId).Await(HandleException, true, true, false);
+                            }
                             ChangeProps(ItemPageState.View, "Edit", $"View {ItemType}", true);
                             break;
                         case ItemPageState.Edit:
@@ -121,16 +124,19 @@ namespace PassManager.ViewModels
             bool accept = await PageService.DisplayAlert("Delete","Do you really want to delete this item?","Yes","No");
             if (accept)
             {
-                await PageService.PushPopupAsync(new Views.Popups.WaitForActionView());
-                try
+                if (IsInternet())
                 {
-                    await Delete();
+                    await PageService.PushPopupAsync(new Views.Popups.WaitForActionView());
+                    try
+                    {
+                        await Delete();
+                    }
+                    catch(Exception ex)
+                    {
+                        HandleException(ex);
+                    }
+                    await PageService.PopPopupAsync(false);
                 }
-                catch(Exception ex)
-                {
-                    HandleException(ex);
-                }
-                await PageService.PopPopupAsync(false);
             }
         }
         private void DisplayMore()
@@ -148,28 +154,31 @@ namespace PassManager.ViewModels
         }
         private async void ChangePageType()
         {
-            //open popup
-            if(PageState == ItemPageState.Create || PageState == ItemPageState.Edit)
+            if (IsInternet())
             {
-                await PageService.PushPopupAsync(new Views.Popups.WaitForActionView(),false); 
-            }
-            switch (PageState)
-            {
-                case ItemPageState.Create:
-                    if (await IsModelValid())
-                    {
-                        Create().Await(HandleException, false, true, false);
-                    }
-                    break;
-                case ItemPageState.View:
-                    ChangeProps(ItemPageState.Edit, "Save", $"Edit {ItemType}", false);
-                    break;
-                case ItemPageState.Edit:
-                    if (await IsModelValid())
-                    {
-                        Modify(_itemId).Await(HandleException, false, true, false);
-                    }
-                    break;
+                //open popup
+                if(PageState == ItemPageState.Create || PageState == ItemPageState.Edit)
+                {
+                    await PageService.PushPopupAsync(new Views.Popups.WaitForActionView(),false); 
+                }
+                switch (PageState)
+                {
+                    case ItemPageState.Create:
+                        if (await IsModelValid())
+                        {
+                            Create().Await(HandleException, false, true, false);
+                        }
+                        break;
+                    case ItemPageState.View:
+                        ChangeProps(ItemPageState.Edit, "Save", $"Edit {ItemType}", false);
+                        break;
+                    case ItemPageState.Edit:
+                        if (await IsModelValid())
+                        {
+                            Modify(_itemId).Await(HandleException, false, true, false);
+                        }
+                        break;
+                }
             }
         }
         //basic actions for item page

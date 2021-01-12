@@ -15,7 +15,7 @@ namespace PassManager.ViewModels.FlyoutItems
     {
         public EntireItemsViewModel() : base("All items")
         {
-            if (CheckInternet())
+            if (IsInternet())
             {
                 GetDataAsync().Await(HandleException, true, true, false);
             }
