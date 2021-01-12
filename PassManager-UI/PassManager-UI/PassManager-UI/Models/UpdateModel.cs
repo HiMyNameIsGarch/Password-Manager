@@ -13,8 +13,12 @@ namespace PassManager.Models
         public TypeOfUpdates UpdateType { get; set; }
         public int IdToDelete //if the updatetype is delete
         {
-            get { return UpdateType == TypeOfUpdates.Delete ? _id : -1; }// then return the value of the id
-            set { _id = UpdateType == TypeOfUpdates.Delete ? value : -1; }//the set the value
+            get { return SetIfDeleteUpdate(_id); }// then return the value of the id
+            set { _id = SetIfDeleteUpdate(value); }//the set the value
+        }
+        private int SetIfDeleteUpdate(int value)
+        {
+            return UpdateType == TypeOfUpdates.Delete ? value : -1;
         }
     }
 }
