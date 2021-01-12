@@ -4,12 +4,11 @@ using Xamarin.Forms;
 using PassManager.Models;
 using System.Threading.Tasks;
 using System;
-using System.Linq;
+using Newtonsoft.Json;
 
 namespace PassManager.ViewModels
 {
-    [QueryProperty("PageType", "pageType")]
-    [QueryProperty("Id", "id")]
+    [QueryProperty("CreatePage", "createPage")]
     public abstract class BaseItemVM : BaseViewModel
     {
         //constructors
@@ -33,56 +32,44 @@ namespace PassManager.ViewModels
         private bool _needMoreActions = false;
         private bool _canDelete;
         private string _actionsText = "More";
-        private string _pageType;
-        private string _id;
+        private int _itemId;
+        private string _createPage;
+        
         //parameters
-        public string Id
+        public string CreatePage
         {
-            private protected get { return _id; }
+            private get { return _createPage; }
             set
             {
-                _id = Uri.UnescapeDataString(value ?? string.Empty);
-                if (PageState != ItemPageState.Null)
+                _createPage = Uri.UnescapeDataString(value ?? string.Empty);
+                var page = JsonConvert.DeserializeObject<CreatePage>(_createPage);
+                if(page.IdForItem != 0 && page.PageState != ItemPageState.Null)
                 {
-                    if (int.TryParse(Id, out int newId))
+                    PageState = page.PageState;
+                    _itemId = page.IdForItem;
+                    //get data from api
+                    GetDataAsync(_itemId).Await(HandleException, true, true, false);
+                    //change page based on state
+                    switch (PageState)
                     {
-                        GetDataAsync(newId).Await(HandleException, true, true, false);
-                    }
-                    else
-                    {
-                        //handle error from id
+                        case ItemPageState.Create:
+                            PageTitle = $"Create {ItemType}!";
+                            ReadOnly = false;
+                            break;
+                        case ItemPageState.View:
+                            ChangeProps(ItemPageState.View, "Edit", $"View {ItemType}", true);
+                            break;
+                        case ItemPageState.Edit:
+                            PageTitle = $"Edit {ItemType}";
+                            break;
+                        default:
+                            PageTitle = $"Your {ItemType} is invalid!";
+                            break;
                     }
                 }
                 else
                 {
-                    //handle error
-                    PageTitle = "Your item is invalid!";
-                }
-            }
-        }
-        public string PageType
-        {
-            private protected get { return _pageType; }
-            set
-            {
-                _pageType = Uri.UnescapeDataString(value ?? string.Empty);
-                Enum.TryParse(_pageType, out ItemPageState pageState);
-                PageState = pageState;
-                switch (PageState)
-                {
-                    case ItemPageState.Create:
-                        PageTitle = $"Create {ItemType}!";
-                        ReadOnly = false;
-                        break;
-                    case ItemPageState.View:
-                        ChangeProps(ItemPageState.View, "Edit", $"View {ItemType}", true);
-                        break;
-                    case ItemPageState.Edit:
-                        PageTitle = $"Edit {ItemType}";
-                        break;
-                    default:
-                        PageTitle = $"Your {ItemType} is invalid!";
-                        break;
+                    ChangeProps(ItemPageState.Null, "Error","Something went wrong!", true);
                 }
             }
         }
@@ -180,7 +167,7 @@ namespace PassManager.ViewModels
                 case ItemPageState.Edit:
                     if (await IsModelValid())
                     {
-                        Modify().Await(HandleException, false, true, false);
+                        Modify(_itemId).Await(HandleException, false, true, false);
                     }
                     break;
             }
@@ -188,7 +175,7 @@ namespace PassManager.ViewModels
         //basic actions for item page
         private protected abstract Task Create();
         private protected abstract Task Delete();
-        private protected abstract Task Modify();
+        private protected abstract Task Modify(int id);
         private protected abstract Task<bool> IsModelValid();//this function will check if the item is valid(title not to be more than 25 char etc etc) other wise will display a popup with the info
         //functions
         private protected abstract Task GetDataAsync(int id);

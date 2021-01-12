@@ -77,34 +77,20 @@ namespace PassManager.ViewModels.CreateItems
                 //handle error(password not deleted)
             }
         }
-        private protected async override Task Modify()
+        private protected async override Task Modify(int id)
         {
-            if(Id != string.Empty)
+            bool isSuccess = await PasswordProcessor.Modify(ApiHelper.ApiClient, id, Password);
+            if (isSuccess)
             {
-                if (int.TryParse(Id, out int newId))
+                if((_tempPassword.Name != Password.Name) || (_tempPassword.Username != Password.Username))//if some props from itempreviews changed, then update the item
                 {
-                    bool isSuccess = await PasswordProcessor.Modify(ApiHelper.ApiClient, newId, Password);
-                    if (isSuccess)
-                    {
-                        if((_tempPassword.Name != Password.Name) || (_tempPassword.Username != Password.Username))//if some props from itempreviews changed, then update the item
-                        {
-                            UpdateModel Model = new UpdateModel(Enums.TypeOfUpdates.Modify);
-                            string stringModel = JsonConvert.SerializeObject(Model);
-                            await GoTo("Password", $"?update={stringModel}");
-                        }
-                        else
-                        {
-                            await GoTo("Password");
-                        }
-                    }
-                    else
-                    {
-                        //handle errors
-                    }
+                    UpdateModel Model = new UpdateModel(Enums.TypeOfUpdates.Modify);
+                    string stringModel = JsonConvert.SerializeObject(Model);
+                    await GoTo("Password", $"?update={stringModel}");
                 }
                 else
                 {
-                    //handle errors
+                    await GoTo("Password");
                 }
             }
             else
