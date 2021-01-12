@@ -1,14 +1,9 @@
 ﻿using Microsoft.AspNet.Identity;
 using PassManager_WebApi.Enums;
 using PassManager_WebApi.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
-using System.Data.Entity;
-using System.Diagnostics;
 
 namespace PassManager_WebApi.Controllers
 {
@@ -17,6 +12,7 @@ namespace PassManager_WebApi.Controllers
     public class EntireItemsController : ApiController
     {
         private PasswordManagerEntities db = new PasswordManagerEntities();
+
         //GET api/EntireItems
         public IHttpActionResult Get()//get latest passwords preview
         {
@@ -24,6 +20,7 @@ namespace PassManager_WebApi.Controllers
 
             return Ok(previews);
         }
+        //GET API/EntireItems/searchString
         public IHttpActionResult Get(string searchString)
         {
             if (string.IsNullOrEmpty(searchString))
@@ -33,6 +30,7 @@ namespace PassManager_WebApi.Controllers
             IEnumerable<ItemPreview> previews = GetAllItems(GetCurrentUser(), searchString);
             return Ok(previews);
         }
+        //GET API/EntireItems/updateType
         public IHttpActionResult Get(TypeOfUpdates updateType)
         {
             var user = GetCurrentUser();
@@ -42,11 +40,13 @@ namespace PassManager_WebApi.Controllers
             }
             //take passwords
             var passwords = user.Passwords
-            .OrderByDescending(s => updateType == TypeOfUpdates.Create ? s.CreateDate : updateType == TypeOfUpdates.Modify ? s.LastModified : s.LastVisited)
-            .Select(item => new ItemPreview(item.Id, item.Name, item.Username, TypeOfItems.Password))
-            .Union(user.Wifis
-                .OrderByDescending(s => updateType == TypeOfUpdates.Create ? s.CreateDate : updateType == TypeOfUpdates.Modify ? s.LastModified : s.LastVisited)
-                .Select(item => new ItemPreview(item.Id, item.Name, TypeOfItems.Wifi.ToString(), TypeOfItems.Wifi))).FirstOrDefault();
+            .OrderByDescending(s => updateType == TypeOfUpdates.Create ? s.CreateDate : s.LastModified)
+            .Select(item => new ItemPreview(item.Id, item.Name, item.Username, TypeOfItems.Password)).Take(1)
+            .Union
+            (user.Wifis
+            .OrderByDescending(s => updateType == TypeOfUpdates.Create ? s.CreateDate : s.LastModified)
+            .Select(item => new ItemPreview(item.Id, item.Name, TypeOfItems.Wifi.ToString(), TypeOfItems.Wifi)).Take(1))
+            .FirstOrDefault();
             if (passwords is null)
             {
                 return BadRequest("No item were updated!");
@@ -58,17 +58,17 @@ namespace PassManager_WebApi.Controllers
             if(user != null)
             {
                 //base list, where all the items will be stored
-                IEnumerable<ItemPreview> items = Enumerable.Empty<ItemPreview>();
 
                 //take passwords
-                var passwords = user.Passwords
-                .OrderByDescending(p => p.LastVisited)
-                .Select(item => new ItemPreview(item.Id, item.Name, item.Username, TypeOfItems.Password));
-                //Take wifis
-                var wifis = user.Wifis
-                    .OrderByDescending(p => p.LastVisited)
-                    .Select(item => new ItemPreview(item.Id, item.Name, TypeOfItems.Wifi.ToString(), TypeOfItems.Wifi));
-                items = ConcatLists(items, new IEnumerable<ItemPreview>[] { passwords, wifis});
+                var items = user.Passwords
+                .OrderByDescending(p => p.NumOfVisits)
+                .ThenBy(p => p.Name)
+                .Select(item => new ItemPreview(item.Id, item.Name, item.Username, TypeOfItems.Password))
+                .Union//take wifis
+                (user.Wifis
+                .OrderByDescending(p => p.NumOfVisits)
+                .ThenBy(p => p.Name)
+                .Select(item => new ItemPreview(item.Id, item.Name, TypeOfItems.Wifi.ToString(), TypeOfItems.Wifi)));
 
                 if (!string.IsNullOrEmpty(searchString))
                 {
@@ -78,14 +78,6 @@ namespace PassManager_WebApi.Controllers
                 return items;
             }
             return null;
-        }
-        private IEnumerable<ItemPreview> ConcatLists(IEnumerable<ItemPreview> baseList, IEnumerable<ItemPreview>[] lists)
-        {
-            foreach (var list in lists)
-            {
-                baseList = baseList.Concat(list);
-            }
-            return baseList;
         }
         private AspNetUser GetCurrentUser()
         {

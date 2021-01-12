@@ -12,7 +12,7 @@ namespace PassManager_WebApi.Models
         {
             ModifyTo(passwordVM);
             CreateDate = DateTime.Now;
-            LastVisited = DateTime.Now;
+            NumOfVisits = 1;
         }
         public void ModifyTo(ViewModels.PasswordVM passwordVM)
         {
@@ -33,7 +33,7 @@ namespace PassManager_WebApi.Models
             PasswordEncrypted = wifiVM.PasswordEncrypted;
             Notes = wifiVM.Notes;
             CreateDate = DateTime.Now;
-            LastVisited = DateTime.Now;
+            NumOfVisits = 1;
             LastModified = DateTime.Now;
         }
     }

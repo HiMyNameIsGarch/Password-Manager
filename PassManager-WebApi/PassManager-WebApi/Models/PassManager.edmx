@@ -77,7 +77,7 @@
           <Property Name="Url" Type="nvarchar" MaxLength="256" />
           <Property Name="Notes" Type="nvarchar(max)" />
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
-          <Property Name="LastVisited" Type="datetime" Nullable="false" />
+          <Property Name="NumOfVisits" Type="int" Nullable="false" />
           <Property Name="LastModified" Type="datetime" Nullable="false" />
           <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
         </EntityType>
@@ -90,7 +90,7 @@
           <Property Name="PasswordEncrypted" Type="nvarchar(max)" Nullable="false" />
           <Property Name="Notes" Type="nvarchar(max)" />
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
-          <Property Name="LastVisited" Type="datetime" Nullable="false" />
+          <Property Name="NumOfVisits" Type="int" Nullable="false" />
           <Property Name="LastModified" Type="datetime" Nullable="false" />
           <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
         </EntityType>
@@ -345,10 +345,10 @@
           <Property Name="Url" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
           <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LastVisited" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LastModified" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="AspNetUser" Relationship="PasswordManagerModel.FK_Passwords_AspNetUsers1" FromRole="Password" ToRole="AspNetUser" />
+          <Property Name="NumOfVisits" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Wifi">
           <Key>
@@ -359,10 +359,10 @@
           <Property Name="PasswordEncrypted" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="LastVisited" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LastModified" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="AspNetUser" Relationship="PasswordManagerModel.FK_Wifi_AspNetUsers" FromRole="Wifi" ToRole="AspNetUser" />
+          <Property Name="NumOfVisits" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="FK_Passwords_AspNetUsers1">
           <End Type="PasswordManagerModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
@@ -460,9 +460,9 @@
           <EntitySetMapping Name="Passwords">
             <EntityTypeMapping TypeName="PasswordManagerModel.Password">
               <MappingFragment StoreEntitySet="Passwords">
+                <ScalarProperty Name="NumOfVisits" ColumnName="NumOfVisits" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="LastModified" ColumnName="LastModified" />
-                <ScalarProperty Name="LastVisited" ColumnName="LastVisited" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Notes" ColumnName="Notes" />
                 <ScalarProperty Name="Url" ColumnName="Url" />
@@ -476,9 +476,9 @@
           <EntitySetMapping Name="Wifis">
             <EntityTypeMapping TypeName="PasswordManagerModel.Wifi">
               <MappingFragment StoreEntitySet="Wifi">
+                <ScalarProperty Name="NumOfVisits" ColumnName="NumOfVisits" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="LastModified" ColumnName="LastModified" />
-                <ScalarProperty Name="LastVisited" ColumnName="LastVisited" />
                 <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
                 <ScalarProperty Name="Notes" ColumnName="Notes" />
                 <ScalarProperty Name="PasswordEncrypted" ColumnName="PasswordEncrypted" />

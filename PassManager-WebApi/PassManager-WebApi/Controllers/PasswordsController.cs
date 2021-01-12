@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using PassManager_WebApi.ViewModels;
-using System;
 using PassManager_WebApi.Enums;
-using System.Diagnostics;
 
 namespace PassManager_WebApi.Controllers
 {
@@ -21,7 +19,8 @@ namespace PassManager_WebApi.Controllers
         {
             //bring from db just the passwords
             IEnumerable<ItemPreview> unGroupedPasswords = GetCurrentUser().Passwords
-                .OrderByDescending(p => p.LastVisited)
+                .OrderByDescending(p => p.NumOfVisits)
+                .ThenByDescending(p => p.Name)
                 .Select(item => new ItemPreview(item.Id, item.Name, item.Username, TypeOfItems.Password)).ToList();
             //group it by type
             IEnumerable<Grouping<TypeOfItems, ItemPreview>> groupedPasswords = unGroupedPasswords
@@ -35,7 +34,7 @@ namespace PassManager_WebApi.Controllers
             if (id <= 0) return BadRequest("Id is invalid");
             Password password = GetCurrentUser().Passwords.FirstOrDefault(pass => pass.Id == id);//get the current password from user
             if (password is null) return BadRequest("Password does not exist!");//check if that exists
-            password.LastVisited = DateTime.Now;//modify when is last visited
+            password.NumOfVisits++;//modify when is last visited
             db.SaveChanges();//save the changes
             return Ok(new PasswordVM(password));//send
         }
