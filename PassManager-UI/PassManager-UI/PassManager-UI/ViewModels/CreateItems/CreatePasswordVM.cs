@@ -49,9 +49,12 @@ namespace PassManager.ViewModels.CreateItems
                     _tempPassword = (Password)password.Clone();//store a temp password for future verifications
                     Password = password;
                 }
+                else
+                {
+                    await PageService.PushPopupAsync(new ErrorView("Something went wrong and we couldn't get your password, try again!"));
+                }
             }
         }
-        //override basic actions for password
         private protected async override Task Create()
         {
             bool isSuccess = await PasswordProcessor.CreatePassword(ApiHelper.ApiClient,Password);
@@ -63,7 +66,7 @@ namespace PassManager.ViewModels.CreateItems
             }
             else
             {
-                //handle error(password not good or exception)
+                await PageService.PushPopupAsync(new ErrorView("Something went wrong and your password has not been created, try again!"));
             }
         }
         private protected async override Task Delete()
@@ -77,7 +80,7 @@ namespace PassManager.ViewModels.CreateItems
             }
             else
             {
-                //handle error(password not deleted)
+                await PageService.PushPopupAsync(new ErrorView("Something went wrong and your password has not been deleted, try again!"));
             }
         }
         private protected async override Task Modify(int id)
@@ -98,7 +101,7 @@ namespace PassManager.ViewModels.CreateItems
             }
             else
             {
-                //handle errors
+                await PageService.PushPopupAsync(new ErrorView("Something went wrong and your password has not been modified, try again!"));
             }
         }
         private protected async override Task<bool> IsModelValid()
