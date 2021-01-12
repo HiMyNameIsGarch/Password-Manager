@@ -36,7 +36,18 @@ namespace PassManager.ViewModels.CreateItems
         //implementation for commands
         public async void GoBackButton()
         {
-            await Shell.Current.Navigation.PopToRootAsync();
+            if (Password.IsChanged(_tempPassword))
+            {
+                bool wantsToLeave = await PageService.DisplayAlert("Wait!", "Are you sure you want to leave?","Yes", "No");
+                if (wantsToLeave)
+                {
+                    await Shell.Current.Navigation.PopToRootAsync();
+                }
+            }
+            else
+            {
+                await Shell.Current.Navigation.PopToRootAsync();
+            }
         }
         //functions
         private protected async override Task GetDataAsync(int id)
