@@ -21,9 +21,9 @@ namespace PassManager_WebApi.Models
         public string Url { get; set; }
         public string Notes { get; set; }
         public System.DateTime CreateDate { get; set; }
-        public System.DateTime LastVisited { get; set; }
         public System.DateTime LastModified { get; set; }
         public string UserId { get; set; }
+        public int NumOfVisits { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
     }
