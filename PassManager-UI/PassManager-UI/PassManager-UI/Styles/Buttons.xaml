@@ -11,4 +11,21 @@
         <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
         <Setter Property="CornerRadius" Value="{OnPlatform Android=30, UWP=15}"/>
     </Style>
+    <Style x:Key="BasicBtn" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{DynamicResource FrameTopColor}"/>
+        <Setter Property="CornerRadius" Value="20"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="FontSize" Value="13"/>
+        <Setter Property="WidthRequest" Value="90"/>
+        <Setter Property="HeightRequest" Value="40"/>
+        <Setter Property="TextColor" Value="{DynamicResource PageBottomColor}"/>
+    </Style>
+    <Style x:Key="NavigationBtn" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{DynamicResource PageTopColor}"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="VerticalOptions" Value="Center"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="TextColor" Value="White"/>
+    </Style>
 </ResourceDictionary>

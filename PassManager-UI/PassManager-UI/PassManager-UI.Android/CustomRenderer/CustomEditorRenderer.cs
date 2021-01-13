@@ -1,25 +1,22 @@
 ﻿using Android.Content;
-using Android.Content.Res;
-using Android.Graphics;
-using Android.OS;
 using PassManager.CustomRenderer;
 using PassManager_UI.Droid.CustomRenderer;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 
-[assembly: ExportRenderer(typeof(CustomEntry), typeof(CustomEntryRenderer))]
+[assembly: ExportRenderer(typeof(CustomEntry), typeof(CustomEditorRenderer))]
 namespace PassManager_UI.Droid.CustomRenderer
 {
-    public class CustomEntryRenderer: EntryRenderer
+    public class CustomEditorRenderer : EditorRenderer
     {
-        public CustomEntryRenderer(Context context) : base(context)
-        { 
+        public CustomEditorRenderer(Context context) : base(context)
+        {
         }
-        protected override void OnElementChanged(ElementChangedEventArgs<Entry> e)
+        protected override void OnElementChanged(ElementChangedEventArgs<Editor> e)
         {
             base.OnElementChanged(e);
-            
-            if(Control != null)
+
+            if (Control != null)
             {
                 var transparentColor = Android.Graphics.Color.Transparent;
                 Control.SetBackgroundColor(transparentColor);

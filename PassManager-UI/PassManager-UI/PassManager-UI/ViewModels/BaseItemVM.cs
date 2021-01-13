@@ -15,7 +15,7 @@ namespace PassManager.ViewModels
         public BaseItemVM(TypeOfItems itemType)
         {
             //set defaults values in case no parameter passed
-            ChangeProps(ItemPageState.Null, "Create", "No data provided", true);
+            ChangeProps(ItemPageState.Null, "Save", "No data provided", true);
             ItemType = itemType.ToString();
             _save = new Command(ChangePageType);
             _displayMoreActions = new Command(DisplayMore);
@@ -51,7 +51,7 @@ namespace PassManager.ViewModels
                     switch (PageState)
                     {
                         case ItemPageState.Create:
-                            PageTitle = $"Create {ItemType}!";
+                            PageTitle = $"Add {ItemType}";
                             ReadOnly = false;
                             break;
                         case ItemPageState.View:

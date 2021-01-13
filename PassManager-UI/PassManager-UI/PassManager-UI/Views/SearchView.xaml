@@ -2,19 +2,19 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:CRender="clr-namespace:PassManager.CustomRenderer"
-             x:Class="PassManager.Views.SearchView">
+             x:Class="PassManager.Views.SearchView" BackgroundColor="{DynamicResource PageBottomColor}">
     <Shell.TitleView>
-        <CRender:CustomeEntry VerticalOptions="Center" HorizontalOptions="Center" ClearButtonVisibility="WhileEditing" 
+        <CRender:CustomEntry VerticalOptions="Center" HorizontalOptions="Center" ClearButtonVisibility="WhileEditing" 
                IsTextPredictionEnabled="False" Placeholder="{Binding PageTitle}" Text="{Binding SearchString, Mode=TwoWay}"/>
     </Shell.TitleView>
     <StackLayout>
-        <CRender:CustomeEntry IsVisible="{Binding IsUwp}" ClearButtonVisibility="WhileEditing" IsTextPredictionEnabled="False" Placeholder="{Binding PageTitle}" 
+        <CRender:CustomEntry IsVisible="{Binding IsUwp}" ClearButtonVisibility="WhileEditing" IsTextPredictionEnabled="False" Placeholder="{Binding PageTitle}" 
                               FontSize="Medium" Text="{Binding SearchString, Mode=TwoWay}"/>
         <ListView ItemsSource="{Binding Items}" HasUnevenRows="True" SelectedItem="{Binding SelectedItem, Mode=TwoWay}" IsGroupingEnabled="True">
             <ListView.GroupHeaderTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <Label Text="{Binding Key}"/>
+                        <Label Text="{Binding Key}" Style="{DynamicResource GroupKeyLabel}"/>
                     </ViewCell>
                 </DataTemplate>
             </ListView.GroupHeaderTemplate>

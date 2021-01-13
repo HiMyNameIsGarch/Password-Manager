@@ -2,9 +2,9 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              NavigationPage.HasNavigationBar="False"
-             x:Class="PassManager.Views.ListItemView" Title="Select item to add">
+             x:Class="PassManager.Views.ListItemView" Title="Select item to add" BackgroundColor="{DynamicResource PageBottomColor}">
     <Shell.TitleView>
-        <Label Text="Select item to add" FontSize="20" VerticalTextAlignment="Center"/>
+        <Label Text="Select item to add" Style="{DynamicResource NavigationLabel}"/>
     </Shell.TitleView>
     <ListView ItemsSource="{Binding ListItems}" SelectedItem="{Binding SelectedPage, Mode=TwoWay}" HasUnevenRows="True">
         <ListView.ItemTemplate>
