@@ -25,8 +25,7 @@
             <!--#endregion-->
         <StackLayout Grid.Row="2" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Start" Orientation="Horizontal">
             <Label Text="{Binding QuestionForUser}" VerticalOptions="Center" FontSize="14" TextColor="#354f52"/>
-            <Button Text="{Binding AnotherPageText}" IsEnabled="{Binding ActionStatus}" CornerRadius="15"
-                    FontSize="12" Command="{Binding ChangePageCommand}" WidthRequest="90" HeightRequest="40"/>
+            <Button Text="{Binding AnotherPageText}" IsEnabled="{Binding ActionStatus}" Command="{Binding ChangePageCommand}" Style="{StaticResource BasicBtn}"/>
         </StackLayout>
         <Grid Grid.Row="1" Grid.Column="1">
                 <!--#region Second grid settings-->
@@ -44,7 +43,7 @@
                 <!--#endregion-->
             <Label Grid.Row="0" HorizontalOptions="CenterAndExpand" VerticalOptions="End" Text="{Binding PageTitle}" FontSize="26" 
                    FontAttributes="Bold"/>
-            <Label Grid.Row="1" Text="{Binding ErrorMsg}" Padding="20,0,20,0" FontSize="16" TextColor="Red" VerticalOptions="End"
+            <Label Grid.Row="1" Text="{Binding ErrorMsg}" Padding="20,0,20,0" FontSize="16" TextColor="Red" VerticalOptions="CenterAndExpand"
                    HorizontalOptions="CenterAndExpand" IsVisible="{Binding IsError}"/>
                 <!--#region Fields-->
             <StackLayout Grid.Row="2" VerticalOptions="StartAndExpand">
@@ -52,7 +51,7 @@
                     <!--Email-->
                     <Frame Style="{StaticResource CustomFrame}">
                         <StackLayout Orientation="Horizontal">
-                            <CRender:CustomeEntry Keyboard="Email" Placeholder="Email" HorizontalTextAlignment="Start"
+                            <CRender:CustomEntry Keyboard="Email" Placeholder="Email" HorizontalTextAlignment="Start"
                                    Margin="15,0,15,0" FontSize="17" HorizontalOptions="FillAndExpand" 
                                    Text="{Binding Username, Mode=TwoWay}"/>
                         </StackLayout>
@@ -60,7 +59,7 @@
                     <!--Password-->
                     <Frame Style="{StaticResource CustomFrame}">
                         <StackLayout x:Name="password" Orientation="Horizontal">
-                            <CRender:CustomeEntry IsPassword="True" Placeholder="Password" HorizontalTextAlignment="Start" 
+                            <CRender:CustomEntry IsPassword="True" Placeholder="Password" HorizontalTextAlignment="Start" 
                                    Margin="15,0,0,0" FontSize="17" HorizontalOptions="FillAndExpand" 
                                     Text="{Binding Password, Mode=TwoWay}"/>
                             <Frame Style="{StaticResource RoundFrame}">
@@ -76,7 +75,7 @@
                     <!--Confirm password-->
                     <Frame Style="{StaticResource CustomFrame}" IsEnabled="{Binding IsRegisterPage}" IsVisible="{Binding IsRegisterPage}">
                         <StackLayout x:Name="confirmPass" Orientation="Horizontal">
-                            <CRender:CustomeEntry IsPassword="True" Placeholder="Confirm password" HorizontalTextAlignment="Start" 
+                            <CRender:CustomEntry IsPassword="True" Placeholder="Confirm password" HorizontalTextAlignment="Start" 
                                    Margin="15,0,0,0" FontSize="17" HorizontalOptions="FillAndExpand" 
                                    Text="{Binding ConfirmPass, Mode=TwoWay}"/>
                             <Frame Style="{StaticResource RoundFrame}">
@@ -91,8 +90,7 @@
                     </Frame>
                 </StackLayout>
                     <!--#endregion-->
-                <Button Text="{Binding PageTitle}" IsEnabled="{Binding ActionStatus}" Command="{Binding ActionCommand}" 
-                        CornerRadius="20" HorizontalOptions="Center" FontSize="13" WidthRequest="90" HeightRequest="40" />
+                <Button Text="{Binding PageTitle}" IsEnabled="{Binding ActionStatus}" Command="{Binding ActionCommand}" Style="{StaticResource BasicBtn}"/>
             </StackLayout>
         </Grid>
     </Grid>

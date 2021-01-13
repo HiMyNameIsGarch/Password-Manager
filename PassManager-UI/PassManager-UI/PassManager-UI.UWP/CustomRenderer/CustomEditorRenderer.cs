@@ -4,22 +4,21 @@ using Windows.UI;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.UWP;
 
-[assembly: ExportRenderer(typeof(CustomEntry), typeof(CustomEntryRenderer))]
+[assembly: ExportRenderer(typeof(CustomEditor), typeof(CustomEditorRenderer))]
 namespace PassManager_UI.UWP.CustomRenderer
 {
-    public class CustomEntryRenderer : EntryRenderer
+    public class CustomEditorRenderer : EditorRenderer
     {
-        protected override void OnElementChanged(ElementChangedEventArgs<Entry> e)
+        protected override void OnElementChanged(ElementChangedEventArgs<Editor> e)
         {
             base.OnElementChanged(e);
 
             if (Control != null)
             {
-                var transparentBrush = new Windows.UI.Xaml.Media.SolidColorBrush(Colors.Transparent);
-                Control.Background = transparentBrush;
-                Control.BackgroundFocusBrush = transparentBrush;
+                var transparentBackground = new Windows.UI.Xaml.Media.SolidColorBrush(Colors.Transparent);
+                Control.BackgroundFocusBrush = transparentBackground;
+                Control.Background = transparentBackground;
                 Control.BorderThickness = new Windows.UI.Xaml.Thickness(0, 0, 0, 0);
-                Control.BorderBrush = transparentBrush;
                 Control.Margin = new Windows.UI.Xaml.Thickness(15, 5, 15, 5);
             }
         }

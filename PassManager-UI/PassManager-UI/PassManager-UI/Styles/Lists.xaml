@@ -23,7 +23,7 @@
                 <ListView.GroupHeaderTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Label Text="{Binding Key}"/>
+                            <Label Text="{Binding Key}" Style="{DynamicResource GroupKeyLabel}"/>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.GroupHeaderTemplate>

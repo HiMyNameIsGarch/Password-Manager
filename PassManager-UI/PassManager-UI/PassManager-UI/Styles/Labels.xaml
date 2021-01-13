@@ -7,4 +7,15 @@
         <Setter Property="TextColor" Value="{DynamicResource TextColor}"/>
         <Setter Property="FontSize" Value="17"/>
     </Style>
+    <Style x:Key="NavigationLabel" TargetType="Label">
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="HorizontalTextAlignment" Value="Start"/>
+        <Setter Property="VerticalTextAlignment" Value="Center"/>
+        <Setter Property="TextColor" Value="White"/>
+    </Style>
+    <Style x:Key="GroupKeyLabel" TargetType="Label">
+        <Setter Property="FontSize" Value="17"/>
+        <Setter Property="TextColor" Value="{DynamicResource TextColor}"/>
+        <Setter Property="Margin" Value="5"/>
+    </Style>
 </ResourceDictionary>
