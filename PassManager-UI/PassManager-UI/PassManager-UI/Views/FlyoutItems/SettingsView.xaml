@@ -1,8 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="PassManager.Views.FlyoutItems.SettingsView" BackgroundColor="{StaticResource PageBottomColor}">
-    <Label Text="Here will be the account settings!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+             x:Class="PassManager.Views.FlyoutItems.SettingsView" BackgroundColor="{StaticResource PageBottomColor}" Title="{Binding PageTitle}">
+    <ListView ItemsSource="{Binding AllSettings}" HasUnevenRows="True">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <StackLayout>
+                        <Button Text="{Binding Text}" FontSize="20" Command="{Binding WhenClicked}" BackgroundColor="Transparent" Padding="20" TextColor="{StaticResource FrameBottomColor}"/>
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
 </ContentPage>

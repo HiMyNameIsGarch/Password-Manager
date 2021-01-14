@@ -32,7 +32,7 @@
             <ShellContent Route="WifiPass" ContentTemplate="{DataTemplate items:WifiPassView}"/>
         </Tab>
     </FlyoutItem>
-    <FlyoutItem Title="Account Settings">
+    <FlyoutItem Title="Settings">
         <Tab>
             <ShellContent Route="Settings" ContentTemplate="{DataTemplate items:SettingsView}"/>
         </Tab>
