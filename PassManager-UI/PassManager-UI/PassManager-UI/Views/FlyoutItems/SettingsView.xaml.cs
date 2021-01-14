@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PassManager.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,7 @@ namespace PassManager.Views.FlyoutItems
         public SettingsView()
         {
             InitializeComponent();
+            BindingContext = new SettingsViewModel();
         }
     }
 }

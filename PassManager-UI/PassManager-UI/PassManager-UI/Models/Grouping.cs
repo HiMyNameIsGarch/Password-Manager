@@ -14,10 +14,6 @@ namespace PassManager.Models
                 this.Items.Add(item);
             }
         }
-        internal protected void InsertNewItem(int index, T newItem)
-        {
-            this.InsertItem(index, newItem);
-        }
         internal protected void SetNewItem(int index, T newItem)
         {
             this.SetItem(index, newItem);

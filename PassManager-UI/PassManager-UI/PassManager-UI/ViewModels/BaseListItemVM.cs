@@ -43,23 +43,23 @@ namespace PassManager.ViewModels
                 _updateModel = JsonConvert.DeserializeObject<UpdateModel>(_update);
                 if(_updateModel != null)
                 {
-                    if (Items.Count() > 0)
+                    bool hasItems = Items.Count() > 0;
+                    switch (_updateModel.UpdateType)
                     {
-                        switch (_updateModel.UpdateType)
-                        {
-                            case TypeOfUpdates.Null:
-                                //log
-                                break;
-                            case TypeOfUpdates.Create:
+                        case TypeOfUpdates.Null:
+                            //log
+                            break;
+                        case TypeOfUpdates.Create:
+                            UpdateItems(_updateModel.UpdateType).Await(HandleException, false, true, false);
+                            break;
+                        case TypeOfUpdates.Modify:
+                            if (hasItems)
                                 UpdateItems(_updateModel.UpdateType).Await(HandleException, false, true, false);
-                                break;
-                            case TypeOfUpdates.Modify:
-                                UpdateItems(_updateModel.UpdateType).Await(HandleException, false, true, false);
-                                break;
-                            case TypeOfUpdates.Delete:
+                            break;
+                        case TypeOfUpdates.Delete:
+                            if (hasItems)
                                 Delete(_updateModel.IdToDelete);
-                                break;
-                        }
+                            break;
                     }
                 }
             }
@@ -156,9 +156,14 @@ namespace PassManager.ViewModels
             {
                 ItemPreview newItem = await EntireItemsProcessor.GetUpdate(ApiHelper.ApiClient, updateType);
                 var currentItems = Items.Where(s => s.Key == newItem.ItemType).FirstOrDefault();
-                if(updateType == TypeOfUpdates.Create)
+                if(currentItems is null)
                 {
-                    currentItems.InsertNewItem(0, newItem);
+                    DisplayMsg("",false);
+                    Items.Add(new Grouping<TypeOfItems, ItemPreview>(newItem.ItemType, new List<ItemPreview>() { newItem }));
+                }
+                else if (updateType == TypeOfUpdates.Create)
+                {
+                    currentItems.Add(newItem);
                 }
                 else if(updateType == TypeOfUpdates.Modify)
                 {
@@ -181,6 +186,11 @@ namespace PassManager.ViewModels
                     item.Remove(itemToDelete);
                     break;
                 }
+            }
+            if(Items.Count == 1 && Items.FirstOrDefault().Count == 0)
+            {
+                Items.Clear();
+                DisplayMsg("You have no passwords yet, click on button below to add a new one!", true);
             }
         }
         private protected abstract Task GetDataAsync();
