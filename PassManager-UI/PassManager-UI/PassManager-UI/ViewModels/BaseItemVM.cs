@@ -5,6 +5,7 @@ using PassManager.Models;
 using System.Threading.Tasks;
 using System;
 using Newtonsoft.Json;
+using PassManager.Views.Popups;
 
 namespace PassManager.ViewModels
 {
@@ -107,6 +108,16 @@ namespace PassManager.ViewModels
             protected private set { _readOnly = value; NotifyPropertyChanged(); }
         }
         //commands
+        public ICommand GeneratePassword
+        {
+            get
+            {
+                return new Command(async () => 
+                {
+                    await PageService.PushPopupAsync(new PasswordGeneratorView());
+                });
+            }
+        }
         public ICommand DeleteItem
         {
             get { return _deleteItem; }
