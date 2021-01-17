@@ -83,17 +83,30 @@ namespace PassManager.ViewModels.Popups
         public string Password
         {
             get { return _password; }
-            set { _password = value; NotifyPropertyChanged(); }
+            private set { _password = value; NotifyPropertyChanged(); }
         }
         //commands
         public ICommand CopyPassword
         {
             get { return _copyPassword; }
         }
+        public ICommand Close
+        {
+            get { 
+                return new Command(async () => 
+                {
+                    await PageService.PopPopupAsync(true);
+                }); 
+            }
+        }
         //functions
         private async void CopyToClipboard()
         {
-            await Clipboard.SetTextAsync(Password);
+            string clipboardText = await Clipboard.GetTextAsync() ?? "";
+            if (Password != clipboardText)
+            {
+                await Clipboard.SetTextAsync(Password);
+            }
         }
     }
 }
