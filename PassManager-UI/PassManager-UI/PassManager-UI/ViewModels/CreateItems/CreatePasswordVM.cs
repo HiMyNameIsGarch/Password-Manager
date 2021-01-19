@@ -16,10 +16,15 @@ namespace PassManager.ViewModels.CreateItems
     {
         public CreatePasswordVM() : base(Enums.TypeOfItems.Password)
         {
+            //set some defaults values
+            IsPasswordVisible = true;
+            PassEntryIcon = ImageSource.FromResource($"PassManager-UI.Images.Locked.png");
+            //set commands
             _goBack = new Command(GoBackButton);
             _copyUsername = new Command(CopyUsernameToClipboard);
             _copyPassword = new Command(CopyPasswordToClipboard);
             _copyUrl = new Command(CopyUrlToClipboard);
+            _changeVisOfPassword = new Command(ChangeVisOfPass);
             _password = new Password();
         }
         //variables
@@ -29,12 +34,29 @@ namespace PassManager.ViewModels.CreateItems
         private ICommand _copyUrl;
         private ICommand _copyUsername;
         private ICommand _copyPassword;
+        private ICommand _changeVisOfPassword;
+        private bool _isPasswordVisible;
+        private ImageSource _passEntryIcon;
         //props
+        public bool IsPasswordVisible
+        {
+            get { return _isPasswordVisible; }
+            private set { _isPasswordVisible = value; NotifyPropertyChanged(); }
+        }
+        public ImageSource PassEntryIcon
+        {
+            get { return _passEntryIcon; }
+            private set { _passEntryIcon = value; NotifyPropertyChanged(); }
+        }
         public Password Password {
             get { return _password; }
             set { _password = value; NotifyPropertyChanged(); }
         }
         //commands
+        public ICommand ChangeVisOfPassword
+        {
+            get { return _changeVisOfPassword; }
+        }
         public ICommand CopyUsername
         {
             get { return _copyUsername; }
@@ -169,6 +191,10 @@ namespace PassManager.ViewModels.CreateItems
         private async void CopyUsernameToClipboard() { await CopyToClipboard(Password.Username); }
         private async void CopyPasswordToClipboard() { await CopyToClipboard(Password.PasswordEncrypted); }
         private async void CopyUrlToClipboard() { await CopyToClipboard(Password.Url); }
-
+        private void ChangeVisOfPass()
+        {
+            PassEntryIcon = ImageSource.FromResource($"PassManager-UI.Images.{(IsPasswordVisible ? "Open" : "Locked")}.png");
+            IsPasswordVisible = !IsPasswordVisible;
+        }
     }
 }
