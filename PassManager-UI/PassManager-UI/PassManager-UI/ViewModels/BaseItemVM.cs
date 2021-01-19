@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System;
 using Newtonsoft.Json;
 using PassManager.Views.Popups;
+using Xamarin.Essentials;
 
 namespace PassManager.ViewModels
 {
@@ -27,6 +28,7 @@ namespace PassManager.ViewModels
         protected private ItemPageState PageState;
         private string _actionBtnText;
         private bool _readOnly;
+        private bool _canCopy;
         private ICommand _save;
         private ICommand _displayMoreActions;
         private ICommand _deleteItem;
@@ -35,7 +37,6 @@ namespace PassManager.ViewModels
         private string _actionsText = "More";
         private int _itemId;
         private string _createPage;
-        
         //parameters
         public string CreatePage
         {
@@ -106,6 +107,11 @@ namespace PassManager.ViewModels
         {
             get { return _readOnly; }
             protected private set { _readOnly = value; NotifyPropertyChanged(); }
+        }
+        public bool CanCopy
+        {
+            get { return _canCopy; }
+            private set { _canCopy = value; NotifyPropertyChanged(); }
         }
         //commands
         public ICommand GeneratePassword
@@ -201,12 +207,18 @@ namespace PassManager.ViewModels
         private protected abstract Task GetDataAsync(int id);
         private protected void ChangeProps(ItemPageState pageState, string btnText, string pageTitle, bool isReadOnly)
         {
-            if(pageState == ItemPageState.View || pageState == ItemPageState.Edit)
+            if(pageState == ItemPageState.View)
+            {
+                CanCopy = true;
+                CanDelete = true;
+            }
+            else if(pageState == ItemPageState.Edit)
             {
                 CanDelete = true;
             }
             else
             {
+                CanCopy = false;
                 CanDelete = false;
             }
             PageState = pageState;
@@ -233,6 +245,17 @@ namespace PassManager.ViewModels
             if (IsUwp)
             {
                 await Task.WhenAll(Shell.Current.GoToAsync("///EntireItems", false), Shell.Current.GoToAsync($"///{itemPage}", false));
+            }
+        }
+        private protected async Task CopyToClipboard(string textToCopy)
+        {
+            if (!string.IsNullOrEmpty(textToCopy))
+            {
+                string clipboardText = await Clipboard.GetTextAsync() ?? "";
+                if (textToCopy != clipboardText)
+                {
+                    await Clipboard.SetTextAsync(textToCopy);
+                }
             }
         }
     }

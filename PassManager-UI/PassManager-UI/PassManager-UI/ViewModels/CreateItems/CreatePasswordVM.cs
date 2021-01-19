@@ -17,18 +17,36 @@ namespace PassManager.ViewModels.CreateItems
         public CreatePasswordVM() : base(Enums.TypeOfItems.Password)
         {
             _goBack = new Command(GoBackButton);
+            _copyUsername = new Command(CopyUsernameToClipboard);
+            _copyPassword = new Command(CopyPasswordToClipboard);
+            _copyUrl = new Command(CopyUrlToClipboard);
             _password = new Password();
         }
         //variables
         private Password _password;
         private Password _tempPassword;
         private ICommand _goBack;
+        private ICommand _copyUrl;
+        private ICommand _copyUsername;
+        private ICommand _copyPassword;
         //props
         public Password Password {
             get { return _password; }
-            set { _password = value; NotifyPropertyChanged(); } 
+            set { _password = value; NotifyPropertyChanged(); }
         }
         //commands
+        public ICommand CopyUsername
+        {
+            get { return _copyUsername; }
+        }
+        public ICommand CopyUrl
+        {
+            get { return _copyUrl; }
+        }
+        public ICommand CopyPassword
+        {
+            get { return _copyPassword; }
+        }
         public ICommand GoBack
         {
             get { return _goBack; }
@@ -38,7 +56,7 @@ namespace PassManager.ViewModels.CreateItems
         {
             if (Password.IsChanged(_tempPassword))
             {
-                bool wantsToLeave = await PageService.DisplayAlert("Wait!", "Are you sure you want to leave?","Yes", "No");
+                bool wantsToLeave = await PageService.DisplayAlert("Wait!", "Are you sure you want to leave?", "Yes", "No");
                 if (wantsToLeave)
                 {
                     await Shell.Current.Navigation.PopToRootAsync();
@@ -68,7 +86,7 @@ namespace PassManager.ViewModels.CreateItems
         }
         private protected async override Task Create()
         {
-            bool isSuccess = await PasswordProcessor.CreatePassword(ApiHelper.ApiClient,Password);
+            bool isSuccess = await PasswordProcessor.CreatePassword(ApiHelper.ApiClient, Password);
             if (isSuccess)
             {
                 UpdateModel Model = new UpdateModel(Enums.TypeOfUpdates.Create);
@@ -118,7 +136,7 @@ namespace PassManager.ViewModels.CreateItems
         private protected async override Task<bool> IsModelValid()
         {
             string msgToDisplay = string.Empty;
-            if(string.IsNullOrEmpty(Password.Name) || string.IsNullOrEmpty(Password.Username) || string.IsNullOrEmpty(Password.PasswordEncrypted))
+            if (string.IsNullOrEmpty(Password.Name) || string.IsNullOrEmpty(Password.Username) || string.IsNullOrEmpty(Password.PasswordEncrypted))
             {
                 msgToDisplay = "You need to complete at least 'name', 'username' and 'password' in order to save!";
             }
@@ -147,5 +165,10 @@ namespace PassManager.ViewModels.CreateItems
                 return false;
             }
         }
+        //something else
+        private async void CopyUsernameToClipboard() { await CopyToClipboard(Password.Username); }
+        private async void CopyPasswordToClipboard() { await CopyToClipboard(Password.PasswordEncrypted); }
+        private async void CopyUrlToClipboard() { await CopyToClipboard(Password.Url); }
+
     }
 }
