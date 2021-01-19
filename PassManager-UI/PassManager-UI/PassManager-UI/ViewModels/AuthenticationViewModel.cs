@@ -15,11 +15,16 @@ namespace PassManager.Views
         public AuthenticationViewModel()
         {
             //set some default values
+            IsConfirmPassVisible = true;
+            IsPasswordVisible = true;
+            PassEntryIcon = ImageSource.FromResource($"PassManager-UI.Images.Locked.png");
+            ConfirmPassEntryIcon = ImageSource.FromResource($"PassManager-UI.Images.Locked.png");
             ActionStatus = true;
             CurrentAction = TypeOfActions.Sign_In;
             IsRegisterPage = false;
             //set commands
-            _changeVisCommand = new Command(ChangeVisOfPassField);
+            _changeVisOfConfirmPass = new Command(ChangeVisOfConfirmPassword);
+            _changeVisOfPass = new Command(ChangeVisOfPassword);
             _changePageCommand = new Command(ChangePage);
             _actionCommand = new Command(Action);
             //set some names for page
@@ -30,19 +35,30 @@ namespace PassManager.Views
         private string _errorMsg;
         private string _anotherPageText;
         private string _questionForUser;
-        private bool _isError;
-        private bool _actionStatus;
-        private bool _isRegisterPage;
         private string _username;
         private string _password;
         private string _confirmPass;
+        private ImageSource _passEntryIcon;
+        private ImageSource _confirmPassEntryIcon;
+        //booleans
+        private bool _isError;
+        private bool _actionStatus;
+        private bool _isRegisterPage;
+        private bool _isPasswordVisible;
+        private bool _isConfirmPassVisible;
         //commands
-        private ICommand _changeVisCommand;
         private ICommand _changePageCommand;
         private ICommand _actionCommand;
-        public ICommand ChangeVisCommand
+        private ICommand _changeVisOfConfirmPass;
+        private ICommand _changeVisOfPass;
+        //commands prop
+        public ICommand ChangeVisOfConfirmPass
         {
-            get { return _changeVisCommand; }
+            get { return _changeVisOfConfirmPass; }
+        }
+        public ICommand ChangeVisOfPass
+        {
+            get { return _changeVisOfPass; }
         }
         public ICommand ChangePageCommand
         {
@@ -53,6 +69,26 @@ namespace PassManager.Views
             get { return _actionCommand; }
         }
         //prop for the view
+        public ImageSource PassEntryIcon
+        {
+            get { return _passEntryIcon; }
+            private set { _passEntryIcon = value; NotifyPropertyChanged(); }
+        }
+        public ImageSource ConfirmPassEntryIcon
+        {
+            get { return _confirmPassEntryIcon; }
+            private set { _confirmPassEntryIcon = value; NotifyPropertyChanged(); }
+        }
+        public bool IsPasswordVisible
+        {
+            get { return _isPasswordVisible; }
+            private set { _isPasswordVisible = value; NotifyPropertyChanged(); }
+        }
+        public bool IsConfirmPassVisible
+        {
+            get { return _isConfirmPassVisible; }
+            private set { _isConfirmPassVisible = value; NotifyPropertyChanged(); }
+        }
         public string Username
         {
             get { return _username; }
@@ -99,22 +135,15 @@ namespace PassManager.Views
             private set { _isRegisterPage = value; NotifyPropertyChanged(); }
         }
         //commands implementation
-        private void ChangeVisOfPassField(object obj)
+        private void ChangeVisOfConfirmPassword()
         {
-            var mainStack = obj as StackLayout;
-            CustomeEntry entry = mainStack.Children.FirstOrDefault() as CustomeEntry;
-            bool statusPassVis = false;
-            if (entry != null)
-            {
-                statusPassVis = entry.IsPassword;
-                entry.IsPassword = statusPassVis == true ? false : true;
-            }
-            Frame frame = mainStack.Children.Where(s => s.GetType().Name == "Frame").FirstOrDefault() as Frame;
-            if (frame != null)
-            {
-                Image image = frame.Content as Image;
-                if (image != null) image.Source = ImageSource.FromResource($"PassManager-UI.Images.{(statusPassVis ? "Open" : "Locked")}.png");
-            }
+            ConfirmPassEntryIcon = ImageSource.FromResource($"PassManager-UI.Images.{(IsConfirmPassVisible ? "Open" : "Locked")}.png");
+            IsConfirmPassVisible = !IsConfirmPassVisible;
+        }
+        private void ChangeVisOfPassword()
+        {
+            PassEntryIcon = ImageSource.FromResource($"PassManager-UI.Images.{(IsPasswordVisible ? "Open" : "Locked")}.png");
+            IsPasswordVisible = !IsPasswordVisible;
         }
         private void ChangePage()
         {
@@ -156,7 +185,7 @@ namespace PassManager.Views
         //methods
         private void Register()
         {
-            if (CheckInternet())
+            if (IsInternet())
             {
                 //    //check if all fields are completed
                 //    if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password) || String.IsNullOrWhiteSpace(ConfirmPass)) DisplayError("You need to complete all fields in order to register!");
@@ -189,7 +218,7 @@ namespace PassManager.Views
         }
         private async void SignIn()
         {
-            if (CheckInternet())
+            if (IsInternet())
             {
                 //check if fields are completed
                 if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password)) DisplayError("You need to complete all fields in order to register!");

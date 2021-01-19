@@ -11,6 +11,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Settings\**" />
+    <EmbeddedResource Remove="Views\Settings\**" />
+    <None Remove="Views\Settings\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Images\Locked.png" />
     <None Remove="Images\Open.png" />
   </ItemGroup>
@@ -110,9 +116,5 @@
     <EmbeddedResource Update="Views\SearchView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\Settings\" />
   </ItemGroup>
 </Project>

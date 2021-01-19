@@ -58,15 +58,14 @@
                     </Frame>
                     <!--Password-->
                     <Frame Style="{StaticResource CustomFrame}">
-                        <StackLayout x:Name="password" Orientation="Horizontal">
-                            <CRender:CustomEntry IsPassword="True" Placeholder="Password" HorizontalTextAlignment="Start" 
+                        <StackLayout Orientation="Horizontal">
+                            <CRender:CustomEntry IsPassword="{Binding IsPasswordVisible}" Placeholder="Password" HorizontalTextAlignment="Start" 
                                    Margin="15,0,0,0" FontSize="17" HorizontalOptions="FillAndExpand" 
                                     Text="{Binding Password, Mode=TwoWay}"/>
                             <Frame Style="{StaticResource RoundFrame}">
-                                <Image Source="{MarkExt:EmbeddedImage PassManager-UI.Images.Locked.png}" Aspect="AspectFill" Margin="0">
+                                <Image Source="{Binding PassEntryIcon}" Aspect="AspectFill" Margin="0">
                                     <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding ChangeVisCommand}"
-                                            CommandParameter="{Binding Source={x:Reference password}}" />
+                                        <TapGestureRecognizer Command="{Binding ChangeVisOfPass}" />
                                     </Image.GestureRecognizers>
                                 </Image>
                             </Frame>
@@ -74,15 +73,14 @@
                     </Frame>
                     <!--Confirm password-->
                     <Frame Style="{StaticResource CustomFrame}" IsEnabled="{Binding IsRegisterPage}" IsVisible="{Binding IsRegisterPage}">
-                        <StackLayout x:Name="confirmPass" Orientation="Horizontal">
-                            <CRender:CustomEntry IsPassword="True" Placeholder="Confirm password" HorizontalTextAlignment="Start" 
+                        <StackLayout Orientation="Horizontal">
+                            <CRender:CustomEntry IsPassword="{Binding IsConfirmPassVisible}" Placeholder="Confirm password" HorizontalTextAlignment="Start" 
                                    Margin="15,0,0,0" FontSize="17" HorizontalOptions="FillAndExpand" 
                                    Text="{Binding ConfirmPass, Mode=TwoWay}"/>
                             <Frame Style="{StaticResource RoundFrame}">
-                                <Image Source="{MarkExt:EmbeddedImage PassManager-UI.Images.Locked.png}" Aspect="AspectFill" Margin="0">
+                                <Image Source="{Binding ConfirmPassEntryIcon}" Aspect="AspectFill" Margin="0">
                                     <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding ChangeVisCommand}"
-                                            CommandParameter="{Binding Source={x:Reference confirmPass}}" />
+                                        <TapGestureRecognizer Command="{Binding ChangeVisOfConfirmPass}" />
                                     </Image.GestureRecognizers>
                                 </Image>
                             </Frame>
