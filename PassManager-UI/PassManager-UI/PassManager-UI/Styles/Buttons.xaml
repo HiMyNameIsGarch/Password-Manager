@@ -28,4 +28,15 @@
         <Setter Property="FontAttributes" Value="Bold"/>
         <Setter Property="TextColor" Value="White"/>
     </Style>
+    <Style x:Key="CopyEntryBtn" TargetType="Button">
+        <Setter Property="Text" Value="Copy"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="TextColor" Value="{DynamicResource TextColor}"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="Margin" Value="0"/>
+        <Setter Property="BackgroundColor" Value="Transparent"/>
+        <Setter Property="VerticalOptions" Value="Center"/>
+        <Setter Property="IsVisible" Value="{Binding CanCopy}"/>
+    </Style>
 </ResourceDictionary>
