@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows.Input;
 using Xamarin.Forms;
 using System;
+using PassManager.Models;
 
 namespace PassManager.Views
 {
@@ -183,37 +184,38 @@ namespace PassManager.Views
             ActionStatus = true;
         }
         //methods
-        private void Register()
+        private async void Register()
         {
             if (IsInternet())
             {
-                //    //check if all fields are completed
-                //    if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password) || String.IsNullOrWhiteSpace(ConfirmPass)) DisplayError("You need to complete all fields in order to register!");
-                //    else
-                //    {
-                //        //verify status of fields
-                //        Models.TaskStatus emailStatus = FieldsHelper.VerifyEmail(Username);
-                //        if (!emailStatus.IsError)
-                //        {
-                //            Models.TaskStatus passwordStatus = FieldsHelper.VerifyPassword(Password);
-                //            if (!passwordStatus.IsError)
-                //            {
-                //                if (ConfirmPass == Password)
-                //                {
-                //                    Models.TaskStatus statusRegister = await UserProcessor.Register(ApiHelper.ApiClient, Username, Password, ConfirmPass);
-                //                    if (!statusRegister.IsError)
-                //                    {
-                //                        Username = Password = ConfirmPass = string.Empty;
-                Models.PageService.ChangeMainPage(new MainView());
-            //                    }
-            //                    else DisplayError(statusRegister.Message);
-            //                }
-            //                else DisplayError("Your confirm password is not equal with your password!");
-            //            }
-            //            else DisplayError(passwordStatus.Message);
-            //        }
-            //        else DisplayError(emailStatus.Message);
-            //    }
+                //check if all fields are completed
+                if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password) || String.IsNullOrWhiteSpace(ConfirmPass)) DisplayError("You need to complete all fields in order to register!");
+                else
+                {
+                    //verify status of fields
+                    Models.TaskStatus emailStatus = FieldsHelper.VerifyEmail(Username);
+                    if (!emailStatus.IsError)
+                    {
+                        Models.TaskStatus passwordStatus = FieldsHelper.VerifyPassword(Password);
+                        if (!passwordStatus.IsError)
+                        {
+                            if (ConfirmPass == Password)
+                            {
+                                string authPassword = VaultManager.CreateAuthPassword(Username, Password);
+                                Models.TaskStatus statusRegister = await UserProcessor.Register(ApiHelper.ApiClient, Username, authPassword, authPassword);
+                                if (!statusRegister.IsError)
+                                {
+                                    Username = Password = ConfirmPass = string.Empty;
+                                    Models.PageService.ChangeMainPage(new MainView());
+                                }
+                                else DisplayError(statusRegister.Message);
+                            }
+                            else DisplayError("Your confirm password is not equal with your password!");
+                        }
+                        else DisplayError(passwordStatus.Message);
+                    }
+                    else DisplayError(emailStatus.Message);
+                }
             }
         }
         private async void SignIn()
@@ -225,7 +227,9 @@ namespace PassManager.Views
                 else
                 {
                     await Models.PageService.PushPopupAsync(new Popups.WaitForActionView());
-                    Models.TaskStatus statusLogin = await UserProcessor.LogIn(ApiHelper.ApiClient, Username, Password);
+                    //create auth password
+                    string authPassword = Models.VaultManager.CreateAuthPassword(Username, Password);
+                    Models.TaskStatus statusLogin = await UserProcessor.LogIn(ApiHelper.ApiClient, Username, authPassword);
                     if (!statusLogin.IsError)
                     {
                         Username = Password = string.Empty;
