@@ -31,7 +31,9 @@ namespace PassManager_WebApi.Providers
         {
             var userManager = context.OwinContext.GetUserManager<ApplicationUserManager>();
 
-            ApplicationUser user = await userManager.FindAsync(context.UserName, context.Password);
+            var hashedPassword = Convert.ToBase64String(SecurePassword.HashPassword(context.UserName, context.Password));
+
+            ApplicationUser user = await userManager.FindAsync(context.UserName, hashedPassword);
 
             if (user == null)
             {

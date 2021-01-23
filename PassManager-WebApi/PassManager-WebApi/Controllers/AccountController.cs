@@ -327,6 +327,11 @@ namespace PassManager_WebApi.Controllers
             {
                 return BadRequest(ModelState);
             }
+            //hash the password
+            var hashedPassword = Convert.ToBase64String(SecurePassword.HashPassword(model.Email, model.Password));
+            //modify the model
+            model.Password = hashedPassword;
+            model.ConfirmPassword = hashedPassword;
 
             var user = new ApplicationUser() { UserName = model.Email, Email = model.Email };
 
