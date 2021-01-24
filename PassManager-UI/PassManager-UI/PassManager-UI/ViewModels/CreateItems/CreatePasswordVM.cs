@@ -97,8 +97,9 @@ namespace PassManager.ViewModels.CreateItems
                 Password password = await PasswordProcessor.GetPassword(ApiHelper.ApiClient, id);
                 if (password != null)
                 {
-                    _tempPassword = (Password)password.Clone();//store a temp password for future verifications
-                    Password = password;
+                    var decryptedPass = (Password)DecryptItem(password);
+                    Password = decryptedPass;
+                    _tempPassword = (Password)decryptedPass.Clone();//store a temp password for future verifications
                 }
                 else
                 {
@@ -108,7 +109,8 @@ namespace PassManager.ViewModels.CreateItems
         }
         private protected async override Task Create()
         {
-            bool isSuccess = await PasswordProcessor.CreatePassword(ApiHelper.ApiClient, Password);
+            var encryptedPass = (Password)EncryptItem(Password);
+            bool isSuccess = await PasswordProcessor.CreatePassword(ApiHelper.ApiClient, encryptedPass);
             if (isSuccess)
             {
                 UpdateModel Model = new UpdateModel(Enums.TypeOfUpdates.Create);
@@ -136,6 +138,7 @@ namespace PassManager.ViewModels.CreateItems
         }
         private protected async override Task Modify(int id)
         {
+            var encryptedPass = (Password)EncryptItem(Password);
             bool isSuccess = await PasswordProcessor.Modify(ApiHelper.ApiClient, id, Password);
             if (isSuccess)
             {
@@ -195,6 +198,26 @@ namespace PassManager.ViewModels.CreateItems
         {
             PassEntryIcon = ImageSource.FromResource($"PassManager-UI.Images.{(IsPasswordVisible ? "Open" : "Locked")}.png");
             IsPasswordVisible = !IsPasswordVisible;
+        }
+        private protected override object EncryptItem(object obj)
+        {
+            var passwordToEncrypt = (Password)obj;
+            passwordToEncrypt.PasswordEncrypted = VaultManager.EncryptString(passwordToEncrypt.PasswordEncrypted);
+            if (!string.IsNullOrEmpty(passwordToEncrypt.Notes))
+            {
+                passwordToEncrypt.Notes = VaultManager.EncryptString(passwordToEncrypt.Notes);
+            }
+            return passwordToEncrypt;
+        }
+        private protected override object DecryptItem(object obj)
+        {
+            var passwordToDecrypt = (Password)obj;
+            passwordToDecrypt.PasswordEncrypted = VaultManager.DecryptString(passwordToDecrypt.PasswordEncrypted);
+            if (!string.IsNullOrEmpty(passwordToDecrypt.Notes))
+            {
+                passwordToDecrypt.Notes = VaultManager.DecryptString(passwordToDecrypt.Notes);
+            }
+            return passwordToDecrypt;
         }
     }
 }
