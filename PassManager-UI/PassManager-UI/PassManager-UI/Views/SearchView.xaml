@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:CRender="clr-namespace:PassManager.CustomRenderer"
-             x:Class="PassManager.Views.SearchView" BackgroundColor="{DynamicResource PageBottomColor}">
+             x:Class="PassManager.Views.SearchView" BackgroundColor="{DynamicResource PageBottomColor}" Title="{Binding PageTitle}">
     <Shell.TitleView>
         <CRender:CustomEntry VerticalOptions="Center" HorizontalOptions="Center" ClearButtonVisibility="WhileEditing" 
                IsTextPredictionEnabled="False" Placeholder="{Binding PageTitle}" Text="{Binding SearchString, Mode=TwoWay}"/>
