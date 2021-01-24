@@ -5,6 +5,7 @@ using PassManager.Models;
 using PassManager.Models.Items;
 using Xamarin.Forms;
 using Newtonsoft.Json;
+using PassManager.ViewModels.Bases;
 
 namespace PassManager.ViewModels
 {

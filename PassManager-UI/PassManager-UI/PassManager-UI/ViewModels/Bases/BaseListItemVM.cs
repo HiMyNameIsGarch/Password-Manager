@@ -11,8 +11,9 @@ using System.Linq;
 using PassManager.Views.Popups;
 using Newtonsoft.Json;
 using PassManager.Models.Api;
+using PassManager.Models.Api.Processors;
 
-namespace PassManager.ViewModels
+namespace PassManager.ViewModels.Bases
 {
     [QueryProperty("Update", "update")]
     public abstract class BaseListItemVM : BaseViewModel
@@ -20,7 +21,6 @@ namespace PassManager.ViewModels
         //constructors
         public BaseListItemVM(string pageTitle) : base(pageTitle)
         {
-            ManageFlyoutItems.Add(pageTitle, true);
             _addItem = new Command(SelectItemToAdd);
             _items = new ObservableCollection<Grouping<TypeOfItems, ItemPreview>>();
         }

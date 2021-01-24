@@ -6,7 +6,7 @@ using System.Net.Http;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
-namespace PassManager.Models.Api
+namespace PassManager.Models.Api.Processors
 {
     public class UserProcessor
     {

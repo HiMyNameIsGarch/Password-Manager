@@ -2,6 +2,7 @@
 using PassManager.Models.Items;
 using PassManager.Enums;
 using System.Threading.Tasks;
+using PassManager.ViewModels.Bases;
 
 namespace PassManager.ViewModels.FlyoutItems
 {
@@ -9,50 +10,20 @@ namespace PassManager.ViewModels.FlyoutItems
     {
         public WifiPassViewModel() : base("Wifi")
         {
-            if (CheckInternet())
+            if (IsInternet())
             {
                 //add some data for page
-                AddDataForAndroid();
             }
         }
 
-        private protected override Task GetData()
+        private protected override Task GetDataAsync()
         {
             throw new NotImplementedException();
         }
 
-        private protected override Task RefreshPage()
+        private protected override Task RefreshPageAsync()
         {
             throw new NotImplementedException();
-        }
-
-        //function for android testing
-        private void AddDataForAndroid()
-        {
-            Items = new System.Collections.ObjectModel.ObservableCollection<ItemPreview>()
-            {
-                new ItemPreview()
-                {
-                    Id = 1,
-                    Title = "Home",
-                    SubTitle = "Wifi",
-                    ItemType = TypeOfItems.Wifi
-                },
-                new ItemPreview()
-                {
-                    Id = 2,
-                    Title = "Coffee shop",
-                    SubTitle = "Wifi",
-                    ItemType = TypeOfItems.Wifi
-                },
-                new ItemPreview()
-                {
-                    Id = 3,
-                    Title = "My friends house",
-                    SubTitle = "Wifi",
-                    ItemType = TypeOfItems.Wifi
-                }
-            };
         }
     }
 }

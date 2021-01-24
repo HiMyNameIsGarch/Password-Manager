@@ -1,9 +1,7 @@
-﻿using PassManager.CustomRenderer;
-using PassManager.Enums;
-using PassManager.Models.Interfaces;
+﻿using PassManager.Enums;
 using PassManager.Models.Api;
-using PassManager.ViewModels;
-using System.Linq;
+using PassManager.Models.Api.Processors;
+using PassManager.ViewModels.Bases;
 using System.Windows.Input;
 using Xamarin.Forms;
 using System;

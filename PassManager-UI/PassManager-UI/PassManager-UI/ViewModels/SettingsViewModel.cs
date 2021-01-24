@@ -3,6 +3,7 @@ using PassManager.Models.Api;
 using System.Collections.Generic;
 using System.Windows.Input;
 using Xamarin.Forms;
+using PassManager.ViewModels.Bases;
 
 namespace PassManager.ViewModels
 {
