@@ -78,7 +78,7 @@ namespace PassManager.ViewModels
         public ObservableCollection<Grouping<TypeOfItems, ItemPreview>> Items
         {
             get { return _items; }
-            private protected set { _items = value; NotifyPropertyChanged(); }
+            private set { _items = value; NotifyPropertyChanged(); }
         }
         public bool IsUwp
         {
