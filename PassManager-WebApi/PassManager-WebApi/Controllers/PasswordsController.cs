@@ -26,6 +26,7 @@ namespace PassManager_WebApi.Controllers
             IEnumerable<Grouping<TypeOfItems, ItemPreview>> groupedPasswords = unGroupedPasswords
                 .GroupBy(item => item.ItemType)
                 .Select(item => new Grouping<TypeOfItems, ItemPreview>(item.Key, item));
+
             return Ok(groupedPasswords);
         }
         //GET api/Passwords/id
@@ -42,6 +43,8 @@ namespace PassManager_WebApi.Controllers
         public IHttpActionResult Post([FromBody] PasswordVM password)
         {
             if (password is null) return BadRequest("Password does not exist!");
+            var isModelValid = password.IsModelValid();
+            if (!string.IsNullOrEmpty(isModelValid)) return BadRequest(isModelValid);
             GetCurrentUser().Passwords.Add(new Password(password));
             db.SaveChanges();
             return Ok();
@@ -52,8 +55,13 @@ namespace PassManager_WebApi.Controllers
             if (password is null) return BadRequest("Password does not exist!");
             if (id != password.Id) return BadRequest("Id does not match with the password");
             if (id <= 0) return BadRequest("Id is invalid!");
+            //check is model is valid
+            var isModelValid = password.IsModelValid();
+            if (!string.IsNullOrEmpty(isModelValid)) return BadRequest(isModelValid);
+            //get current password
             Password passwordToBeModified = GetCurrentPassword(id);
             if (passwordToBeModified is null) return BadRequest("Password not found!");
+            //modify it
             passwordToBeModified.ModifyTo(password);
             db.SaveChanges();
             return Ok();

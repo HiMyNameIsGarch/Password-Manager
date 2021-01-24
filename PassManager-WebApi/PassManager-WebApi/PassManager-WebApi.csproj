@@ -290,6 +290,7 @@
     </Compile>
     <Compile Include="Models\Grouping.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Interfaces\IModelValid.cs" />
     <Compile Include="Models\ItemPreview.cs" />
     <Compile Include="Models\PassManager.Context.cs">
       <AutoGen>True</AutoGen>
@@ -309,6 +310,7 @@
     <Compile Include="Models\Password.cs">
       <DependentUpon>PassManager.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\SecurePassword.cs" />
     <Compile Include="Models\Wifi.cs">
       <DependentUpon>PassManager.tt</DependentUpon>
     </Compile>
