@@ -203,6 +203,8 @@ namespace PassManager.ViewModels
         private protected abstract Task Delete();
         private protected abstract Task Modify(int id);
         private protected abstract Task<bool> IsModelValid();//this function will check if the item is valid(title not to be more than 25 char etc etc) other wise will display a popup with the info
+        private protected abstract object EncryptItem(object obj);//gen an object(an item for that particular page) and return the encrypted version
+        private protected abstract object DecryptItem(object obj);//get an object(an item for that particular page) and return the decrypted version
         //functions
         private protected abstract Task GetDataAsync(int id);
         private protected void ChangeProps(ItemPageState pageState, string btnText, string pageTitle, bool isReadOnly)
