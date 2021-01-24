@@ -1,6 +1,8 @@
-﻿namespace PassManager_WebApi.ViewModels
+﻿using PassManager_WebApi.Models.Interfaces;
+
+namespace PassManager_WebApi.ViewModels
 {
-    public class WifiVM
+    public class WifiVM : IModelValid
     {
         public WifiVM() { }
         public WifiVM(Models.Wifi wifi)
@@ -15,5 +17,9 @@
         public string Name { get; set; }
         public string PasswordEncrypted { get; set; }
         public string Notes { get; set; }
+        public string IsModelValid()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -1,20 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+using PassManager_WebApi.ViewModels;
 
 namespace PassManager_WebApi.Models
 {
     public partial class Password
     {
         public Password() { }
-        public Password(ViewModels.PasswordVM passwordVM)
+        public Password(PasswordVM passwordVM)
         {
             ModifyTo(passwordVM);
             CreateDate = DateTime.Now;
             NumOfVisits = 1;
         }
-        public void ModifyTo(ViewModels.PasswordVM passwordVM)
+
+        public void ModifyTo(PasswordVM passwordVM)
         {
             Name = passwordVM.Name;
             Username = passwordVM.Username;
@@ -27,7 +26,7 @@ namespace PassManager_WebApi.Models
     public partial class Wifi
     {
         public Wifi() { }
-        public Wifi(ViewModels.WifiVM wifiVM)
+        public Wifi(WifiVM wifiVM)
         {
             Name = wifiVM.Name;
             PasswordEncrypted = wifiVM.PasswordEncrypted;
