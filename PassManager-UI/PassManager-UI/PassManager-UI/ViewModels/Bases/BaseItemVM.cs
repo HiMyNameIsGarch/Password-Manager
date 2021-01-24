@@ -8,7 +8,7 @@ using Newtonsoft.Json;
 using PassManager.Views.Popups;
 using Xamarin.Essentials;
 
-namespace PassManager.ViewModels
+namespace PassManager.ViewModels.Bases
 {
     [QueryProperty("CreatePage", "createPage")]
     public abstract class BaseItemVM : BaseViewModel

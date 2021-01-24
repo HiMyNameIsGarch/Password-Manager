@@ -1,6 +1,7 @@
 ﻿using PassManager.Models;
 using System.Windows.Input;
 using Xamarin.Forms;
+using PassManager.ViewModels.Bases;
 
 namespace PassManager.ViewModels.Popups
 {

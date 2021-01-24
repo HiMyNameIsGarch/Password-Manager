@@ -2,6 +2,7 @@
 using Xamarin.Forms;
 using PassManager.Models.Interfaces;
 using System.Threading.Tasks;
+using PassManager.ViewModels.Bases;
 
 namespace PassManager.ViewModels.CreateItems
 {
@@ -29,17 +30,27 @@ namespace PassManager.ViewModels.CreateItems
         {
             throw new System.NotImplementedException();
         }
-
-        private protected override Task Modify()
-        {
-            throw new System.NotImplementedException();
-        }
-        private protected override Task GetData(int id)
-        {
-            throw new System.NotImplementedException();
-        }
-
         private protected override Task<bool> IsModelValid()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private protected override Task Modify(int id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private protected override Task GetDataAsync(int id)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private protected override object EncryptItem(object obj)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        private protected override object DecryptItem(object obj)
         {
             throw new System.NotImplementedException();
         }

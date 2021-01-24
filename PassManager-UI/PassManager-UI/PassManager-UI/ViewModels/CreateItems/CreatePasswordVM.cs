@@ -8,6 +8,8 @@ using PassManager.Models;
 using PassManager.Views.Popups;
 using Rg.Plugins.Popup.Services;
 using Newtonsoft.Json;
+using PassManager.ViewModels.Bases;
+using PassManager.Models.Api.Processors;
 
 namespace PassManager.ViewModels.CreateItems
 {

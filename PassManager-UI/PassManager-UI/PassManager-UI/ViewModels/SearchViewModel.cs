@@ -9,6 +9,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using PassManager.ViewModels.Bases;
+using PassManager.Models.Api.Processors;
 
 namespace PassManager.ViewModels
 {

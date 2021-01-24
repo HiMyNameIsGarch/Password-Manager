@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace PassManager.Models.Api
+namespace PassManager.Models.Api.Processors
 {
     public class PasswordProcessor
     {

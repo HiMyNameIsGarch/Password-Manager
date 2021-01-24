@@ -7,6 +7,8 @@ using PassManager.Models;
 using PassManager.Enums;
 using System.Linq;
 using PassManager.Views.Popups;
+using PassManager.ViewModels.Bases;
+using PassManager.Models.Api.Processors;
 
 namespace PassManager.ViewModels.FlyoutItems
 {

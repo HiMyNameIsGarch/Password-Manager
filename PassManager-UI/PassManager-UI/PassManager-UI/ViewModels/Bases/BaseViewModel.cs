@@ -6,7 +6,7 @@ using PassManager.Models;
 using PassManager.Views.Popups;
 using Rg.Plugins.Popup.Services;
 
-namespace PassManager.ViewModels
+namespace PassManager.ViewModels.Bases
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
