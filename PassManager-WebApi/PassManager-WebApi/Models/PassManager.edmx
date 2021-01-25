@@ -93,6 +93,9 @@
           <Property Name="NumOfVisits" Type="int" Nullable="false" />
           <Property Name="LastModified" Type="datetime" Nullable="false" />
           <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="SSID" Type="nvarchar" MaxLength="64" />
+          <Property Name="SettingsPassword" Type="nvarchar(max)" />
+          <Property Name="ConnectionType" Type="nvarchar" MaxLength="64" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
@@ -363,6 +366,9 @@
           <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="AspNetUser" Relationship="PasswordManagerModel.FK_Wifi_AspNetUsers" FromRole="Wifi" ToRole="AspNetUser" />
           <Property Name="NumOfVisits" Type="Int32" Nullable="false" />
+          <Property Name="SSID" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="SettingsPassword" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ConnectionType" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_Passwords_AspNetUsers1">
           <End Type="PasswordManagerModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
@@ -476,6 +482,9 @@
           <EntitySetMapping Name="Wifis">
             <EntityTypeMapping TypeName="PasswordManagerModel.Wifi">
               <MappingFragment StoreEntitySet="Wifi">
+                <ScalarProperty Name="ConnectionType" ColumnName="ConnectionType" />
+                <ScalarProperty Name="SettingsPassword" ColumnName="SettingsPassword" />
+                <ScalarProperty Name="SSID" ColumnName="SSID" />
                 <ScalarProperty Name="NumOfVisits" ColumnName="NumOfVisits" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="LastModified" ColumnName="LastModified" />

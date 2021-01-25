@@ -23,11 +23,13 @@ namespace PassManager.ViewModels.Bases
         {
             _addItem = new Command(SelectItemToAdd);
             _items = new ObservableCollection<Grouping<TypeOfItems, ItemPreview>>();
+            _refresh = new Command(RefreshCommand);
         }
         //private variables
         private bool _isRefreshing;
         private ItemPreview _selectedItem;
         private ICommand _addItem;
+        private ICommand _refresh;
         private string _update;
         private bool _hasItems;
         private string _noItemsText;
@@ -116,39 +118,51 @@ namespace PassManager.ViewModels.Bases
         }
         public ICommand Refresh
         {
-            get { return new Command(async () => 
-            {
-                if (IsInternet())
-                {
-                    await PageService.PushPopupAsync(new WaitForActionView(),false);
-                    IsRefreshing = true;
-                    try
-                    {
-                        await RefreshPageAsync();
-                    }
-                    catch(Exception ex)
-                    {
-                        HandleException(ex);
-                    }
-                    IsRefreshing = false;
-                }
-                else
-                {
-                    IsRefreshing = false;
-                }
-            }); }
+            get { return _refresh; }
         }
         public ICommand AddItem
         {
             get { return _addItem; }
         }
         //actions for commands
+        private async void RefreshCommand()
+        {
+            if (IsInternet())
+            {
+                IEnumerable<Grouping<TypeOfItems, ItemPreview>> items = Enumerable.Empty<Grouping<TypeOfItems, ItemPreview>>();
+                await PageService.PushPopupAsync(new WaitForActionView(), false);
+                IsRefreshing = true;
+                try
+                {
+                    items = await RefreshPageAsync();
+                }
+                catch (Exception ex)
+                {
+                    HandleException(ex);
+                }
+                IsRefreshing = false;
+
+                await PageService.PopAllAsync(false);
+                if (IsListChanged(items))
+                {
+                    Items = UpdateItems(items);
+                }
+                else
+                {
+                    await PageService.PushPopupAsync(new WarningView("Your items are up to date!"));
+                }
+            }
+            else
+            {
+                IsRefreshing = false;
+            }
+        }
         private async void SelectItemToAdd()
         {
             if (Shell.Current != null)
                 await Shell.Current.GoToAsync("ListItem");
         }
-        private protected abstract Task RefreshPageAsync();
+        private protected abstract Task<IEnumerable<Grouping<TypeOfItems, ItemPreview>>> RefreshPageAsync();
         //abstract functions
         private async Task UpdateItems(TypeOfUpdates updateType)
         {
@@ -242,6 +256,18 @@ namespace PassManager.ViewModels.Bases
                 }
             }
             return needUpdate;
+        }
+        private protected void DisplayItems(IEnumerable<Grouping<TypeOfItems, ItemPreview>> itemsToDisplay)
+        {
+            if (itemsToDisplay != null && itemsToDisplay.Count() > 0)
+            {
+                DisplayMsg(string.Empty, false);
+                Items = new ObservableCollection<Grouping<TypeOfItems, ItemPreview>>(itemsToDisplay);
+            }
+            else if (itemsToDisplay.Count() == 0)
+            {
+                DisplayMsg($"You have no items yet, click on button below to add a new one!", true);
+            }
         }
         private protected ObservableCollection<Grouping<TypeOfItems, ItemPreview>> UpdateItems(IEnumerable<Grouping<TypeOfItems, ItemPreview>> newList)
         {
