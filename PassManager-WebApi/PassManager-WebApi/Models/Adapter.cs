@@ -26,13 +26,21 @@ namespace PassManager_WebApi.Models
     public partial class Wifi
     {
         public Wifi() { }
-        public Wifi(WifiVM wifiVM)
+        public Wifi(WifiVM wifiVM, string userId)
+        {
+            ModifyTo(wifiVM);
+            UserId = userId;
+            NumOfVisits = 1;
+            CreateDate = DateTime.Now;
+        }
+        public void ModifyTo(WifiVM wifiVM)
         {
             Name = wifiVM.Name;
             PasswordEncrypted = wifiVM.PasswordEncrypted;
+            SSID = wifiVM.SSID;
+            SettingsPassword = wifiVM.SettingsPassword;
+            ConnectionType = wifiVM.ConnectionType;
             Notes = wifiVM.Notes;
-            CreateDate = DateTime.Now;
-            NumOfVisits = 1;
             LastModified = DateTime.Now;
         }
     }
