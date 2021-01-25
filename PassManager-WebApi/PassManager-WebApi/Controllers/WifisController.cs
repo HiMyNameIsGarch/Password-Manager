@@ -23,8 +23,8 @@ namespace PassManager_WebApi.Controllers
                 .Where(item => item.UserId == userId)
                 .OrderByDescending(item => item.NumOfVisits)
                 .ThenByDescending(item => item.Name)
-                .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = "Wi-Fi", ItemType = TypeOfItems.Wifi })
-                .ToList();
+                .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = "Wi-Fi", ItemType = TypeOfItems.Wifi });
+            
             return Ok(wifis);
         }
         //GET api/Wifis/5

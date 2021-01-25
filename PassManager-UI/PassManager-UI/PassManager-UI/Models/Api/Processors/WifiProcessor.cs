@@ -10,7 +10,7 @@ namespace PassManager.Models.Api.Processors
 {
     internal static class WifiProcessor
     {
-        public static async Task<IEnumerable<Grouping<TypeOfItems, ItemPreview>>> GetPreviews(HttpClient httpClient)
+        public static async Task<IEnumerable<Grouping<string, ItemPreview>>> GetPreviews(HttpClient httpClient)
         {
             HttpResponseMessage responseMessage = null;
             try
@@ -24,9 +24,9 @@ namespace PassManager.Models.Api.Processors
             if (responseMessage.IsSuccessStatusCode)
             {
                 var itemList = await responseMessage.Content.ReadAsAsync<IEnumerable<ItemPreview>>();
-                var groupedList = itemList.GroupBy(item => item.ItemType)
-                    .Select(item => new Grouping<TypeOfItems, ItemPreview>(item.Key, item));
-                return groupedList;
+                var groupedItems = itemList.GroupBy(item => item.ItemType)
+                                           .Select(item => new Grouping<string, ItemPreview>(item.Key.ToSampleString(), item));
+                return groupedItems;
             }
             return null;
         }

@@ -25,7 +25,7 @@ namespace PassManager.ViewModels.FlyoutItems
             DisplayItems(previews);
         }
 
-        private protected override async Task<IEnumerable<Grouping<TypeOfItems, ItemPreview>>> RefreshPageAsync()
+        private protected override async Task<IEnumerable<Grouping<string, ItemPreview>>> RefreshPageAsync()
         {
             var newList = await WifiProcessor.GetPreviews(ApiHelper.ApiClient);
             return newList;

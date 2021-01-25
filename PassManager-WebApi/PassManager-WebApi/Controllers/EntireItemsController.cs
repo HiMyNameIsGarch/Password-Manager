@@ -16,7 +16,7 @@ namespace PassManager_WebApi.Controllers
         //GET api/EntireItems
         public IHttpActionResult Get()//get latest passwords preview
         {
-            IEnumerable<ItemPreview> previews = GetAllItems(GetCurrentUser());
+            var previews = GetAllItems(GetCurrentUser());
 
             return Ok(previews);
         }
@@ -27,7 +27,7 @@ namespace PassManager_WebApi.Controllers
             {
                 return BadRequest("Your item is null or empty!");
             }
-            IEnumerable<ItemPreview> previews = GetAllItems(GetCurrentUser(), searchString);
+            var previews = GetAllItems(GetCurrentUser(), searchString);
             return Ok(previews);
         }
         //GET API/EntireItems/updateType
@@ -39,19 +39,19 @@ namespace PassManager_WebApi.Controllers
                 return BadRequest("UpdateType is invalid!");
             }
             //take passwords
-            var passwords = user.Passwords
+            var password = user.Passwords
             .OrderByDescending(s => updateType == TypeOfUpdates.Create ? s.CreateDate : s.LastModified)
             .Select(item => new ItemPreview(item.Id, item.Name, item.Username, TypeOfItems.Password)).Take(1)
             .Union
             (user.Wifis
             .OrderByDescending(s => updateType == TypeOfUpdates.Create ? s.CreateDate : s.LastModified)
-            .Select(item => new ItemPreview(item.Id, item.Name, TypeOfItems.Wifi.ToString(), TypeOfItems.Wifi)).Take(1))
+            .Select(item => new ItemPreview(item.Id, item.Name, "Wi-Fi", TypeOfItems.Wifi)).Take(1))
             .FirstOrDefault();
-            if (passwords is null)
+            if (password is null)
             {
                 return BadRequest("No item were updated!");
             }
-            return Ok(passwords);
+            return Ok(password);
         }
         private IEnumerable<ItemPreview> GetAllItems(AspNetUser user, string searchString = "")
         {
@@ -68,7 +68,7 @@ namespace PassManager_WebApi.Controllers
                 (user.Wifis
                 .OrderByDescending(p => p.NumOfVisits)
                 .ThenBy(p => p.Name)
-                .Select(item => new ItemPreview(item.Id, item.Name, TypeOfItems.Wifi.ToString(), TypeOfItems.Wifi)));
+                .Select(item => new ItemPreview(item.Id, item.Name, "Wi-Fi", TypeOfItems.Wifi)));
 
                 if (!string.IsNullOrEmpty(searchString))
                 {

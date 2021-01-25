@@ -21,12 +21,12 @@ namespace PassManager.ViewModels.FlyoutItems
         //functions
         private protected override async Task GetDataAsync()
         {
-            IEnumerable<Grouping<TypeOfItems, ItemPreview>> previews = await PasswordProcessor.GetPreviews(ApiHelper.ApiClient);
+            IEnumerable<Grouping<string, ItemPreview>> previews = await PasswordProcessor.GetPreviews(ApiHelper.ApiClient);
             DisplayItems(previews);
         }
-        private protected override async Task<IEnumerable<Grouping<TypeOfItems, ItemPreview>>> RefreshPageAsync()
+        private protected override async Task<IEnumerable<Grouping<string, ItemPreview>>> RefreshPageAsync()
         {
-            IEnumerable<Grouping<TypeOfItems, ItemPreview>> newList = await PasswordProcessor.GetPreviews(ApiHelper.ApiClient);
+            IEnumerable<Grouping<string, ItemPreview>> newList = await PasswordProcessor.GetPreviews(ApiHelper.ApiClient);
             return newList;
         }
     }
