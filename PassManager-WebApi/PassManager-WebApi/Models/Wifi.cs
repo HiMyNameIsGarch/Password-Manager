@@ -22,6 +22,9 @@ namespace PassManager_WebApi.Models
         public System.DateTime LastModified { get; set; }
         public string UserId { get; set; }
         public int NumOfVisits { get; set; }
+        public string SSID { get; set; }
+        public string SettingsPassword { get; set; }
+        public string ConnectionType { get; set; }
     
         public virtual AspNetUser AspNetUser { get; set; }
     }
