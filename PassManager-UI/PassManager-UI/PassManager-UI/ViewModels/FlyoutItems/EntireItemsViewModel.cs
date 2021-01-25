@@ -20,10 +20,10 @@ namespace PassManager.ViewModels.FlyoutItems
         }
         private protected async override Task GetDataAsync()
         {
-            IEnumerable<Grouping<TypeOfItems, ItemPreview>> previews = await EntireItemsProcessor.GetPreviews(ApiHelper.ApiClient);
+            IEnumerable<Grouping<string, ItemPreview>> previews = await EntireItemsProcessor.GetPreviews(ApiHelper.ApiClient);
             DisplayItems(previews);
         }
-        private protected override async Task<IEnumerable<Grouping<TypeOfItems, ItemPreview>>> RefreshPageAsync()
+        private protected override async Task<IEnumerable<Grouping<string, ItemPreview>>> RefreshPageAsync()
         {
             var previews = await EntireItemsProcessor.GetPreviews(ApiHelper.ApiClient);
             return previews;

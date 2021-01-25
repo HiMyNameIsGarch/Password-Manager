@@ -18,7 +18,7 @@ namespace PassManager.ViewModels
     {
         public SearchViewModel() : base("Search...")
         {
-            _items = new ObservableCollection<Grouping<TypeOfItems, ItemPreview>>();
+            _items = new ObservableCollection<Grouping<string, ItemPreview>>();
         }
         private ItemPreview _selectedItem;
         private string _searchString;
@@ -68,7 +68,7 @@ namespace PassManager.ViewModels
                 var items = await EntireItemsProcessor.GetPreviews(ApiHelper.ApiClient, searchString.ToLower());
                 if(items.Count() > 0)
                 {
-                    Items = new ObservableCollection<Grouping<TypeOfItems, ItemPreview>>(items);
+                    Items = new ObservableCollection<Grouping<string, ItemPreview>>(items);
                 }
                 else
                 {
@@ -76,8 +76,8 @@ namespace PassManager.ViewModels
                 }
             }
         }
-        private ObservableCollection<Grouping<TypeOfItems, ItemPreview>> _items;
-        public ObservableCollection<Grouping<TypeOfItems, ItemPreview>> Items
+        private ObservableCollection<Grouping<string, ItemPreview>> _items;
+        public ObservableCollection<Grouping<string, ItemPreview>> Items
         {
             get { return _items; }
             private set { _items = value; NotifyPropertyChanged(); }

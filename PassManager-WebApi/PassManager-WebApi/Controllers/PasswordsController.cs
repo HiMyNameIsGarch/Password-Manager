@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web.Http;
 using PassManager_WebApi.ViewModels;
 using PassManager_WebApi.Enums;
+using System.Diagnostics;
 
 namespace PassManager_WebApi.Controllers
 {
@@ -18,16 +19,11 @@ namespace PassManager_WebApi.Controllers
         public IHttpActionResult Get()//get latest passwords preview
         {
             //bring from db just the passwords
-            IEnumerable<ItemPreview> unGroupedPasswords = GetCurrentUser().Passwords
+            IEnumerable<ItemPreview> passwords = GetCurrentUser().Passwords
                 .OrderByDescending(p => p.NumOfVisits)
                 .ThenByDescending(p => p.Name)
                 .Select(item => new ItemPreview(item.Id, item.Name, item.Username, TypeOfItems.Password)).ToList();
-            //group it by type
-            IEnumerable<Grouping<TypeOfItems, ItemPreview>> groupedPasswords = unGroupedPasswords
-                .GroupBy(item => item.ItemType)
-                .Select(item => new Grouping<TypeOfItems, ItemPreview>(item.Key, item));
-
-            return Ok(groupedPasswords);
+            return Ok(passwords);
         }
         //GET api/Passwords/id
         public IHttpActionResult Get(int id)

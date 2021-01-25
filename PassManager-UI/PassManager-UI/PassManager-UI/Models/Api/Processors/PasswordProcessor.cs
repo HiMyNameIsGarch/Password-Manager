@@ -2,14 +2,15 @@
 using PassManager.Models.Items;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace PassManager.Models.Api.Processors
 {
-    public class PasswordProcessor
+    internal class PasswordProcessor
     {
-        internal static async Task<IEnumerable<Grouping<TypeOfItems, ItemPreview>>> GetPreviews(HttpClient httpClient)
+        public static async Task<IEnumerable<Grouping<string, ItemPreview>>> GetPreviews(HttpClient httpClient)
         {
             HttpResponseMessage responseMessage = null;
             try
@@ -22,12 +23,14 @@ namespace PassManager.Models.Api.Processors
             }
             if (responseMessage.IsSuccessStatusCode)
             {
-                IEnumerable<Grouping<TypeOfItems, ItemPreview>> itemList = await responseMessage.Content.ReadAsAsync<IEnumerable<Grouping<TypeOfItems, ItemPreview>>>();
-                return itemList;
+                var itemList = await responseMessage.Content.ReadAsAsync<IEnumerable<ItemPreview>>();
+                var groupedItems = itemList.GroupBy(item => item.ItemType)
+                                           .Select(item => new Grouping<string, ItemPreview>(item.Key.ToSampleString(), item));
+                return groupedItems;
             }
             return null;
         }
-        internal static async Task<bool> CreatePassword(HttpClient httpClient, Password password)
+        public static async Task<bool> CreatePassword(HttpClient httpClient, Password password)
         {
             HttpContent content = ConvertToHttpContent(password);
             HttpResponseMessage responseMessage = null;
@@ -45,7 +48,7 @@ namespace PassManager.Models.Api.Processors
             }
             return false;
         }
-        internal static async Task<Password> GetPassword(HttpClient httpClient, int id)
+        public static async Task<Password> GetPassword(HttpClient httpClient, int id)
         {
             HttpResponseMessage responseMessage = null;
             try
@@ -63,7 +66,7 @@ namespace PassManager.Models.Api.Processors
             }
             return null;
         }
-        internal static async Task<bool> Modify(HttpClient httpClient, int id, Password changedPassword)
+        public static async Task<bool> Modify(HttpClient httpClient, int id, Password changedPassword)
         {
             HttpContent httpContent = ConvertToHttpContent(changedPassword);
             HttpResponseMessage responseMessage = null;
@@ -81,7 +84,7 @@ namespace PassManager.Models.Api.Processors
             }
             throw new Exception("Error from modifying a password");
         }
-        internal static async Task<bool> Delete(HttpClient httpClient, int id)
+        public static async Task<bool> Delete(HttpClient httpClient, int id)
         {
             HttpResponseMessage responseMessage = null;
             try

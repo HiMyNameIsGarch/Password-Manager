@@ -22,7 +22,7 @@ namespace PassManager.ViewModels.Bases
         public BaseListItemVM(string pageTitle) : base(pageTitle)
         {
             _addItem = new Command(SelectItemToAdd);
-            _items = new ObservableCollection<Grouping<TypeOfItems, ItemPreview>>();
+            _items = new ObservableCollection<Grouping<string, ItemPreview>>();
             _refresh = new Command(RefreshCommand);
         }
         //private variables
@@ -33,7 +33,7 @@ namespace PassManager.ViewModels.Bases
         private string _update;
         private bool _hasItems;
         private string _noItemsText;
-        private ObservableCollection<Grouping<TypeOfItems, ItemPreview>> _items;
+        private ObservableCollection<Grouping<string, ItemPreview>> _items;
         private UpdateModel _updateModel;
         //parameters
         public string Update
@@ -67,7 +67,7 @@ namespace PassManager.ViewModels.Bases
             }
         }
         //props for binding
-        public ObservableCollection<Grouping<TypeOfItems, ItemPreview>> Items
+        public ObservableCollection<Grouping<string, ItemPreview>> Items
         {
             get { return _items; }
             private protected set { _items = value; NotifyPropertyChanged(); }
@@ -129,7 +129,7 @@ namespace PassManager.ViewModels.Bases
         {
             if (IsInternet())
             {
-                IEnumerable<Grouping<TypeOfItems, ItemPreview>> items = Enumerable.Empty<Grouping<TypeOfItems, ItemPreview>>();
+                IEnumerable<Grouping<string, ItemPreview>> items = Enumerable.Empty<Grouping<string, ItemPreview>>();
                 await PageService.PushPopupAsync(new WaitForActionView(), false);
                 IsRefreshing = true;
                 try
@@ -162,18 +162,18 @@ namespace PassManager.ViewModels.Bases
             if (Shell.Current != null)
                 await Shell.Current.GoToAsync("ListItem");
         }
-        private protected abstract Task<IEnumerable<Grouping<TypeOfItems, ItemPreview>>> RefreshPageAsync();
+        private protected abstract Task<IEnumerable<Grouping<string, ItemPreview>>> RefreshPageAsync();
         //abstract functions
         private async Task UpdateItems(TypeOfUpdates updateType)
         {
             if (IsInternet())
             {
                 ItemPreview newItem = await EntireItemsProcessor.GetUpdate(ApiHelper.ApiClient, updateType);
-                var currentItems = Items.Where(s => s.Key == newItem.ItemType).FirstOrDefault();
+                var currentItems = Items.Where(s => s.Key == newItem.ItemType.ToSampleString()).FirstOrDefault();
                 if(currentItems is null)
                 {
                     DisplayMsg("",false);
-                    Items.Add(new Grouping<TypeOfItems, ItemPreview>(newItem.ItemType, new List<ItemPreview>() { newItem }));
+                    Items.Add(new Grouping<string, ItemPreview>(newItem.ItemType.ToSampleString(), new List<ItemPreview>() { newItem }));
                 }
                 else if (updateType == TypeOfUpdates.Create)
                 {
@@ -226,7 +226,7 @@ namespace PassManager.ViewModels.Bases
                 await Shell.Current.GoToAsync($"Create{itemType}?createPage={pageToCreateString}");
             }
         }
-        private protected bool IsListChanged(IEnumerable<Grouping<TypeOfItems, ItemPreview>> newList)
+        private protected bool IsListChanged(IEnumerable<Grouping<string, ItemPreview>> newList)
         {
             int previewsCount = newList.Count();
             int itemsCount = Items.Count();
@@ -257,21 +257,21 @@ namespace PassManager.ViewModels.Bases
             }
             return needUpdate;
         }
-        private protected void DisplayItems(IEnumerable<Grouping<TypeOfItems, ItemPreview>> itemsToDisplay)
+        private protected void DisplayItems(IEnumerable<Grouping<string, ItemPreview>> itemsToDisplay)
         {
             if (itemsToDisplay != null && itemsToDisplay.Count() > 0)
             {
                 DisplayMsg(string.Empty, false);
-                Items = new ObservableCollection<Grouping<TypeOfItems, ItemPreview>>(itemsToDisplay);
+                Items = UpdateItems(itemsToDisplay);
             }
             else if (itemsToDisplay.Count() == 0)
             {
                 DisplayMsg($"You have no items yet, click on button below to add a new one!", true);
             }
         }
-        private protected ObservableCollection<Grouping<TypeOfItems, ItemPreview>> UpdateItems(IEnumerable<Grouping<TypeOfItems, ItemPreview>> newList)
+        private protected ObservableCollection<Grouping<string, ItemPreview>> UpdateItems(IEnumerable<Grouping<string, ItemPreview>> newList)
         {
-            return new ObservableCollection<Grouping<TypeOfItems, ItemPreview>>(newList);
+            return new ObservableCollection<Grouping<string, ItemPreview>>(newList);
         }
     }
 }

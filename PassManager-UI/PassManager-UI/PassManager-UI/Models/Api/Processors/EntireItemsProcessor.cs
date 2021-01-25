@@ -10,7 +10,7 @@ namespace PassManager.Models.Api.Processors
 {
     public class EntireItemsProcessor
     {
-        internal static async Task<IEnumerable<Grouping<TypeOfItems, ItemPreview>>> GetPreviews(HttpClient httpClient, string searchString = "")
+        internal static async Task<IEnumerable<Grouping<string, ItemPreview>>> GetPreviews(HttpClient httpClient, string searchString = "")
         {
             bool isSearch = false;
             if (searchString != "") isSearch = true; 
@@ -25,9 +25,10 @@ namespace PassManager.Models.Api.Processors
             }
             if (responseMessage.IsSuccessStatusCode)
             {
-                IEnumerable<ItemPreview> itemList = await responseMessage.Content.ReadAsAsync<IEnumerable<ItemPreview>>();
-                return itemList.GroupBy(item => item.ItemType)
-                                   .Select(item => new Grouping<TypeOfItems, ItemPreview>(item.Key, item));
+                var itemList = await responseMessage.Content.ReadAsAsync<IEnumerable<ItemPreview>>();
+                var groupedItems = itemList.GroupBy(item => item.ItemType)
+                    .Select(item => new Grouping<string, ItemPreview>(item.Key.ToSampleString(), item));
+                return groupedItems;
             }
             return null;
         }
