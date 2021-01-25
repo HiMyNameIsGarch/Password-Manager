@@ -1,12 +1,9 @@
 ﻿using PassManager.Models.Items;
-using System.Collections.ObjectModel;
 using PassManager.Enums;
 using System.Threading.Tasks;
 using PassManager.Models;
 using System.Collections.Generic;
 using PassManager.Models.Api;
-using System.Linq;
-using PassManager.Views.Popups;
 using PassManager.ViewModels.Bases;
 using PassManager.Models.Api.Processors;
 
@@ -23,35 +20,13 @@ namespace PassManager.ViewModels.FlyoutItems
         }
         private protected async override Task GetDataAsync()
         {
-            if (IsInternet())
-            {
-                IEnumerable<Grouping<TypeOfItems, ItemPreview>> previews = await EntireItemsProcessor.GetPreviews(ApiHelper.ApiClient);
-                if(previews != null && previews.Count() > 0)
-                {
-                    DisplayMsg(string.Empty, false);
-                    Items = new ObservableCollection<Grouping<TypeOfItems, ItemPreview>>(previews);
-                }
-                else if (previews.Count() == 0)
-                {
-                    DisplayMsg("You have no items yet, click on button below to add a new one!",true);
-                }
-            }
+            IEnumerable<Grouping<TypeOfItems, ItemPreview>> previews = await EntireItemsProcessor.GetPreviews(ApiHelper.ApiClient);
+            DisplayItems(previews);
         }
-        private protected override async Task RefreshPageAsync()
+        private protected override async Task<IEnumerable<Grouping<TypeOfItems, ItemPreview>>> RefreshPageAsync()
         {
-            if (IsInternet())
-            {
-                IEnumerable<Grouping<TypeOfItems, ItemPreview>> previews = await EntireItemsProcessor.GetPreviews(ApiHelper.ApiClient);
-                await PageService.PopAllAsync(false);
-                if (IsListChanged(previews))
-                {
-                    Items = UpdateItems(previews);
-                }
-                else
-                {
-                    await PageService.PushPopupAsync(new WarningView("Your items are up to date!"),false);
-                }
-            }
+            var previews = await EntireItemsProcessor.GetPreviews(ApiHelper.ApiClient);
+            return previews;
         }
     }
 }

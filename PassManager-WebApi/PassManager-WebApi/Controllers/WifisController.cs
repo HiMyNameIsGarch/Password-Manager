@@ -25,11 +25,7 @@ namespace PassManager_WebApi.Controllers
                 .ThenByDescending(item => item.Name)
                 .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = "Wi-Fi", ItemType = TypeOfItems.Wifi })
                 .ToList();
-            //group them
-            IEnumerable<Grouping<TypeOfItems, ItemPreview>> groupedWifis = wifis
-                .GroupBy(item => item.ItemType)
-                .Select(item => new Grouping<TypeOfItems, ItemPreview>(item.Key, item));
-            return Ok(groupedWifis);
+            return Ok(wifis);
         }
         //GET api/Wifis/5
         public IHttpActionResult Get(int id)

@@ -1,12 +1,9 @@
 ﻿using PassManager.Models.Items;
-using System.Collections.ObjectModel;
 using PassManager.Models.Api;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using PassManager.Models;
 using PassManager.Enums;
-using System.Linq;
-using PassManager.Views.Popups;
 using PassManager.ViewModels.Bases;
 using PassManager.Models.Api.Processors;
 
@@ -24,35 +21,13 @@ namespace PassManager.ViewModels.FlyoutItems
         //functions
         private protected override async Task GetDataAsync()
         {
-            if (IsInternet())
-            {
-                IEnumerable<Grouping<TypeOfItems, ItemPreview>> previews = await PasswordProcessor.GetPreviews(ApiHelper.ApiClient);
-                if(previews != null && previews.Count() > 0)
-                {
-                    DisplayMsg(string.Empty, false);
-                    Items = new ObservableCollection<Grouping<TypeOfItems, ItemPreview>>(previews);
-                }
-                else if(previews.Count() == 0)
-                {
-                    DisplayMsg("You have no passwords yet, click on button below to add a new one!", true);
-                }
-            }
+            IEnumerable<Grouping<TypeOfItems, ItemPreview>> previews = await PasswordProcessor.GetPreviews(ApiHelper.ApiClient);
+            DisplayItems(previews);
         }
-        private protected override async Task RefreshPageAsync()
+        private protected override async Task<IEnumerable<Grouping<TypeOfItems, ItemPreview>>> RefreshPageAsync()
         {
-            if (IsInternet())
-            {
-                IEnumerable<Grouping<TypeOfItems, ItemPreview>> newList = await PasswordProcessor.GetPreviews(ApiHelper.ApiClient);
-                await PageService.PopAllAsync(false);
-                if (IsListChanged(newList))
-                {
-                    Items = UpdateItems(newList);
-                }
-                else
-                {
-                    await PageService.PushPopupAsync(new WarningView("Your passwords are up to date!"));
-                }
-            }
+            IEnumerable<Grouping<TypeOfItems, ItemPreview>> newList = await PasswordProcessor.GetPreviews(ApiHelper.ApiClient);
+            return newList;
         }
     }
 }

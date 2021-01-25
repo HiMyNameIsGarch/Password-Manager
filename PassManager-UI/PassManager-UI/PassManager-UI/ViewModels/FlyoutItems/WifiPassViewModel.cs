@@ -1,8 +1,11 @@
-﻿using System;
-using PassManager.Models.Items;
+﻿using PassManager.Models.Items;
 using PassManager.Enums;
+using PassManager.Models.Api.Processors;
 using System.Threading.Tasks;
 using PassManager.ViewModels.Bases;
+using PassManager.Models;
+using PassManager.Models.Api;
+using System.Collections.Generic;
 
 namespace PassManager.ViewModels.FlyoutItems
 {
@@ -12,18 +15,20 @@ namespace PassManager.ViewModels.FlyoutItems
         {
             if (IsInternet())
             {
-                //add some data for page
+                GetDataAsync().Await(HandleException, true,true,false);
             }
         }
 
-        private protected override Task GetDataAsync()
+        private protected override async Task GetDataAsync()
         {
-            throw new NotImplementedException();
+            var previews = await WifiProcessor.GetPreviews(ApiHelper.ApiClient);
+            DisplayItems(previews);
         }
 
-        private protected override Task RefreshPageAsync()
+        private protected override async Task<IEnumerable<Grouping<TypeOfItems, ItemPreview>>> RefreshPageAsync()
         {
-            throw new NotImplementedException();
+            var newList = await WifiProcessor.GetPreviews(ApiHelper.ApiClient);
+            return newList;
         }
     }
 }
