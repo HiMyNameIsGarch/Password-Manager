@@ -31,7 +31,13 @@ namespace PassManager.Models.Api.Processors
             if (responseMessage.IsSuccessStatusCode)
                 return await LogIn(httpClient, username, password);
             else
-                return new TaskStatus(true, "The form input is invalid!");
+            {
+                string errorMsg = await responseMessage.Content.ReadAsStringAsync();
+                if (errorMsg.Contains("is already taken"))
+                    return new TaskStatus(true, $"Email \"{username}\" is already taken, try to log in!");
+
+                return new TaskStatus(true, "Something went wrong please try again!");
+            }
         }
         internal static async Task<TaskStatus> LogIn(HttpClient httpClient, string username, string password)
         {

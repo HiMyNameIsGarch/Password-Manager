@@ -6,6 +6,8 @@ using System.Windows.Input;
 using Xamarin.Forms;
 using System;
 using PassManager.Models;
+using PassManager.Views.Popups;
+using System.Threading.Tasks;
 
 namespace PassManager.Views
 {
@@ -18,7 +20,6 @@ namespace PassManager.Views
             IsPasswordVisible = true;
             PassEntryIcon = ImageSource.FromResource($"PassManager-UI.Images.Locked.png");
             ConfirmPassEntryIcon = ImageSource.FromResource($"PassManager-UI.Images.Locked.png");
-            ActionStatus = true;
             CurrentAction = TypeOfActions.Sign_In;
             IsRegisterPage = false;
             //set commands
@@ -31,7 +32,6 @@ namespace PassManager.Views
         }
         private TypeOfActions CurrentAction { get; set; }
         //private props
-        private string _errorMsg;
         private string _anotherPageText;
         private string _questionForUser;
         private string _username;
@@ -40,8 +40,6 @@ namespace PassManager.Views
         private ImageSource _passEntryIcon;
         private ImageSource _confirmPassEntryIcon;
         //booleans
-        private bool _isError;
-        private bool _actionStatus;
         private bool _isRegisterPage;
         private bool _isPasswordVisible;
         private bool _isConfirmPassVisible;
@@ -103,11 +101,6 @@ namespace PassManager.Views
             get { return _confirmPass; }
             set { _confirmPass = value; NotifyPropertyChanged(); }
         }
-        public string ErrorMsg
-        {
-            get { return _errorMsg; }
-            private set { _errorMsg = value; NotifyPropertyChanged(); }
-        }
         public string AnotherPageText
         {
             get { return _anotherPageText; }
@@ -117,16 +110,6 @@ namespace PassManager.Views
         {
             get { return _questionForUser; }
             private set { _questionForUser = value; NotifyPropertyChanged(); }
-        }
-        public bool IsError
-        {
-            get { return _isError; }
-            private set { _isError = value; NotifyPropertyChanged(); }
-        }
-        public bool ActionStatus
-        {
-            get { return _actionStatus; }
-            private set { _actionStatus = value; NotifyPropertyChanged(); }
         }
         public bool IsRegisterPage
         {
@@ -163,11 +146,9 @@ namespace PassManager.Views
             }
             //empty user fields and errors if exists
             Username = Password = ConfirmPass = string.Empty;
-            DisplayError(string.Empty);
         }
         private void Action()
         {
-            ActionStatus = false;
             switch (CurrentAction)
             {
                 case TypeOfActions.Register:
@@ -176,10 +157,7 @@ namespace PassManager.Views
                 case TypeOfActions.Sign_In:
                     SignIn();
                     break;
-                default:
-                    break;
             }
-            ActionStatus = true;
         }
         //methods
         private async void Register()
@@ -187,7 +165,7 @@ namespace PassManager.Views
             if (IsInternet())
             {
                 //check if all fields are completed
-                if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password) || String.IsNullOrWhiteSpace(ConfirmPass)) DisplayError("You need to complete all fields in order to register!");
+                if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password) || String.IsNullOrWhiteSpace(ConfirmPass)) await DisplayError("You need to complete all fields in order to register!");
                 else
                 {
                     //verify status of fields
@@ -199,20 +177,29 @@ namespace PassManager.Views
                         {
                             if (ConfirmPass == Password)
                             {
-                                string authPassword = VaultManager.CreateAuthPassword(Username, Password);
-                                Models.TaskStatus statusRegister = await UserProcessor.Register(ApiHelper.ApiClient, Username, authPassword, authPassword);
-                                if (!statusRegister.IsError)
+                                if (!Password.Contains(Username))
                                 {
-                                    Username = Password = ConfirmPass = string.Empty;
-                                    Models.PageService.ChangeMainPage(new MainView());
+                                    await PageService.PushPopupAsync(new WaitForActionView());
+                                    string authPassword = VaultManager.CreateAuthPassword(Username, Password);
+                                    Models.TaskStatus statusRegister = await UserProcessor.Register(ApiHelper.ApiClient, Username, authPassword, authPassword);
+                                    if (!statusRegister.IsError)
+                                    {
+                                        Username = Password = ConfirmPass = string.Empty;
+                                        PageService.ChangeMainPage(new MainView());
+                                    }
+                                    else
+                                    {
+                                        await PageService.PopPopupAsync();
+                                        await DisplayError(statusRegister.Message);
+                                    }
                                 }
-                                else DisplayError(statusRegister.Message);
+                                else await DisplayError("Your email can't be in your password!");
                             }
-                            else DisplayError("Your confirm password is not equal with your password!");
+                            else await DisplayError("Your confirm password is not equal with your password!");
                         }
-                        else DisplayError(passwordStatus.Message);
+                        else await DisplayError(passwordStatus.Message);
                     }
-                    else DisplayError(emailStatus.Message);
+                    else await DisplayError(emailStatus.Message);
                 }
             }
         }
@@ -221,23 +208,22 @@ namespace PassManager.Views
             if (IsInternet())
             {
                 //check if fields are completed
-                if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password)) DisplayError("You need to complete all fields in order to register!");
+                if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password)) await DisplayError("You need to complete all fields in order to register!");
                 else
                 {
-                    await Models.PageService.PushPopupAsync(new Popups.WaitForActionView());
+                    await PageService.PushPopupAsync(new WaitForActionView());
                     //create auth password
-                    string authPassword = Models.VaultManager.CreateAuthPassword(Username, Password);
+                    string authPassword = VaultManager.CreateAuthPassword(Username, Password);
                     Models.TaskStatus statusLogin = await UserProcessor.LogIn(ApiHelper.ApiClient, Username, authPassword);
                     if (!statusLogin.IsError)
                     {
                         Username = Password = string.Empty;
-                        Models.PageService.ChangeMainPage(new MainView());
-                        await Models.PageService.PopPopupAsync();
+                        PageService.ChangeMainPage(new MainView());
                     }
                     else
                     {
-                        await Models.PageService.PopPopupAsync();
-                        DisplayError(statusLogin.Message);
+                        await PageService.PopPopupAsync();
+                        await DisplayError(statusLogin.Message);
                     }
                 }
             }
@@ -249,10 +235,9 @@ namespace PassManager.Views
             QuestionForUser = question;
         }
         //the method can be used to clear the errors as well
-        private void DisplayError(string errorMsg)
+        private async Task DisplayError(string errorMsg)
         {
-            IsError = true;
-            ErrorMsg = errorMsg;
+            await PageService.PushPopupAsync(new ErrorView(errorMsg));
         }
     }
 }

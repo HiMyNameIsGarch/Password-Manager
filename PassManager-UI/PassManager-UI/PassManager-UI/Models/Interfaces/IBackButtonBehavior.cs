@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Windows.Input;
 
 namespace PassManager.Models.Interfaces
 {
     public interface IBackButtonBehavior
     {
-        System.Windows.Input.ICommand GoBack { get; }
+        ICommand GoBack { get; }
         void GoBackButton();
     }
 }

@@ -6,11 +6,12 @@ namespace PassManager_WebApi.Models
     public partial class Password
     {
         public Password() { }
-        public Password(PasswordVM passwordVM)
+        public Password(PasswordVM passwordVM, string userId)
         {
             ModifyTo(passwordVM);
             CreateDate = DateTime.Now;
             NumOfVisits = 1;
+            UserId = userId;
         }
 
         public void ModifyTo(PasswordVM passwordVM)
