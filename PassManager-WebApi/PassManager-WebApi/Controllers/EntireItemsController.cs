@@ -16,49 +16,59 @@ namespace PassManager_WebApi.Controllers
         //GET api/EntireItems
         public IHttpActionResult Get()//get latest passwords preview
         {
-            var previews = GetAllItems(GetCurrentUser());
-
+            var previews = GetAllItems();
+            
             return Ok(previews);
         }
-        //GET API/EntireItems/searchString
+        //GET API/EntireItems?searchString=a
         public IHttpActionResult Get(string searchString)
         {
-            if (string.IsNullOrEmpty(searchString))
-            {
-                return BadRequest("Your item is null or empty!");
-            }
-            var previews = GetAllItems(GetCurrentUser(), searchString);
+            var previews = SearchItems(searchString);
+
+            if(previews is null)
+                return BadRequest("Your search string can't be empty!");
+
             return Ok(previews);
         }
-        private IEnumerable<ItemPreview> GetAllItems(AspNetUser user, string searchString = "")
+        private IEnumerable<ItemPreview> GetAllItems()
         {
-            if(user != null)
-            {
-                //base list, where all the items will be stored
+            string userId = User.Identity.GetUserId();
+            //take passwords
+            var items = db.Passwords
+            .Where(item => item.UserId == userId)
+            .OrderByDescending(p => p.NumOfVisits)
+            .ThenBy(p => p.Name)
+            .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = item.Username, ItemType = TypeOfItems.Password })
+            .Union//take wifis
+            (db.Wifis
+            .Where(item => item.UserId == userId)
+            .OrderByDescending(p => p.NumOfVisits)
+            .ThenBy(p => p.Name)
+            .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = "Wi-Fi", ItemType = TypeOfItems.Wifi }));
 
-                //take passwords
-                var items = user.Passwords
-                .OrderByDescending(p => p.NumOfVisits)
-                .ThenBy(p => p.Name)
-                .Select(item => new ItemPreview(item.Id, item.Name, item.Username, TypeOfItems.Password))
-                .Union//take wifis
-                (user.Wifis
-                .OrderByDescending(p => p.NumOfVisits)
-                .ThenBy(p => p.Name)
-                .Select(item => new ItemPreview(item.Id, item.Name, "Wi-Fi", TypeOfItems.Wifi)));
-
-                if (!string.IsNullOrEmpty(searchString))
-                {
-                    items = items.Where(i => i.Title.Contains(searchString));
-                }
-
-                return items;
-            }
-            return null;
+            return items;
         }
-        private AspNetUser GetCurrentUser()
+        private IEnumerable<ItemPreview> SearchItems(string searchString)
         {
-            return db.AspNetUsers.Find(User.Identity.GetUserId());
+            if (string.IsNullOrEmpty(searchString)) return null;
+            //get current user id
+            string userId = User.Identity.GetUserId();
+            //get items from db
+            var items = db.Passwords
+                .Where(item => item.UserId == userId)
+                .OrderByDescending(p => p.NumOfVisits)
+                .ThenBy(p => p.Name)
+                .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = item.Username, ItemType = TypeOfItems.Password })
+                .Where(item => item.Title.Contains(searchString))
+                .Union//take wifis
+                (db.Wifis
+                .Where(item => item.UserId == userId)
+                .OrderByDescending(p => p.NumOfVisits)
+                .ThenBy(p => p.Name)
+                .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = "Wi-Fi", ItemType = TypeOfItems.Wifi }))
+                .Where(item => item.Title.Contains(searchString));
+            //return them
+            return items;
         }
     }
 }

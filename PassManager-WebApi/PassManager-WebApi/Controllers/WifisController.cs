@@ -22,7 +22,7 @@ namespace PassManager_WebApi.Controllers
             IEnumerable<ItemPreview> wifis = db.Wifis
                 .Where(item => item.UserId == userId)
                 .OrderByDescending(item => item.NumOfVisits)
-                .ThenByDescending(item => item.Name)
+                .ThenBy(item => item.Name)
                 .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = "Wi-Fi", ItemType = TypeOfItems.Wifi });
             
             return Ok(wifis);

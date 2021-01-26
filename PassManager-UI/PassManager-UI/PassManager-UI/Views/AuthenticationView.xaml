@@ -2,7 +2,6 @@
 <ContentPage NavigationPage.HasNavigationBar="False" xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:CRender="clr-namespace:PassManager.CustomRenderer"
-             xmlns:MarkExt="clr-namespace:PassManager.MarkupExtensions"
              x:Class="PassManager.Views.AuthenticationView">
     <Grid>
             <!--#region Main grid settings-->
@@ -25,7 +24,7 @@
             <!--#endregion-->
         <StackLayout Grid.Row="2" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Start" Orientation="Horizontal">
             <Label Text="{Binding QuestionForUser}" VerticalOptions="Center" FontSize="14" TextColor="#354f52"/>
-            <Button Text="{Binding AnotherPageText}" IsEnabled="{Binding ActionStatus}" Command="{Binding ChangePageCommand}" Style="{StaticResource BasicBtn}"/>
+            <Button Text="{Binding AnotherPageText}" Command="{Binding ChangePageCommand}" Style="{StaticResource BasicBtn}"/>
         </StackLayout>
         <Grid Grid.Row="1" Grid.Column="1">
                 <!--#region Second grid settings-->
@@ -36,17 +35,14 @@
                 </LinearGradientBrush>
             </Grid.Background>
             <Grid.RowDefinitions>
-                <RowDefinition Height="3*"/>
-                <RowDefinition Height="3*"/>
+                <RowDefinition Height="6*"/>
                 <RowDefinition Height="13*"/>
             </Grid.RowDefinitions>
                 <!--#endregion-->
-            <Label Grid.Row="0" HorizontalOptions="CenterAndExpand" VerticalOptions="End" Text="{Binding PageTitle}" FontSize="26" 
+            <Label Grid.Row="0" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Text="{Binding PageTitle}" FontSize="26" 
                    FontAttributes="Bold"/>
-            <Label Grid.Row="1" Text="{Binding ErrorMsg}" Padding="20,0,20,0" FontSize="16" TextColor="Red" VerticalOptions="CenterAndExpand"
-                   HorizontalOptions="CenterAndExpand" IsVisible="{Binding IsError}"/>
-                <!--#region Fields-->
-            <StackLayout Grid.Row="2" VerticalOptions="StartAndExpand">
+            <!--#region Fields-->
+            <StackLayout Grid.Row="1" VerticalOptions="Start">
                 <StackLayout Padding="0,5,0,5">
                     <!--Email-->
                     <Frame Style="{StaticResource CustomFrame}">
