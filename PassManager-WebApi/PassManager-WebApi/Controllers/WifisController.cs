@@ -27,6 +27,21 @@ namespace PassManager_WebApi.Controllers
             
             return Ok(wifis);
         }
+        //GET api/Wifi?lastCreated=true
+        public IHttpActionResult Get(bool lastCreated)
+        {
+            if (lastCreated)
+            {
+                var userId = User.Identity.GetUserId();
+                var lastestWifi = db.Wifis
+                    .Where(w => w.UserId == userId)
+                    .OrderByDescending(s => s.CreateDate)
+                    .Take(1)
+                    .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = "Wi-Fi", ItemType = TypeOfItems.Wifi });
+                return Ok(lastestWifi.FirstOrDefault());
+            }
+            return BadRequest();
+        }
         //GET api/Wifis/5
         public IHttpActionResult Get(int id)
         {

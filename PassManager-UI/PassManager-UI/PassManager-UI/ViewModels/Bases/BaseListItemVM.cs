@@ -10,8 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using PassManager.Views.Popups;
 using Newtonsoft.Json;
-using PassManager.Models.Api;
-using PassManager.Models.Api.Processors;
+using System.Diagnostics;
 
 namespace PassManager.ViewModels.Bases
 {
@@ -45,24 +44,7 @@ namespace PassManager.ViewModels.Bases
                 _updateModel = JsonConvert.DeserializeObject<UpdateModel>(_update);
                 if(_updateModel != null)
                 {
-                    bool hasItems = Items.Count() > 0;
-                    switch (_updateModel.UpdateType)
-                    {
-                        case TypeOfUpdates.Null:
-                            //log
-                            break;
-                        case TypeOfUpdates.Create:
-                            UpdateItems(_updateModel.UpdateType).Await(HandleException, false, true, false);
-                            break;
-                        case TypeOfUpdates.Modify:
-                            if (hasItems)
-                                UpdateItems(_updateModel.UpdateType).Await(HandleException, false, true, false);
-                            break;
-                        case TypeOfUpdates.Delete:
-                            if (hasItems)
-                                Delete(_updateModel.IdToDelete);
-                            break;
-                    }
+                    UpdateItem(_updateModel);
                 }
             }
         }
@@ -164,32 +146,7 @@ namespace PassManager.ViewModels.Bases
         }
         private protected abstract Task<IEnumerable<Grouping<string, ItemPreview>>> RefreshPageAsync();
         //abstract functions
-        private async Task UpdateItems(TypeOfUpdates updateType)
-        {
-            if (IsInternet())
-            {
-                ItemPreview newItem = await EntireItemsProcessor.GetUpdate(ApiHelper.ApiClient, updateType);
-                var currentItems = Items.Where(s => s.Key == newItem.ItemType.ToSampleString()).FirstOrDefault();
-                if(currentItems is null)
-                {
-                    DisplayMsg("",false);
-                    Items.Add(new Grouping<string, ItemPreview>(newItem.ItemType.ToSampleString(), new List<ItemPreview>() { newItem }));
-                }
-                else if (updateType == TypeOfUpdates.Create)
-                {
-                    currentItems.Add(newItem);
-                }
-                else if(updateType == TypeOfUpdates.Modify)
-                {
-                    var itemToBeModified = currentItems.FirstOrDefault(s => s.Id == newItem.Id);
-                    if(itemToBeModified != null)
-                    {
-                        int index = currentItems.IndexOf(itemToBeModified);
-                        currentItems.SetNewItem(index, newItem);
-                    }
-                }
-            }
-        }
+        private protected abstract Task GetDataAsync();
         private void Delete(int id)
         {
             foreach (var item in Items)
@@ -207,8 +164,36 @@ namespace PassManager.ViewModels.Bases
                 DisplayMsg("You have no passwords yet, click on button below to add a new one!", true);
             }
         }
-        private protected abstract Task GetDataAsync();
         //methods
+        private void UpdateItem(UpdateModel updateModel)
+        {
+            var currentItems = Items.Where(k => k.Key == updateModel.ItemPreview.ItemType.ToSampleString())
+                    .FirstOrDefault();
+            if(currentItems is null)//that means no items of that type are in list
+            {
+                //add new item
+                DisplayMsg("", false);//make sure there is no msg
+                Items.Add(new Grouping<string, ItemPreview>(updateModel.ItemPreview.ItemType.ToSampleString(), new List<ItemPreview>() { updateModel.ItemPreview }));
+            }
+            else if(updateModel.UpdateType == TypeOfUpdates.Create)
+            {
+                currentItems.Add(updateModel.ItemPreview);
+            }
+            else if(updateModel.UpdateType == TypeOfUpdates.Modify)
+            {//get current item that will be modified later
+                var itemToBeModified = currentItems.FirstOrDefault(s => s.Id == updateModel.ItemPreview.Id);
+                if (itemToBeModified != null)
+                {
+                    int index = currentItems.IndexOf(itemToBeModified);//get index of the item from the list
+                    currentItems.SetNewItem(index, updateModel.ItemPreview);
+                }
+            }
+            else if(updateModel.UpdateType == TypeOfUpdates.Delete)
+            {
+                Delete(updateModel.ItemPreview.Id);
+            }
+            Items = UpdateItems(Items);//update the list with itself(bug: (when updating an item it will not be displayed so i updated the current list))
+        }
         private protected void DisplayMsg(string text, bool hasItems)
         {
             NoItemsText = text;

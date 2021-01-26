@@ -25,6 +25,22 @@ namespace PassManager_WebApi.Controllers
                 .Select(item => new ItemPreview(item.Id, item.Name, item.Username, TypeOfItems.Password)).ToList();
             return Ok(passwords);
         }
+        //GET api/Password?lastCreated=true
+        public IHttpActionResult Get(bool lastCreated)
+        {
+            if (lastCreated)
+            {
+                var userId = User.Identity.GetUserId();
+                var lastestPass = db.Passwords
+                    .Where(w => w.UserId == userId)
+                    .OrderByDescending(s => s.CreateDate)
+                    .Take(1)
+                    .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = item.Username, ItemType = TypeOfItems.Password});
+                return Ok(lastestPass.FirstOrDefault());
+            }
+            return BadRequest();
+        }
+
         //GET api/Passwords/id
         public IHttpActionResult Get(int id)
         {

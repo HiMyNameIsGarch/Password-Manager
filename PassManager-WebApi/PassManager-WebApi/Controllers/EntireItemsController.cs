@@ -30,29 +30,6 @@ namespace PassManager_WebApi.Controllers
             var previews = GetAllItems(GetCurrentUser(), searchString);
             return Ok(previews);
         }
-        //GET API/EntireItems/updateType
-        public IHttpActionResult Get(TypeOfUpdates updateType)
-        {
-            var user = GetCurrentUser();
-            if (updateType != TypeOfUpdates.Create && updateType != TypeOfUpdates.Modify)
-            {
-                return BadRequest("UpdateType is invalid!");
-            }
-            //take passwords
-            var password = user.Passwords
-            .OrderByDescending(s => updateType == TypeOfUpdates.Create ? s.CreateDate : s.LastModified)
-            .Select(item => new ItemPreview(item.Id, item.Name, item.Username, TypeOfItems.Password)).Take(1)
-            .Union
-            (user.Wifis
-            .OrderByDescending(s => updateType == TypeOfUpdates.Create ? s.CreateDate : s.LastModified)
-            .Select(item => new ItemPreview(item.Id, item.Name, "Wi-Fi", TypeOfItems.Wifi)).Take(1))
-            .FirstOrDefault();
-            if (password is null)
-            {
-                return BadRequest("No item were updated!");
-            }
-            return Ok(password);
-        }
         private IEnumerable<ItemPreview> GetAllItems(AspNetUser user, string searchString = "")
         {
             if(user != null)

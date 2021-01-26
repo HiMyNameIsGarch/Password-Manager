@@ -6,10 +6,9 @@ using PassManager.Models.Api;
 using System.Threading.Tasks;
 using PassManager.Models;
 using PassManager.Views.Popups;
-using Rg.Plugins.Popup.Services;
-using Newtonsoft.Json;
 using PassManager.ViewModels.Bases;
 using PassManager.Models.Api.Processors;
+using PassManager.Enums;
 
 namespace PassManager.ViewModels.CreateItems
 {
@@ -82,16 +81,20 @@ namespace PassManager.ViewModels.CreateItems
             {
                 bool wantsToLeave = await PageService.DisplayAlert("Wait!", "Are you sure you want to leave?", "Yes", "No");
                 if (wantsToLeave)
-                {
                     await Shell.Current.Navigation.PopToRootAsync();
-                }
             }
             else
-            {
                 await Shell.Current.Navigation.PopToRootAsync();
-            }
         }
-        //functions
+        private async void CopyUsernameToClipboard() { await CopyToClipboard(Password.Username); }
+        private async void CopyPasswordToClipboard() { await CopyToClipboard(Password.PasswordEncrypted); }
+        private async void CopyUrlToClipboard() { await CopyToClipboard(Password.Url); }
+        private void ChangeVisOfPass()
+        {
+            PassEntryIcon = ImageSource.FromResource($"PassManager-UI.Images.{(IsPasswordVisible ? "Open" : "Locked")}.png");
+            IsPasswordVisible = !IsPasswordVisible;
+        }
+        //override functions
         private protected async override Task GetDataAsync(int id)
         {
             if (IsInternet())
@@ -115,110 +118,77 @@ namespace PassManager.ViewModels.CreateItems
             bool isSuccess = await PasswordProcessor.CreatePassword(ApiHelper.ApiClient, encryptedPass);
             if (isSuccess)
             {
-                UpdateModel Model = new UpdateModel(Enums.TypeOfUpdates.Create);
-                string stringModel = JsonConvert.SerializeObject(Model);
-                await GoTo("Password", $"?update={stringModel}");
+                var latestCreatedItem = await EntireItemsProcessor.GetLatestCreated(ApiHelper.ApiClient, TypeOfItems.Password);
+                if(latestCreatedItem is null)
+                {
+                    await PageService.PushPopupAsync(new ErrorView("Something went wrong and your password has not been created, try again!"));
+                }
+                else
+                {
+                    UpdateModel model = new UpdateModel(TypeOfUpdates.Create, latestCreatedItem);
+                    await GoTo("Password", model);
+                }
             }
             else
-            {
                 await PageService.PushPopupAsync(new ErrorView("Something went wrong and your password has not been created, try again!"));
-            }
         }
         private protected async override Task Delete()
         {
             bool isSuccess = await PasswordProcessor.Delete(ApiHelper.ApiClient, Password.Id);
             if (isSuccess)
             {
-                UpdateModel Model = new UpdateModel(Enums.TypeOfUpdates.Delete, Password.Id);
-                string stringModel = JsonConvert.SerializeObject(Model);
-                await GoTo("Password", $"?update={stringModel}");
+                UpdateModel model = new UpdateModel(TypeOfUpdates.Delete, new ItemPreview() { Id = Password.Id, ItemType = TypeOfItems.Wifi });
+                await GoTo("Password", model);
             }
             else
-            {
                 await PageService.PushPopupAsync(new ErrorView("Something went wrong and your password has not been deleted, try again!"));
-            }
         }
         private protected async override Task Modify(int id)
         {
             var encryptedPass = (Password)EncryptItem(Password);
-            bool isSuccess = await PasswordProcessor.Modify(ApiHelper.ApiClient, id, Password);
+            bool isSuccess = await PasswordProcessor.Modify(ApiHelper.ApiClient, id, encryptedPass);
             if (isSuccess)
             {
                 if ((_tempPassword.Name != Password.Name) || (_tempPassword.Username != Password.Username))//if some props from itempreviews changed, then update the item
                 {
-                    UpdateModel Model = new UpdateModel(Enums.TypeOfUpdates.Modify);
-                    string stringModel = JsonConvert.SerializeObject(Model);
-                    await GoTo("Password", $"?update={stringModel}");
+                    UpdateModel model = new UpdateModel(TypeOfUpdates.Modify, new ItemPreview(Password.Id, Password.Name, Password.Username, TypeOfItems.Password));
+                    await GoTo("Password", model);
                 }
                 else
-                {
                     await GoTo("Password");
-                }
             }
             else
-            {
                 await PageService.PushPopupAsync(new ErrorView("Something went wrong and your password has not been modified, try again!"));
-            }
         }
-        private protected async override Task<bool> IsModelValid()
+        private protected override Models.TaskStatus IsModelValid()
         {
             string msgToDisplay = string.Empty;
             if (string.IsNullOrEmpty(Password.Name) || string.IsNullOrEmpty(Password.Username) || string.IsNullOrEmpty(Password.PasswordEncrypted))
-            {
-                msgToDisplay = "You need to complete at least 'name', 'username' and 'password' in order to save!";
-            }
+                msgToDisplay = "You need to complete at least \"name\", \"username\" and \"password\" in order to save!";
             else if (Password.Name.Length > 64)
-            {
-                msgToDisplay = "Your name must be max 64 characters long!";
-            }
+                msgToDisplay = "Your Name must be max 64 characters long!";
             else if (Password.Username.Length > 64)
-            {
-                msgToDisplay = "Your username must be max 64 characters long!";
-            }
+                msgToDisplay = "Your Username must be max 64 characters long!";
             else if (Password.Url?.Length > 256)
-            {
                 msgToDisplay = "Your URL must be max 264 characters long!";
-            }
+
             if (string.IsNullOrEmpty(msgToDisplay))
-            {
-                return true;
-            }
+                return new Models.TaskStatus(false, string.Empty);
             else
-            {
-                //pop all popups
-                await PopupNavigation.Instance.PopAllAsync();
-                //push main
-                await PageService.PushPopupAsync(new ErrorView(msgToDisplay));
-                return false;
-            }
-        }
-        //something else
-        private async void CopyUsernameToClipboard() { await CopyToClipboard(Password.Username); }
-        private async void CopyPasswordToClipboard() { await CopyToClipboard(Password.PasswordEncrypted); }
-        private async void CopyUrlToClipboard() { await CopyToClipboard(Password.Url); }
-        private void ChangeVisOfPass()
-        {
-            PassEntryIcon = ImageSource.FromResource($"PassManager-UI.Images.{(IsPasswordVisible ? "Open" : "Locked")}.png");
-            IsPasswordVisible = !IsPasswordVisible;
+                return new Models.TaskStatus(true, msgToDisplay);
         }
         private protected override object EncryptItem(object obj)
         {
             var passwordToEncrypt = (Password)obj;
             passwordToEncrypt.PasswordEncrypted = VaultManager.EncryptString(passwordToEncrypt.PasswordEncrypted);
-            if (!string.IsNullOrEmpty(passwordToEncrypt.Notes))
-            {
-                passwordToEncrypt.Notes = VaultManager.EncryptString(passwordToEncrypt.Notes);
-            }
+            passwordToEncrypt.Notes = VaultManager.EncryptString(passwordToEncrypt.Notes);
             return passwordToEncrypt;
         }
         private protected override object DecryptItem(object obj)
         {
             var passwordToDecrypt = (Password)obj;
             passwordToDecrypt.PasswordEncrypted = VaultManager.DecryptString(passwordToDecrypt.PasswordEncrypted);
-            if (!string.IsNullOrEmpty(passwordToDecrypt.Notes))
-            {
-                passwordToDecrypt.Notes = VaultManager.DecryptString(passwordToDecrypt.Notes);
-            }
+            passwordToDecrypt.Notes = VaultManager.DecryptString(passwordToDecrypt.Notes);
             return passwordToDecrypt;
         }
     }
