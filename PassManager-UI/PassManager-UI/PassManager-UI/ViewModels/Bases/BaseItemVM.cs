@@ -7,6 +7,7 @@ using System;
 using Newtonsoft.Json;
 using PassManager.Views.Popups;
 using Xamarin.Essentials;
+using Rg.Plugins.Popup.Services;
 
 namespace PassManager.ViewModels.Bases
 {
@@ -18,7 +19,7 @@ namespace PassManager.ViewModels.Bases
         {
             //set defaults values in case no parameter passed
             ChangeProps(ItemPageState.Null, "Save", "No data provided", true);
-            ItemType = itemType.ToString();
+            ItemType = itemType.ToSampleString();
             _save = new Command(ChangePageType);
             _displayMoreActions = new Command(DisplayMore);
             _deleteItem = new Command(AskToDeleteItemAsync);
@@ -143,7 +144,7 @@ namespace PassManager.ViewModels.Bases
             {
                 if (IsInternet())
                 {
-                    await PageService.PushPopupAsync(new Views.Popups.WaitForActionView());
+                    await PageService.PushPopupAsync(new WaitForActionView());
                     try
                     {
                         await Delete();
@@ -176,24 +177,26 @@ namespace PassManager.ViewModels.Bases
                 //open popup
                 if(PageState == ItemPageState.Create || PageState == ItemPageState.Edit)
                 {
-                    await PageService.PushPopupAsync(new Views.Popups.WaitForActionView(),false); 
+                    await PageService.PushPopupAsync(new WaitForActionView(),false); 
                 }
                 switch (PageState)
                 {
                     case ItemPageState.Create:
-                        if (await IsModelValid())
-                        {
+                        var createStatus = IsModelValid();
+                        if (!createStatus.IsError)
                             Create().Await(HandleException, false, true, false);
-                        }
+                        else
+                            await DisplayPopupError(createStatus.Message);
                         break;
                     case ItemPageState.View:
                         ChangeProps(ItemPageState.Edit, "Save", $"Edit {ItemType}", false);
                         break;
                     case ItemPageState.Edit:
-                        if (await IsModelValid())
-                        {
+                        var editStatus = IsModelValid();
+                        if (!editStatus.IsError)
                             Modify(_itemId).Await(HandleException, false, true, false);
-                        }
+                        else 
+                            await DisplayPopupError(editStatus.Message);
                         break;
                 }
             }
@@ -202,46 +205,55 @@ namespace PassManager.ViewModels.Bases
         private protected abstract Task Create();
         private protected abstract Task Delete();
         private protected abstract Task Modify(int id);
-        private protected abstract Task<bool> IsModelValid();//this function will check if the item is valid(title not to be more than 25 char etc etc) other wise will display a popup with the info
+        private protected abstract Task GetDataAsync(int id);
+        private protected abstract Models.TaskStatus IsModelValid();//this function will check if the item is valid(title not to be more than 25 char etc etc) other wise will display a popup with the info
         private protected abstract object EncryptItem(object obj);//gen an object(an item for that particular page) and return the encrypted version
         private protected abstract object DecryptItem(object obj);//get an object(an item for that particular page) and return the decrypted version
         //functions
-        private protected abstract Task GetDataAsync(int id);
+        private async Task DisplayPopupError(string msg)
+        {
+            //pop all popups
+            await PopupNavigation.Instance.PopAllAsync();
+            //push main
+            await PageService.PushPopupAsync(new ErrorView(msg));
+        }
         private protected void ChangeProps(ItemPageState pageState, string btnText, string pageTitle, bool isReadOnly)
         {
             if(pageState == ItemPageState.View)
             {
-                CanCopy = true;
-                CanDelete = true;
+                CanCopy = CanDelete = true;
             }
             else if(pageState == ItemPageState.Edit)
             {
+                CanCopy = false;
                 CanDelete = true;
             }
             else
             {
-                CanCopy = false;
-                CanDelete = false;
+                CanCopy = CanDelete = false;
             }
             PageState = pageState;
             ActionBtnText = btnText;
             PageTitle = pageTitle;
             ReadOnly = isReadOnly;
         }
-        private protected async Task GoTo(string itemPage, string parameters = "")
+        private protected async Task GoTo(string itemPage, UpdateModel updateModel = null)
         {
+            //construct parameters based on model
+            string parameters = updateModel != null ? JsonConvert.SerializeObject(updateModel) : "";
+            //get current location
             string location = Shell.Current.CurrentState.Location.ToString();
             location = location.Replace("//", "");
             string[] path = location.Split('/');
             if (path[0] == "EntireItems")
             {
-                await Shell.Current.GoToAsync($"///EntireItems{parameters}", false);
-                await Shell.Current.GoToAsync($"///{itemPage}{parameters}", false);
+                await Shell.Current.GoToAsync($"///EntireItems?update={parameters}", false);
+                await Shell.Current.GoToAsync($"///{itemPage}?update={parameters}", false);
             }
             else
             {
-                await Task.WhenAll(Shell.Current.GoToAsync($"///{itemPage}{parameters}", false),
-                    Shell.Current.GoToAsync($"///EntireItems{parameters}", false),
+                await Task.WhenAll(Shell.Current.GoToAsync($"///{itemPage}?update={parameters}", false),
+                    Shell.Current.GoToAsync($"///EntireItems?update={parameters}", false),
                     Shell.Current.GoToAsync($"///{itemPage}", false));
             }
             if (IsUwp)
@@ -255,9 +267,7 @@ namespace PassManager.ViewModels.Bases
             {
                 string clipboardText = await Clipboard.GetTextAsync() ?? "";
                 if (textToCopy != clipboardText)
-                {
                     await Clipboard.SetTextAsync(textToCopy);
-                }
             }
         }
     }

@@ -17,7 +17,7 @@ namespace PassManager.Models
         }
         public static string EncryptString(string plainText)
         {
-            if (string.IsNullOrEmpty(plainText)) return string.Empty;
+            if (string.IsNullOrEmpty(plainText)) return plainText;
 
             byte[] array;
             using (Aes aes = CreateCipher())
@@ -39,7 +39,7 @@ namespace PassManager.Models
         }
         public static string DecryptString(string textToDecrypt)
         {
-            if (string.IsNullOrEmpty(textToDecrypt)) return string.Empty;
+            if (string.IsNullOrEmpty(textToDecrypt)) return textToDecrypt;
 
             byte[] buffer = Convert.FromBase64String(textToDecrypt);
 

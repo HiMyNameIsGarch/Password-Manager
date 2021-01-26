@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace PassManager.Models.Api.Processors
 {
-    public class EntireItemsProcessor
+    internal class EntireItemsProcessor
     {
-        internal static async Task<IEnumerable<Grouping<string, ItemPreview>>> GetPreviews(HttpClient httpClient, string searchString = "")
+        public static async Task<IEnumerable<Grouping<string, ItemPreview>>> GetPreviews(HttpClient httpClient, string searchString = "")
         {
             bool isSearch = false;
             if (searchString != "") isSearch = true; 
@@ -32,21 +32,21 @@ namespace PassManager.Models.Api.Processors
             }
             return null;
         }
-        internal static async Task<ItemPreview> GetUpdate(HttpClient httpClient, TypeOfUpdates updateType)
+        public static async Task<ItemPreview> GetLatestCreated(HttpClient httpClient, TypeOfItems typeOfItems)
         {
             HttpResponseMessage responseMessage = null;
             try
             {
-                responseMessage = await httpClient.GetAsync($"api/EntireItems?updateType={updateType}");
+                responseMessage = await httpClient.GetAsync($"api/{typeOfItems}s?lastCreated=true");
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw (ex);
             }
             if (responseMessage.IsSuccessStatusCode)
             {
-                ItemPreview newItem = await responseMessage.Content.ReadAsAsync<ItemPreview>();
-                return newItem;
+                ItemPreview item = await responseMessage.Content.ReadAsAsync<ItemPreview>();
+                return item;
             }
             return null;
         }

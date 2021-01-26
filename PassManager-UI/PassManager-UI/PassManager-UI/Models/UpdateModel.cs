@@ -1,24 +1,16 @@
 ﻿using PassManager.Enums;
+using PassManager.Models.Items;
 
 namespace PassManager.Models
 {
     public class UpdateModel
     {
-        public UpdateModel(TypeOfUpdates updateType, int id = -1)
+        public UpdateModel(TypeOfUpdates updateType, ItemPreview item)
         {
             UpdateType = updateType;
-            _id = id;
+            ItemPreview = item;
         }
-        private int _id;
         public TypeOfUpdates UpdateType { get; set; }
-        public int IdToDelete //if the updatetype is delete
-        {
-            get { return SetIfDeleteUpdate(_id); }// then return the value of the id
-            set { _id = SetIfDeleteUpdate(value); }//the set the value
-        }
-        private int SetIfDeleteUpdate(int value)
-        {
-            return UpdateType == TypeOfUpdates.Delete ? value : -1;
-        }
+        public ItemPreview ItemPreview { get; set; }
     }
 }
