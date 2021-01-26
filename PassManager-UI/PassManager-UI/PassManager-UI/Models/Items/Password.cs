@@ -2,7 +2,7 @@
 
 namespace PassManager.Models.Items
 {
-    public  class Password : ICloneable
+    public class Password : ICloneable
     {
         public Password()
         {
@@ -18,13 +18,15 @@ namespace PassManager.Models.Items
         {
             return this.MemberwiseClone();
         }
-        internal protected bool IsChanged(Password password)
+        internal bool IsChanged(Password password)
         {
             if(password is null)
             {
-                return Name.Length > 0 || Username.Length > 0 || PasswordEncrypted.Length > 0 || Url.Length > 0 || Notes.Length > 0;
+                return Name.Length > 0 || Username.Length > 0 || PasswordEncrypted.Length > 0 || Url.Length > 0 
+                    || Notes.Length > 0;
             }
-            return password.Name != Name || password.Username != Username || password.PasswordEncrypted != PasswordEncrypted || password.Username != Username || password.Url != Url || password.Notes != Notes;
+            return password.Name != Name || password.Username != Username || password.PasswordEncrypted != PasswordEncrypted
+                || password.Username != Username || password.Url != Url || password.Notes != Notes;
         }
     }
 }

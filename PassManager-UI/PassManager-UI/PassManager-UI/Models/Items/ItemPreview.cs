@@ -1,11 +1,23 @@
-﻿namespace PassManager.Models.Items
+﻿using PassManager.Enums;
+
+namespace PassManager.Models.Items
 {
     public class ItemPreview
     {
+        public ItemPreview()
+        {
+        }
+        public ItemPreview(int id, string title, string subTitle, TypeOfItems itemType)
+        {
+            Id = id;
+            Title = title;
+            SubTitle = subTitle;
+            ItemType = itemType;
+        }
         public int Id { get; set; }
         public string Title { get; set; }
         public string SubTitle { get; set; }
-        public Enums.TypeOfItems ItemType { get; set; }
+        public TypeOfItems ItemType { get; set; }
         public override int GetHashCode()
         {
             return base.GetHashCode();

@@ -99,7 +99,7 @@ namespace PassManager.Models.Api.Processors
             {
                 return true;
             }
-            throw new Exception("Error from deleting a password");
+            return false;
         }
         private static HttpContent ConvertToHttpContent(Wifi wifi)
         {
