@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.Linq;
 using PassManager.Views.Popups;
 using Newtonsoft.Json;
-using System.Diagnostics;
 
 namespace PassManager.ViewModels.Bases
 {

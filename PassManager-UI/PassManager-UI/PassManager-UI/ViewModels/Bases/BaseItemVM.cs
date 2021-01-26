@@ -61,7 +61,7 @@ namespace PassManager.ViewModels.Bases
                             if(_itemId > 0)//check if id is valid
                             {
                                 //get data from api
-                                GetDataAsync(_itemId).Await(HandleException, true, true, false);
+                                GetDataAsync(_itemId).AwaitWithPopup(HandleException, false);
                             }
                             ChangeProps(ItemPageState.View, "Edit", $"View {ItemType}", true);
                             break;
@@ -174,17 +174,12 @@ namespace PassManager.ViewModels.Bases
         {
             if (IsInternet())
             {
-                //open popup
-                if(PageState == ItemPageState.Create || PageState == ItemPageState.Edit)
-                {
-                    await PageService.PushPopupAsync(new WaitForActionView(),false); 
-                }
                 switch (PageState)
                 {
                     case ItemPageState.Create:
                         var createStatus = IsModelValid();
                         if (!createStatus.IsError)
-                            Create().Await(HandleException, false, true, false);
+                            Create().AwaitWithPopup(HandleException, false);
                         else
                             await DisplayPopupError(createStatus.Message);
                         break;
@@ -194,7 +189,7 @@ namespace PassManager.ViewModels.Bases
                     case ItemPageState.Edit:
                         var editStatus = IsModelValid();
                         if (!editStatus.IsError)
-                            Modify(_itemId).Await(HandleException, false, true, false);
+                            Modify(_itemId).AwaitWithPopup(HandleException, false);
                         else 
                             await DisplayPopupError(editStatus.Message);
                         break;

@@ -3,7 +3,6 @@ using PassManager.Models.Api;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using PassManager.Models;
-using PassManager.Enums;
 using PassManager.ViewModels.Bases;
 using PassManager.Models.Api.Processors;
 
@@ -15,7 +14,7 @@ namespace PassManager.ViewModels.FlyoutItems
         {
             if (IsInternet())
             {
-                GetDataAsync().Await(HandleException,true,true,false);
+                GetDataAsync().AwaitWithPopup(HandleException, false);
             }
         }
         //functions

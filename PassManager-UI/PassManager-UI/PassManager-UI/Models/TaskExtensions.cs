@@ -12,13 +12,11 @@ namespace PassManager.Models
         /// </summary>
         /// <param name="task">task that will be awaited</param>
         /// <param name="errorCallBack">if that task throw an exception, this method will be invoked</param>
-        /// <param name="displayPopup">this will display a popup if the page is not already in the stack</param>
-        /// <param name="closePopup">this will close last popup if exists</param>
-        public async static void Await(this Task task, Action<Exception> errorCallBack, bool displayPopup = false, bool closePopup = false, bool animate = true)
+        public async static void AwaitWithPopup(this Task task, Action<Exception> errorCallBack, bool animate = true)
         {
-            var page = new WaitForActionView();
-            if (displayPopup && !CheckIfPageExists(page.ToString()))
-                await PageService.PushPopupAsync(page,animate);
+            await PageService.PopAllAsync();
+            //if (!CheckIfPageExists(nameof(WaitForActionView)))
+            await PageService.PushPopupAsync(new WaitForActionView(), animate);
             try
             {
                 await task;
@@ -27,7 +25,7 @@ namespace PassManager.Models
             {
                 errorCallBack?.Invoke(ex);
             }
-            if (closePopup && PopupNavigation.Instance.PopupStack.Count > 0)
+            if (PopupNavigation.Instance.PopupStack.Count > 0)
                 await PageService.PopPopupAsync(animate);
         }
         //awaits a task(in a constructor or in a setter)
