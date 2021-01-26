@@ -145,6 +145,7 @@ namespace PassManager.ViewModels.CreateItems
         }
         private protected async override Task Modify(int id)
         {
+            if (!Password.IsChanged(_tempPassword)) await Shell.Current.Navigation.PopToRootAsync();
             var encryptedPass = (Password)EncryptItem(Password);
             bool isSuccess = await PasswordProcessor.Modify(ApiHelper.ApiClient, id, encryptedPass);
             if (isSuccess)

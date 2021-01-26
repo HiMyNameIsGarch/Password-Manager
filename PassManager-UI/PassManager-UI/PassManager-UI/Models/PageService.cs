@@ -26,7 +26,7 @@ namespace PassManager.Models
             {
                 return PopupNavigation.Instance.PopAsync(animate);
             }
-            return null;
+            return Task.CompletedTask;
         }
         public static Task PopAllAsync(bool animate = true)
         {
@@ -34,7 +34,7 @@ namespace PassManager.Models
             {
                 return PopupNavigation.Instance.PopAllAsync(animate);
             }
-            return null;
+            return Task.CompletedTask;
         }
         //test only
         public async static Task<bool> DisplayAlert(string title, string message, string accept, string cancel)

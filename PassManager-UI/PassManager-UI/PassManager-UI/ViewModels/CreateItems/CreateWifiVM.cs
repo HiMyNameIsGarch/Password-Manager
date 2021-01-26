@@ -8,7 +8,6 @@ using PassManager.Models.Api.Processors;
 using PassManager.Models.Api;
 using PassManager.Views.Popups;
 using PassManager.Models;
-using Newtonsoft.Json;
 using PassManager.Enums;
 
 namespace PassManager.ViewModels.CreateItems
@@ -159,6 +158,7 @@ namespace PassManager.ViewModels.CreateItems
         }
         private protected override async Task Modify(int id)
         {
+            if (!Wifi.IsChanged(_tempWifi)) await Shell.Current.Navigation.PopToRootAsync();
             var encryptedWifi = (Wifi)EncryptItem(Wifi);
             bool isSuccess = await WifiProcessor.Modify(ApiHelper.ApiClient, id, encryptedWifi);
             if (isSuccess)
