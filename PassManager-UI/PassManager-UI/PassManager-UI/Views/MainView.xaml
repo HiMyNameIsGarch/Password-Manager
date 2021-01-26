@@ -29,7 +29,7 @@
     </FlyoutItem>
     <FlyoutItem Title="Wi-Fi Passwords">
         <Tab>
-            <ShellContent Route="WifiPass" ContentTemplate="{DataTemplate items:WifiPassView}"/>
+            <ShellContent Route="Wifi" ContentTemplate="{DataTemplate items:WifiPassView}"/>
         </Tab>
     </FlyoutItem>
     <FlyoutItem Title="Settings">
