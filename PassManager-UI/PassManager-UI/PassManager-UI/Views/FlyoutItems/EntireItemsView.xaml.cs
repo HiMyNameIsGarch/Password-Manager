@@ -1,4 +1,5 @@
 ﻿using PassManager.Models;
+using PassManager.ViewModels.FlyoutItems;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -10,7 +11,11 @@ namespace PassManager.Views.FlyoutItems
         public EntireItemsView()
         {
             InitializeComponent();
-            BindingContext = new ViewModels.FlyoutItems.EntireItemsViewModel();
+            BindingContext = new EntireItemsViewModel();
+            ((EntireItemsViewModel)this.BindingContext).OnScroll = ((obj, list) =>
+            { //We tell the action to scroll to the passed in object here
+                list.ScrollTo(obj, ScrollToPosition.MakeVisible, false);
+            });
         }
     }
 }

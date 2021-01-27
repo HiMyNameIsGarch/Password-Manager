@@ -8,6 +8,8 @@ using Newtonsoft.Json;
 using PassManager.Views.Popups;
 using Xamarin.Essentials;
 using Rg.Plugins.Popup.Services;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace PassManager.ViewModels.Bases
 {
@@ -208,7 +210,7 @@ namespace PassManager.ViewModels.Bases
         private async Task DisplayPopupError(string msg)
         {
             //pop all popups
-            await PopupNavigation.Instance.PopAllAsync();
+            await PageService.PopAllAsync();
             //push main
             await PageService.PushPopupAsync(new ErrorView(msg));
         }

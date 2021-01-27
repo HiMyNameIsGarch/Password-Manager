@@ -22,14 +22,17 @@ namespace PassManager.ViewModels.Bases
             _addItem = new Command(SelectItemToAdd);
             _items = new ObservableCollection<Grouping<string, ItemPreview>>();
             _refresh = new Command(RefreshCommand);
+            _goToItem = new Command(GoToItemAsync);
         }
         //private variables
         private bool _isRefreshing;
         private ItemPreview _selectedItem;
         private ICommand _addItem;
         private ICommand _refresh;
+        private ICommand _goToItem;
         private string _update;
         private bool _hasItems;
+        private bool _canScroll;
         private string _noItemsText;
         private ObservableCollection<Grouping<string, ItemPreview>> _items;
         private UpdateModel _updateModel;
@@ -48,10 +51,16 @@ namespace PassManager.ViewModels.Bases
             }
         }
         //props for binding
+        public Action<ItemPreview, ListView> OnScroll { get; set; }
         public ObservableCollection<Grouping<string, ItemPreview>> Items
         {
             get { return _items; }
-            private protected set { _items = value; NotifyPropertyChanged(); }
+            private protected set 
+            {
+                _items = value;
+                if (_items?.Count > 1) CanScroll = true;
+                else if (_items?.Count < 2 || _items is null) CanScroll = false;
+                NotifyPropertyChanged(); }
         }
         public ItemPreview SelectedItem
         {
@@ -86,7 +95,21 @@ namespace PassManager.ViewModels.Bases
         {
             get { return Device.RuntimePlatform == Device.UWP; }
         }
+        public bool CanScroll
+        {
+            get { return _canScroll; }
+            private set 
+            {
+                if (_canScroll == value) return;
+                _canScroll = value; 
+                NotifyPropertyChanged();
+            }
+        }
         //commands
+        public ICommand GoToItem
+        {
+            get { return _goToItem; }
+        }
         public ICommand Search
         {
             get
@@ -106,6 +129,22 @@ namespace PassManager.ViewModels.Bases
             get { return _addItem; }
         }
         //actions for commands
+        private async void GoToItemAsync(object obj)
+        {
+            if (Items == null || Items?.Count == 0) return;
+            var list = (ListView)obj;//take the list
+            string[] typeOfItems = new string[Items.Count];//make an array that will contain the options
+            //get all the items type that user have
+            for (int i = 0; i < Items.Count; i++)
+            {
+                typeOfItems[i] = Items[i].Key;
+            }
+            string itemToGo = await PageService.DisplayActionSheet("Select item you wanna go to", "Cancel", null, typeOfItems);
+            if (itemToGo is null) return;
+            var item = Items.Where(s => s.Key == itemToGo).FirstOrDefault().FirstOrDefault();
+            if (item is null) return;
+            OnScroll?.Invoke(item, list);
+        }
         private async void RefreshCommand()
         {
             if (IsInternet())
@@ -153,13 +192,16 @@ namespace PassManager.ViewModels.Bases
                 var itemToDelete = item.Where(s => s.Id == id).FirstOrDefault();
                 if(itemToDelete != null)
                 {
+                    int itemIndex = Items.IndexOf(item);
                     item.Remove(itemToDelete);
+                    if (item.Count == 0)
+                        Items.RemoveAt(itemIndex);
                     break;
                 }
             }
-            if(Items.Count == 1 && Items.FirstOrDefault().Count == 0)
+            if(Items.Count == 1 && Items.FirstOrDefault().Count == 0 || Items.Count == 0)
             {
-                Items.Clear();
+                Items = null;
                 DisplayMsg("You have no passwords yet, click on button below to add a new one!", true);
             }
         }
@@ -191,7 +233,8 @@ namespace PassManager.ViewModels.Bases
             {
                 Delete(updateModel.ItemPreview.Id);
             }
-            Items = UpdateItems(Items);//update the list with itself(bug: (when updating an item it will not be displayed so i updated the current list))
+            if (IsUwp)
+                Items = UpdateItems(Items);//update the list with itself(bug: (when updating an item it will not be displayed so i updated the current list))
         }
         private protected void DisplayMsg(string text, bool hasItems)
         {
@@ -255,6 +298,7 @@ namespace PassManager.ViewModels.Bases
         }
         private protected ObservableCollection<Grouping<string, ItemPreview>> UpdateItems(IEnumerable<Grouping<string, ItemPreview>> newList)
         {
+            if (newList is null) return null;
             return new ObservableCollection<Grouping<string, ItemPreview>>(newList);
         }
     }
