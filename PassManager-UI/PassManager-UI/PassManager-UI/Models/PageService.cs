@@ -36,10 +36,13 @@ namespace PassManager.Models
             }
             return Task.CompletedTask;
         }
-        //test only
         public async static Task<bool> DisplayAlert(string title, string message, string accept, string cancel)
         {
             return await MainPage.DisplayAlert(title, message,accept,cancel);
+        }
+        public async static Task<string> DisplayActionSheet(string title, string cancel, string destruction, params string[] buttons)
+        {
+            return await MainPage.DisplayActionSheet(title,cancel,destruction,buttons);
         }
     }
 }

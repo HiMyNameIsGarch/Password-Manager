@@ -17,13 +17,19 @@
                             FontSize="20" Padding="10"
                             VerticalOptions="End" TextColor="{StaticResource WarningColor}"
                             HorizontalOptions="Center" IsVisible="{TemplateBinding BindingContext.HasItems}"/>
-            <ListView ItemsSource="{TemplateBinding BindingContext.Items}" HasUnevenRows="True" SelectedItem="{TemplateBinding BindingContext.SelectedItem, Mode=TwoWay}"
+            <ListView x:Name="mainListView" x:FieldModifier="Private" ItemsSource="{TemplateBinding BindingContext.Items}" HasUnevenRows="True" SelectedItem="{TemplateBinding BindingContext.SelectedItem, Mode=TwoWay}"
                               IsPullToRefreshEnabled="True" RefreshCommand="{TemplateBinding BindingContext.Refresh}" IsRefreshing="{TemplateBinding BindingContext.IsRefreshing}"
                               IsGroupingEnabled="True">
                 <ListView.GroupHeaderTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Label Text="{Binding Key}" Style="{DynamicResource GroupKeyLabel}"/>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="{Binding Key}" Style="{DynamicResource GroupKeyLabel}"/>
+                                <Button HorizontalOptions="EndAndExpand" Text="Go To" Command="{TemplateBinding BindingContext.GoToItem}" FontAttributes="Bold"
+                                        TextColor="{DynamicResource TextColor}" IsEnabled="{TemplateBinding BindingContext.CanScroll}" BackgroundColor="Transparent"
+                                        CommandParameter="{Binding Source={x:Reference mainListView}}" FontSize="15" IsVisible="{TemplateBinding BindingContext.CanScroll}"
+                                        Margin="0,0,10,0"/>
+                            </StackLayout>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.GroupHeaderTemplate>
