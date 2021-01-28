@@ -32,5 +32,7 @@ namespace PassManager_WebApi.Models
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<Password> Passwords { get; set; }
         public virtual DbSet<Wifi> Wifis { get; set; }
+        public virtual DbSet<Note> Notes { get; set; }
+        public virtual DbSet<PaymentCard> PaymentCards { get; set; }
     }
 }

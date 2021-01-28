@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="PassManager.Views.FlyoutItems.NoteView"  BackgroundColor="{StaticResource PageBottomColor}" Title="{Binding PageTitle}"
+             ControlTemplate="{StaticResource ListViewItemTemplate}">
+    <Shell.TitleView>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Text="{Binding PageTitle}" Style="{DynamicResource NavigationLabel}"/>
+            <Button Grid.Column="1" Grid.ColumnSpan="2" Text="Search" Command="{Binding Search}" Style="{DynamicResource NavigationBtn}"/>
+        </Grid>
+    </Shell.TitleView>
+</ContentPage>

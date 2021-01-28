@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace PassManager.Models.Api.Processors
 {
-    internal class PasswordProcessor
+    internal class NoteProcessor
     {
         public static async Task<IEnumerable<Grouping<string, ItemPreview>>> GetPreviews(HttpClient httpClient)
         {
             HttpResponseMessage responseMessage = null;
             try
             {
-                responseMessage = await httpClient.GetAsync("api/Passwords");
+                responseMessage = await httpClient.GetAsync("api/Notes");
             }
             catch (Exception ex)
             {
@@ -29,13 +29,13 @@ namespace PassManager.Models.Api.Processors
             }
             return null;
         }
-        public static async Task<bool> CreatePassword(HttpClient httpClient, Password password)
+        public static async Task<bool> CreateNote(HttpClient httpClient, Note note)
         {
-            HttpContent content = ConvertToHttpContent(password);
+            HttpContent content = ConvertToHttpContent(note);
             HttpResponseMessage responseMessage = null;
             try
             {
-                responseMessage = await httpClient.PostAsync("api/Passwords", content);
+                responseMessage = await httpClient.PostAsync("api/Notes", content);
             }
             catch (Exception ex)
             {
@@ -47,12 +47,12 @@ namespace PassManager.Models.Api.Processors
             }
             return false;
         }
-        public static async Task<Password> GetPassword(HttpClient httpClient, int id)
+        public static async Task<Note> GetNote(HttpClient httpClient, int id)
         {
             HttpResponseMessage responseMessage = null;
             try
             {
-                responseMessage = await httpClient.GetAsync($"api/Passwords/{id}");
+                responseMessage = await httpClient.GetAsync($"api/Notes/{id}");
             }
             catch (Exception ex)
             {
@@ -60,22 +60,22 @@ namespace PassManager.Models.Api.Processors
             }
             if (responseMessage.IsSuccessStatusCode)
             {
-                Password password = await responseMessage.Content.ReadAsAsync<Password>();
-                return password;
+                Note note = await responseMessage.Content.ReadAsAsync<Note>();
+                return note;
             }
             return null;
         }
-        public static async Task<bool> Modify(HttpClient httpClient, int id, Password changedPassword)
+        public static async Task<bool> Modify(HttpClient httpClient, int id, Note changedNote)
         {
-            HttpContent httpContent = ConvertToHttpContent(changedPassword);
+            HttpContent httpContent = ConvertToHttpContent(changedNote);
             HttpResponseMessage responseMessage = null;
             try
             {
-                responseMessage = await httpClient.PutAsync($"api/Passwords/{id}", httpContent);
+                responseMessage = await httpClient.PutAsync($"api/Notes/{id}", httpContent);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                throw(ex);
+                throw (ex);
             }
             if (responseMessage.IsSuccessStatusCode)
             {
@@ -88,7 +88,7 @@ namespace PassManager.Models.Api.Processors
             HttpResponseMessage responseMessage = null;
             try
             {
-                responseMessage = await httpClient.DeleteAsync($"api/Passwords/{id}");
+                responseMessage = await httpClient.DeleteAsync($"api/Notes/{id}");
             }
             catch (Exception ex)
             {
@@ -100,16 +100,13 @@ namespace PassManager.Models.Api.Processors
             }
             return false;
         }
-        private static HttpContent ConvertToHttpContent(Password password)
+        private static HttpContent ConvertToHttpContent(Note note)
         {
             return new FormUrlEncodedContent(new[]
             {
-                 new KeyValuePair<string, string>("Id", password.Id.ToString()),
-                 new KeyValuePair<string, string>("Name", password.Name),
-                 new KeyValuePair<string, string>("Username", password.Username),
-                 new KeyValuePair<string, string>("PasswordEncrypted", password.PasswordEncrypted),
-                 new KeyValuePair<string, string>("Url", password.Url),
-                 new KeyValuePair<string, string>("Notes", password.Notes)
+                 new KeyValuePair<string, string>("Id", note.Id.ToString()),
+                 new KeyValuePair<string, string>("Name", note.Name),
+                 new KeyValuePair<string, string>("Notes", note.Notes)
             });
         }
     }

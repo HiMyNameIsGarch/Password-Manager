@@ -119,19 +119,16 @@ namespace PassManager.ViewModels.CreateItems
         //override functions
         private protected override async Task GetDataAsync(int id)
         {
-            if (IsInternet())
+            Wifi wifi = await WifiProcessor.GetWifi(ApiHelper.ApiClient, id);
+            if (wifi != null)
             {
-                Wifi wifi = await WifiProcessor.GetWifi(ApiHelper.ApiClient, id);
-                if (wifi != null)
-                {
-                    var decryptedWifi = (Wifi)DecryptItem(wifi);
-                    Wifi = decryptedWifi;
-                    _tempWifi = (Wifi)decryptedWifi.Clone();//store a temp wifi for later verifications
-                }
-                else
-                {
-                    await PageService.PushPopupAsync(new ErrorView("Something went wrong and we couldn't get your wifi, try again!"));
-                }
+                var decryptedWifi = (Wifi)DecryptItem(wifi);
+                Wifi = decryptedWifi;
+                _tempWifi = (Wifi)decryptedWifi.Clone();//store a temp wifi for later verifications
+            }
+            else
+            {
+                await PageService.PushPopupAsync(new ErrorView("Something went wrong and we couldn't get your wifi, try again!"));
             }
         }
         private protected override async Task Create()

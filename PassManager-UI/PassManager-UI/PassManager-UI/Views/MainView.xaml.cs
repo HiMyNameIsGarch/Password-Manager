@@ -14,6 +14,7 @@ namespace PassManager.Views
             Routing.RegisterRoute("ListItem", typeof(ListItemView));
             Routing.RegisterRoute("CreatePassword", typeof(CreatePasswordView));
             Routing.RegisterRoute("CreateWifi", typeof(CreateWifiView));
+            Routing.RegisterRoute("CreateNote",typeof(CreateNoteView));
             Routing.RegisterRoute("SearchItem", typeof(SearchView));
         }
     }

@@ -263,6 +263,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\EntireItemsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\NotesController.cs" />
     <Compile Include="Controllers\PasswordsController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Controllers\WifisController.cs" />
@@ -294,6 +295,9 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Interfaces\IModelValid.cs" />
     <Compile Include="Models\ItemPreview.cs" />
+    <Compile Include="Models\Note.cs">
+      <DependentUpon>PassManager.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\PassManager.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -312,6 +316,9 @@
     <Compile Include="Models\Password.cs">
       <DependentUpon>PassManager.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PaymentCard.cs">
+      <DependentUpon>PassManager.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\SecurePassword.cs" />
     <Compile Include="Models\Wifi.cs">
       <DependentUpon>PassManager.tt</DependentUpon>
@@ -320,6 +327,7 @@
     <Compile Include="Providers\ApplicationOAuthProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\NoteVM.cs" />
     <Compile Include="ViewModels\PasswordVM.cs" />
     <Compile Include="ViewModels\WifiVM.cs" />
   </ItemGroup>

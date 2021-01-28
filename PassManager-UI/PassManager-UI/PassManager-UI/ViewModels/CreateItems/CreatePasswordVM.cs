@@ -12,10 +12,9 @@ using PassManager.Enums;
 
 namespace PassManager.ViewModels.CreateItems
 {
-    //parameters
     public class CreatePasswordVM : BaseItemVM, IBackButtonBehavior
     {
-        public CreatePasswordVM() : base(Enums.TypeOfItems.Password)
+        public CreatePasswordVM() : base(TypeOfItems.Password)
         {
             //set some defaults values
             IsPasswordVisible = true;
@@ -97,20 +96,15 @@ namespace PassManager.ViewModels.CreateItems
         //override functions
         private protected async override Task GetDataAsync(int id)
         {
-            if (IsInternet())
+            Password password = await PasswordProcessor.GetPassword(ApiHelper.ApiClient, id);
+            if (password != null)
             {
-                Password password = await PasswordProcessor.GetPassword(ApiHelper.ApiClient, id);
-                if (password != null)
-                {
-                    var decryptedPass = (Password)DecryptItem(password);
-                    Password = decryptedPass;
-                    _tempPassword = (Password)decryptedPass.Clone();//store a temp password for future verifications
-                }
-                else
-                {
-                    await PageService.PushPopupAsync(new ErrorView("Something went wrong and we couldn't get your password, try again!"));
-                }
+                var decryptedPass = (Password)DecryptItem(password);
+                Password = decryptedPass;
+                _tempPassword = (Password)decryptedPass.Clone();//store a temp password for future verifications
             }
+            else
+                await PageService.PushPopupAsync(new ErrorView("Something went wrong and we couldn't get your password, try again!"));
         }
         private protected async override Task Create()
         {

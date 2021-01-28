@@ -10,6 +10,7 @@ namespace PassManager_WebApi.Models
             {
                 case TypeOfItems.Password: return "Password";
                 case TypeOfItems.Wifi: return "Wi-Fi";
+                case TypeOfItems.Note: return "Note";
             }
             return string.Empty;
         }

@@ -45,4 +45,21 @@ namespace PassManager_WebApi.Models
             LastModified = DateTime.Now;
         }
     }
+    public partial class Note
+    {
+        public Note(){ }
+        public Note(NoteVM note, string userId)
+        {
+            ModifyTo(note);
+            UserId = userId;
+            NumOfVisits = 1;
+            CreateDate = DateTime.Now;
+        }
+        public void ModifyTo(NoteVM note)
+        {
+            Name = note.Name;
+            Notes = note.Notes;
+            LastModified = DateTime.Now;
+        }
+    }
 }
