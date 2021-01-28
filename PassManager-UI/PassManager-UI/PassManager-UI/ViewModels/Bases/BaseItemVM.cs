@@ -60,7 +60,7 @@ namespace PassManager.ViewModels.Bases
                             ReadOnly = false;
                             break;
                         case ItemPageState.View:
-                            if(_itemId > 0)//check if id is valid
+                            if(_itemId > 0 && IsInternet())//check if id is valid
                             {
                                 //get data from api
                                 GetDataAsync(_itemId).AwaitWithPopup(HandleException, false);

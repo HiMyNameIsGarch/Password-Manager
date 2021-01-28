@@ -5,12 +5,12 @@ using Xamarin.Forms.Xaml;
 namespace PassManager.Views.CreateItems
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class CreatePasswordView : ContentPage
+    public partial class CreateNoteView : ContentPage
     {
-        public CreatePasswordView()
+        public CreateNoteView()
         {
             InitializeComponent();
-            BindingContext = new CreatePasswordVM();
+            BindingContext = new CreateNoteVM();
         }
     }
 }

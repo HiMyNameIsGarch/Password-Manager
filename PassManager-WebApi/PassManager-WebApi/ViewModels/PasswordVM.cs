@@ -22,7 +22,6 @@ namespace PassManager_WebApi.ViewModels
         public string PasswordEncrypted { get; set; }
         public string Url { get; set; }
         public string Notes { get; set; }
-
         public string IsModelValid()
         {
             if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(PasswordEncrypted))
@@ -31,7 +30,7 @@ namespace PassManager_WebApi.ViewModels
                 return "Your Name must be maximum 64 characters!";
             if (Username.Length > 64)
                 return "Your Username must be maximum 64 characters!";
-            if (Url?.Length > 256)
+            if (Url?.Length > 354)
                 return "Your Url must be maximum 256 characters!";
             return string.Empty;
         }

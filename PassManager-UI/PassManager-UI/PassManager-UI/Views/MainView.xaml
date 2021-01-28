@@ -27,9 +27,14 @@
             <ShellContent Route="Password" ContentTemplate="{DataTemplate items:PasswordView}"/>
         </Tab>
     </FlyoutItem>
-    <FlyoutItem Title="Wi-Fi Passwords">
+    <FlyoutItem Title="Wi-Fi">
         <Tab>
             <ShellContent Route="Wifi" ContentTemplate="{DataTemplate items:WifiPassView}"/>
+        </Tab>
+    </FlyoutItem>
+    <FlyoutItem Title="Notes">
+        <Tab>
+            <ShellContent Route="Note" ContentTemplate="{DataTemplate items:NoteView}"/>
         </Tab>
     </FlyoutItem>
     <FlyoutItem Title="Settings">

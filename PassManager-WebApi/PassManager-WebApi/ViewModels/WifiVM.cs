@@ -30,9 +30,9 @@ namespace PassManager_WebApi.ViewModels
                 return "You need to complete at least \"Name\" and \"Password\" in order to save!";
             if (Name.Length > 64)
                 return "Your Name must be maximum 64 characters!";
-            if (ConnectionType?.Length > 64)
+            if (ConnectionType?.Length > 108)
                 return "Your Connection Type must be maximum 64 characters!";
-            if (SSID?.Length > 64)
+            if (SSID?.Length > 108)
                 return " must be maximum 64 characters!";
             return string.Empty;
         }

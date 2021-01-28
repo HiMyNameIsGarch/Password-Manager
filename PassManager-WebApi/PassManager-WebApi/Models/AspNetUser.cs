@@ -22,6 +22,8 @@ namespace PassManager_WebApi.Models
             this.AspNetRoles = new HashSet<AspNetRole>();
             this.Passwords = new HashSet<Password>();
             this.Wifis = new HashSet<Wifi>();
+            this.Notes = new HashSet<Note>();
+            this.PaymentCards = new HashSet<PaymentCard>();
         }
     
         public string Id { get; set; }
@@ -47,5 +49,9 @@ namespace PassManager_WebApi.Models
         public virtual ICollection<Password> Passwords { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Wifi> Wifis { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Note> Notes { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PaymentCard> PaymentCards { get; set; }
     }
 }

@@ -66,6 +66,18 @@
           <Property Name="AccessFailedCount" Type="int" Nullable="false" />
           <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
         </EntityType>
+        <EntityType Name="Note">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="CreateDate" Type="datetime" />
+          <Property Name="LastModified" Type="datetime" Nullable="false" />
+          <Property Name="NumOfVisits" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Notes" Type="nvarchar(max)" />
+        </EntityType>
         <EntityType Name="Passwords">
           <Key>
             <PropertyRef Name="Id" />
@@ -74,12 +86,30 @@
           <Property Name="Name" Type="nvarchar" MaxLength="64" Nullable="false" />
           <Property Name="Username" Type="nvarchar" MaxLength="64" Nullable="false" />
           <Property Name="PasswordEncrypted" Type="nvarchar(max)" Nullable="false" />
-          <Property Name="Url" Type="nvarchar" MaxLength="256" />
+          <Property Name="Url" Type="nvarchar" MaxLength="354" />
           <Property Name="Notes" Type="nvarchar(max)" />
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
           <Property Name="NumOfVisits" Type="int" Nullable="false" />
           <Property Name="LastModified" Type="datetime" Nullable="false" />
           <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PaymentCard">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="StartDate" Type="datetime" />
+          <Property Name="ExpirationDate" Type="datetime" />
+          <Property Name="NameOnCard" Type="nvarchar" MaxLength="108" />
+          <Property Name="CardType" Type="nvarchar" MaxLength="64" />
+          <Property Name="CardNumber" Type="nvarchar" MaxLength="32" />
+          <Property Name="SecurityCode" Type="nvarchar" MaxLength="24" />
+          <Property Name="CreateDate" Type="datetime" Nullable="false" />
+          <Property Name="LastModified" Type="datetime" Nullable="false" />
+          <Property Name="NumOfVisits" Type="int" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Notes" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="Wifi">
           <Key>
@@ -93,10 +123,34 @@
           <Property Name="NumOfVisits" Type="int" Nullable="false" />
           <Property Name="LastModified" Type="datetime" Nullable="false" />
           <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="SSID" Type="nvarchar" MaxLength="64" />
+          <Property Name="SSID" Type="nvarchar" MaxLength="108" />
           <Property Name="SettingsPassword" Type="nvarchar(max)" />
-          <Property Name="ConnectionType" Type="nvarchar" MaxLength="64" />
+          <Property Name="ConnectionType" Type="nvarchar" MaxLength="108" />
         </EntityType>
+        <Association Name="FK__Note__UserId__07C12930">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="Note" Type="Self.Note" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Note">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PaymentCa__UserI__04E4BC85">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1" />
+          <End Role="PaymentCard" Type="Self.PaymentCard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUsers">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PaymentCard">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -184,8 +238,18 @@
           <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Note" EntityType="Self.Note" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Passwords" EntityType="Self.Passwords" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PaymentCard" EntityType="Self.PaymentCard" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Wifi" EntityType="Self.Wifi" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Note__UserId__07C12930" Association="Self.FK__Note__UserId__07C12930">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="Note" EntitySet="Note" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PaymentCa__UserI__04E4BC85" Association="Self.FK__PaymentCa__UserI__04E4BC85">
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="PaymentCard" EntitySet="PaymentCard" />
+          </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
@@ -242,6 +306,16 @@
           <AssociationSet Name="FK_Wifi_AspNetUsers" Association="PasswordManagerModel.FK_Wifi_AspNetUsers">
             <End Role="AspNetUser" EntitySet="AspNetUsers" />
             <End Role="Wifi" EntitySet="Wifis" />
+          </AssociationSet>
+          <EntitySet Name="Notes" EntityType="PasswordManagerModel.Note" />
+          <EntitySet Name="PaymentCards" EntityType="PasswordManagerModel.PaymentCard" />
+          <AssociationSet Name="FK_Note_AspNetUsers1" Association="PasswordManagerModel.FK_Note_AspNetUsers1">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="Note" EntitySet="Notes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PaymentCard_AspNetUsers" Association="PasswordManagerModel.FK_PaymentCard_AspNetUsers">
+            <End Role="AspNetUser" EntitySet="AspNetUsers" />
+            <End Role="PaymentCard" EntitySet="PaymentCards" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="C__MigrationHistory">
@@ -304,6 +378,8 @@
           <NavigationProperty Name="AspNetRoles" Relationship="PasswordManagerModel.AspNetUserRoles" FromRole="AspNetUser" ToRole="AspNetRole" />
           <NavigationProperty Name="Passwords" Relationship="PasswordManagerModel.FK_Passwords_AspNetUsers1" FromRole="AspNetUser" ToRole="Password" />
           <NavigationProperty Name="Wifis" Relationship="PasswordManagerModel.FK_Wifi_AspNetUsers" FromRole="AspNetUser" ToRole="Wifi" />
+          <NavigationProperty Name="Notes" Relationship="PasswordManagerModel.FK_Note_AspNetUsers1" FromRole="AspNetUser" ToRole="Note" />
+          <NavigationProperty Name="PaymentCards" Relationship="PasswordManagerModel.FK_PaymentCard_AspNetUsers" FromRole="AspNetUser" ToRole="PaymentCard" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Type="PasswordManagerModel.AspNetUser" Role="AspNetUser" Multiplicity="1">
@@ -345,7 +421,7 @@
           <Property Name="Name" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
           <Property Name="Username" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
           <Property Name="PasswordEncrypted" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Url" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Url" Type="String" MaxLength="354" FixedLength="false" Unicode="true" />
           <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LastModified" Type="DateTime" Nullable="false" Precision="3" />
@@ -366,9 +442,9 @@
           <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="AspNetUser" Relationship="PasswordManagerModel.FK_Wifi_AspNetUsers" FromRole="Wifi" ToRole="AspNetUser" />
           <Property Name="NumOfVisits" Type="Int32" Nullable="false" />
-          <Property Name="SSID" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="SSID" Type="String" MaxLength="108" FixedLength="false" Unicode="true" />
           <Property Name="SettingsPassword" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="ConnectionType" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="ConnectionType" Type="String" MaxLength="108" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_Passwords_AspNetUsers1">
           <End Type="PasswordManagerModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
@@ -390,6 +466,62 @@
               <PropertyRef Name="Id" />
             </Principal>
             <Dependent Role="Wifi">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Note">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Precision="3" />
+          <Property Name="LastModified" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="NumOfVisits" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="PasswordManagerModel.FK_Note_AspNetUsers1" FromRole="Note" ToRole="AspNetUser" />
+        </EntityType>
+        <EntityType Name="PaymentCard">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="ExpirationDate" Type="DateTime" Precision="3" />
+          <Property Name="NameOnCard" Type="String" MaxLength="108" FixedLength="false" Unicode="true" />
+          <Property Name="CardType" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="CardNumber" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="SecurityCode" Type="String" MaxLength="24" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="LastModified" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="NumOfVisits" Type="Int32" Nullable="false" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Notes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="AspNetUser" Relationship="PasswordManagerModel.FK_PaymentCard_AspNetUsers" FromRole="PaymentCard" ToRole="AspNetUser" />
+        </EntityType>
+        <Association Name="FK_Note_AspNetUsers1">
+          <End Type="PasswordManagerModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+          <End Type="PasswordManagerModel.Note" Role="Note" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Note">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PaymentCard_AspNetUsers">
+          <End Type="PasswordManagerModel.AspNetUser" Role="AspNetUser" Multiplicity="1" />
+          <End Type="PasswordManagerModel.PaymentCard" Role="PaymentCard" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="AspNetUser">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="PaymentCard">
               <PropertyRef Name="UserId" />
             </Dependent>
           </ReferentialConstraint>
@@ -496,7 +628,39 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-        </EntityContainerMapping>
+          <EntitySetMapping Name="Notes">
+            <EntityTypeMapping TypeName="PasswordManagerModel.Note">
+              <MappingFragment StoreEntitySet="Note">
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="NumOfVisits" ColumnName="NumOfVisits" />
+                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PaymentCards">
+            <EntityTypeMapping TypeName="PasswordManagerModel.PaymentCard">
+              <MappingFragment StoreEntitySet="PaymentCard">
+                <ScalarProperty Name="Notes" ColumnName="Notes" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="NumOfVisits" ColumnName="NumOfVisits" />
+                <ScalarProperty Name="LastModified" ColumnName="LastModified" />
+                <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+                <ScalarProperty Name="SecurityCode" ColumnName="SecurityCode" />
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
+                <ScalarProperty Name="CardType" ColumnName="CardType" />
+                <ScalarProperty Name="NameOnCard" ColumnName="NameOnCard" />
+                <ScalarProperty Name="ExpirationDate" ColumnName="ExpirationDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

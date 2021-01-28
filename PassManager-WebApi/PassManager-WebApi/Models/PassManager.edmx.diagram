@@ -13,10 +13,14 @@
         <AssociationConnector Association="PasswordManagerModel.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" />
         <AssociationConnector Association="PasswordManagerModel.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" />
         <AssociationConnector Association="PasswordManagerModel.AspNetUserRoles" />
-        <EntityTypeShape EntityType="PasswordManagerModel.Password" Width="1.5" PointX="4.125" PointY="6.75" />
-        <EntityTypeShape EntityType="PasswordManagerModel.Wifi" Width="1.5" PointX="8" PointY="5.25" />
+        <EntityTypeShape EntityType="PasswordManagerModel.Password" Width="1.5" PointX="6.375" PointY="5.625" />
+        <EntityTypeShape EntityType="PasswordManagerModel.Wifi" Width="1.5" PointX="8.25" PointY="4.125" />
         <AssociationConnector Association="PasswordManagerModel.FK_Passwords_AspNetUsers1" />
         <AssociationConnector Association="PasswordManagerModel.FK_Wifi_AspNetUsers" />
+        <EntityTypeShape EntityType="PasswordManagerModel.Note" Width="1.5" PointX="4.75" PointY="9.375" />
+        <EntityTypeShape EntityType="PasswordManagerModel.PaymentCard" Width="1.5" PointX="1.5" PointY="7.75" />
+        <AssociationConnector Association="PasswordManagerModel.FK_Note_AspNetUsers1" />
+        <AssociationConnector Association="PasswordManagerModel.FK_PaymentCard_AspNetUsers" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

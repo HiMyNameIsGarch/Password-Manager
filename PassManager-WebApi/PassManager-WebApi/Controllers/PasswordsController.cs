@@ -18,7 +18,7 @@ namespace PassManager_WebApi.Controllers
         public IHttpActionResult Get()//get latest passwords preview
         {
             string userId = User.Identity.GetUserId();
-            //bring from db just the passwords
+            //bring from db just the item preview for passwords
             IEnumerable<ItemPreview> passwords = db.Passwords
                 .Where(item => item.UserId == userId)
                 .OrderByDescending(item => item.NumOfVisits)
@@ -42,7 +42,6 @@ namespace PassManager_WebApi.Controllers
             }
             return BadRequest();
         }
-
         //GET api/Passwords/5
         public IHttpActionResult Get(int id)
         {

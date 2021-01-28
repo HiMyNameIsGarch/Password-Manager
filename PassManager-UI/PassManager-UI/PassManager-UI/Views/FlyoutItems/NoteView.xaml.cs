@@ -5,12 +5,12 @@ using Xamarin.Forms.Xaml;
 namespace PassManager.Views.FlyoutItems
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class PasswordView : ContentPage
+    public partial class NoteView : ContentPage
     {
-        public PasswordView()
+        public NoteView()
         {
             InitializeComponent();
-            BindingContext = new PasswordViewModel();
+            BindingContext = new NoteViewModel();
         }
     }
 }
