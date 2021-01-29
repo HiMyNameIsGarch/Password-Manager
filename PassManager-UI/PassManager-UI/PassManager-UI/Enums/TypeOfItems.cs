@@ -4,6 +4,7 @@
     {
         Password,
         Wifi,
-        Note
+        Note,
+        PaymentCard
     }
 }

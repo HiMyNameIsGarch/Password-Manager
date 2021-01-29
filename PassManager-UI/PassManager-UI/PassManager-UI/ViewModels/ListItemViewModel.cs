@@ -44,7 +44,8 @@ namespace PassManager.ViewModels
                 {
                     new CreateItem(TypeOfItems.Password.ToSampleString(), string.Empty),
                     new CreateItem(TypeOfItems.Wifi.ToSampleString(), string.Empty),
-                    new CreateItem(TypeOfItems.Note.ToSampleString(),string.Empty)
+                    new CreateItem(TypeOfItems.Note.ToSampleString(),string.Empty),
+                    new CreateItem(TypeOfItems.PaymentCard.ToSampleString(),string.Empty)
                 };
             }
         }

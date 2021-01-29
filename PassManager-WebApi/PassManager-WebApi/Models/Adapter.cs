@@ -62,4 +62,27 @@ namespace PassManager_WebApi.Models
             LastModified = DateTime.Now;
         }
     }
+    public partial class PaymentCard
+    {
+        public PaymentCard() { }
+        public PaymentCard(PaymentCardVM paymentCard, string userId)
+        {
+            ModifyTo(paymentCard);
+            UserId = userId;
+            NumOfVisits = 1;
+            CreateDate = DateTime.Now;
+        }
+        public void ModifyTo(PaymentCardVM paymentCard)
+        {
+            Name = paymentCard.Name;
+            StartDate = paymentCard.StartDate;
+            ExpirationDate = paymentCard.ExpirationDate;
+            NameOnCard = paymentCard.NameOnCard;
+            CardType = paymentCard.CardType;
+            CardNumber = paymentCard.CardNumber;
+            SecurityCode = paymentCard.SecurityCode;
+            Notes = paymentCard.Notes;
+            LastModified = DateTime.Now;
+        }
+    }
 }
