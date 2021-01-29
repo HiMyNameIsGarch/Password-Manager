@@ -25,7 +25,7 @@ namespace PassManager_WebApi.ViewModels
         public string IsModelValid()
         {
             if (string.IsNullOrEmpty(Name) || string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(PasswordEncrypted))
-                return "You need to complete at least \"'Name'\", \"Username\" and \"Password\" in order to save!";
+                return "You need to complete at least Name, Username and Password in order to save!";
             if (Name.Length > 64)
                 return "Your Name must be maximum 64 characters!";
             if (Username.Length > 64)

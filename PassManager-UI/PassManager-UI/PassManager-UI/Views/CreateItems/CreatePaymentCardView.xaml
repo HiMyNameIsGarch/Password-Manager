@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:CRender="clr-namespace:PassManager.CustomRenderer"
+             x:Class="PassManager.Views.CreateItems.CreatePaymentCardView"
+             BackgroundColor="{DynamicResource PageBottomColor}" Title="{Binding PageTitle}">
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding GoBack}"/>
+    </Shell.BackButtonBehavior>
+    <Shell.TitleView>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Text="{Binding PageTitle}" Style="{DynamicResource NavigationLabel}"/>
+            <Button Grid.Column="1" Text="{Binding ActionBtnText}" Command="{Binding SaveChanges}" Style="{DynamicResource NavigationBtn}" />
+            <Button Grid.Column="2" Command="{Binding DisplayMoreActions}" Text="{Binding ActionsText}" Style="{DynamicResource NavigationBtn}"/>
+        </Grid>
+    </Shell.TitleView>
+    <StackLayout>
+        <Grid IsVisible="{Binding NeedMoreActions}" Margin="15,10,15,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" BackgroundColor="{DynamicResource PageTopColor}" TextColor="{DynamicResource  FrameBottomColor}" 
+                    Text="Delete" Command="{Binding DeleteItem}" HorizontalOptions="FillAndExpand" IsVisible="{Binding CanDelete}" />
+            <Button Grid.Column="1" Text="Generate password" Command="{Binding GeneratePassword}" HorizontalOptions="FillAndExpand"
+                    BackgroundColor="{DynamicResource PageTopColor}" TextColor="{DynamicResource  FrameBottomColor}"/>
+        </Grid>
+        <ScrollView>
+            <StackLayout Margin="10">
+                <StackLayout IsVisible="{Binding IsUwp}" Orientation="Horizontal">
+                    <Button Text="{Binding ActionBtnText}" Command="{Binding SaveChanges}" WidthRequest="100" BackgroundColor="{DynamicResource PageTopColor}" TextColor="{DynamicResource  FrameBottomColor}" HorizontalOptions="FillAndExpand"/>
+                    <Button Text="{Binding ActionsText}" WidthRequest="100" Command="{Binding DisplayMoreActions}" HorizontalOptions="FillAndExpand" BackgroundColor="{DynamicResource PageTopColor}" TextColor="{DynamicResource  FrameBottomColor}"/>
+                </StackLayout>
+                <!--Name-->
+                <Label Text="Name:" Style="{StaticResource LabelForEntries}"/>
+                <Frame Style="{StaticResource CustomFrame}">
+                    <CRender:CustomEntry Text="{Binding PaymentCard.Name}" IsReadOnly="{Binding ReadOnly}" 
+                                                      Style="{StaticResource CustomEntry}"/>
+                </Frame>
+                <!--Start Date-->
+                <Label Text="Start Date:" Style="{StaticResource LabelForEntries}"/>
+                <Frame Style="{StaticResource CustomFrame}">
+                    <DatePicker Date="{Binding PaymentCard.StartDate}"/>
+                </Frame>
+                <!--Expiration Date-->
+                <Label Text="Expiration Date:" Style="{StaticResource LabelForEntries}"/>
+                <Frame Style="{StaticResource CustomFrame}">
+                    <DatePicker Date="{Binding PaymentCard.ExpirationDate}"/>
+                </Frame>
+                <!--Name On Card-->
+                <Label Text="Name On Card:" Style="{StaticResource LabelForEntries}"/>
+                <Frame Style="{StaticResource CustomFrame}">
+                    <CRender:CustomEntry Text="{Binding PaymentCard.NameOnCard}" IsReadOnly="{Binding ReadOnly}" 
+                                                      Style="{StaticResource CustomEntry}"/>
+                </Frame>
+                <!--Card Type-->
+                <Label Text="Card Type:" Style="{StaticResource LabelForEntries}"/>
+                <Frame Style="{StaticResource CustomFrame}">
+                    <CRender:CustomEntry Text="{Binding PaymentCard.CardType}" IsReadOnly="{Binding ReadOnly}" 
+                                                      Style="{StaticResource CustomEntry}"/>
+                </Frame>
+                <!--Card Number-->
+                <Label Text="Card Number:" Style="{StaticResource LabelForEntries}"/>
+                <Frame Style="{StaticResource CustomFrame}">
+                    <CRender:CustomEntry Text="{Binding PaymentCard.CardNumber}" IsReadOnly="{Binding ReadOnly}" 
+                                                      Style="{StaticResource CustomEntry}"/>
+                </Frame>
+                <!--Security Code-->
+                <Label Text="Security Code:" Style="{StaticResource LabelForEntries}"/>
+                <Frame Style="{StaticResource CustomFrame}">
+                    <CRender:CustomEntry Text="{Binding PaymentCard.SecurityCode}" IsReadOnly="{Binding ReadOnly}" 
+                                                      Style="{StaticResource CustomEntry}"/>
+                </Frame>
+                <!--Notes-->
+                <Label Text="Notes:" Style="{StaticResource LabelForEntries}"/>
+                <Frame Style="{StaticResource CustomFrame}">
+                    <CRender:CustomEditor Text="{Binding PaymentCard.Notes}" IsReadOnly="{Binding ReadOnly}" AutoSize="TextChanges"
+                                        Style="{StaticResource CustomEntry}"/>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
+    </StackLayout>
+</ContentPage>

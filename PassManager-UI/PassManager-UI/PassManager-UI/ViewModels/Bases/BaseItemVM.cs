@@ -7,9 +7,6 @@ using System;
 using Newtonsoft.Json;
 using PassManager.Views.Popups;
 using Xamarin.Essentials;
-using Rg.Plugins.Popup.Services;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace PassManager.ViewModels.Bases
 {

@@ -37,6 +37,11 @@
             <ShellContent Route="Note" ContentTemplate="{DataTemplate items:NoteView}"/>
         </Tab>
     </FlyoutItem>
+    <FlyoutItem Title="Payment Card">
+        <Tab>
+            <ShellContent Route="PaymentCard" ContentTemplate="{DataTemplate items:PaymentCardView}"/>
+        </Tab>
+    </FlyoutItem>
     <FlyoutItem Title="Settings">
         <Tab>
             <ShellContent Route="Settings" ContentTemplate="{DataTemplate items:SettingsView}"/>

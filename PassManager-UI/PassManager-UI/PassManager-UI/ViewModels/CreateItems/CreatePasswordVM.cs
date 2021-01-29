@@ -131,7 +131,7 @@ namespace PassManager.ViewModels.CreateItems
             bool isSuccess = await PasswordProcessor.Delete(ApiHelper.ApiClient, Password.Id);
             if (isSuccess)
             {
-                UpdateModel model = new UpdateModel(TypeOfUpdates.Delete, new ItemPreview() { Id = Password.Id, ItemType = TypeOfItems.Wifi });
+                UpdateModel model = new UpdateModel(TypeOfUpdates.Delete, new ItemPreview() { Id = Password.Id, ItemType = TypeOfItems.Password });
                 await GoTo("Password", model);
             }
             else
