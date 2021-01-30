@@ -14,6 +14,8 @@ using System.Linq;
 using PassManager.Models.Api.Processors;
 using PassManager.Models.Api;
 using PassManager.Models.CallStatus;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace PassManager.ViewModels.Bases
 {
@@ -29,21 +31,17 @@ namespace PassManager.ViewModels.Bases
             _goBack = new Command(GoBackButton);
             _save = new Command(ChangePageType);
             _displayMoreActions = new Command(DisplayMore);
-            _deleteItem = new Command(AskToDeleteItemAsync);
         }
         //variables
         private readonly TypeOfItems ItemType;
-        protected private ItemPageState PageState;
+        private ItemPageState PageState;
+        private bool CanDelete;
         private string _actionBtnText;
         private bool _readOnly;
         private bool _canCopy;
         private ICommand _save;
-        private ICommand _displayMoreActions;
-        private ICommand _deleteItem;
         private ICommand _goBack;
-        private bool _needMoreActions = false;
-        private bool _canDelete;
-        private string _actionsText = "More";
+        private ICommand _displayMoreActions;
         private int _itemId;
         private string _createPage;
         //parameters
@@ -71,13 +69,13 @@ namespace PassManager.ViewModels.Bases
                                 //get data from api
                                 GetDataAsync(_itemId).AwaitWithPopup(HandleException, false);
                             }
-                            ChangeProps(ItemPageState.View, "Edit", $"View {ItemType}", true);
+                            ChangeProps(ItemPageState.View, "Edit", $"View {ItemType.ToSampleString()}", true);
                             break;
                         case ItemPageState.Edit:
-                            PageTitle = $"Edit {ItemType}";
+                            PageTitle = $"Edit {ItemType.ToSampleString()}";
                             break;
                         default:
-                            PageTitle = $"Your {ItemType} is invalid!";
+                            PageTitle = $"Your {ItemType.ToSampleString()} is invalid!";
                             break;
                     }
                 }
@@ -88,21 +86,6 @@ namespace PassManager.ViewModels.Bases
             }
         }
         //props
-        public bool CanDelete
-        {
-            get { return _canDelete; }
-            private set { _canDelete = value; NotifyPropertyChanged(); }
-        }
-        public string ActionsText
-        {
-            get { return _actionsText; }
-            private set { _actionsText = value; NotifyPropertyChanged(); }
-        }
-        public bool NeedMoreActions
-        {
-            get { return _needMoreActions; }
-            private set { _needMoreActions = value; NotifyPropertyChanged(); }
-        }
         public bool IsUwp
         {
             get { return Device.RuntimePlatform == Device.UWP; }
@@ -123,26 +106,12 @@ namespace PassManager.ViewModels.Bases
             private set { _canCopy = value; NotifyPropertyChanged(); }
         }
         //commands
-        public ICommand GeneratePassword
-        {
-            get
-            {
-                return new Command(async () => 
-                {
-                    await PageService.PushPopupAsync(new PasswordGeneratorView());
-                });
-            }
-        }
-        public ICommand DeleteItem
-        {
-            get { return _deleteItem; }
-        }
-        public ICommand SaveChanges {
-            get { return _save; }
-        }
         public ICommand DisplayMoreActions
         {
             get { return _displayMoreActions; }
+        }
+        public ICommand SaveChanges {
+            get { return _save; }
         }
         public ICommand GoBack
         {
@@ -161,7 +130,7 @@ namespace PassManager.ViewModels.Bases
             else
                 await Shell.Current.Navigation.PopToRootAsync();
         }
-        private async void AskToDeleteItemAsync()
+        private async Task AskToDeleteItemAsync()
         {
             bool accept = await PageService.DisplayAlert("Delete","Do you really want to delete this item?","Yes","No");
             if (accept)
@@ -189,17 +158,21 @@ namespace PassManager.ViewModels.Bases
                 }
             }
         }
-        private void DisplayMore()
+        private async void DisplayMore()
         {
-            if (NeedMoreActions)
+            ICollection<string> options = new List<string>(){"Generate Password" };
+            if (CanDelete)
+                options.Add("Delete Item");
+            var response = await PageService.DisplayActionSheet("What do you want to do?","Cancel",null, options.ToArray());
+            switch (response)
             {
-                NeedMoreActions = false;
-                ActionsText = "More";
-            }
-            else
-            {
-                NeedMoreActions = true;
-                ActionsText = "Hide";
+                case "Generate Password":
+                    await PageService.PushPopupAsync(new PasswordGeneratorView());
+                    break;
+                case "Delete Item":
+                    if (CanDelete)
+                        await AskToDeleteItemAsync();
+                    break;
             }
         }
         private async void ChangePageType()
