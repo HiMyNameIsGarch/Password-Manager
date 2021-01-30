@@ -2,7 +2,6 @@
 using PassManager_WebApi.Enums;
 using PassManager_WebApi.Models;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Web.Http;
 
@@ -13,7 +12,42 @@ namespace PassManager_WebApi.Controllers
     public class EntireItemsController : ApiController
     {
         private PasswordManagerEntities db = new PasswordManagerEntities();
-
+        internal static IQueryable<ItemPreview> GetAllPasswords(PasswordManagerEntities db, string userId)
+        {
+            if (db is null || string.IsNullOrEmpty(userId)) return null;
+            return db.Passwords
+                .Where(item => item.UserId == userId)
+                .OrderByDescending(p => p.NumOfVisits)
+                .ThenBy(p => p.Name)
+                .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = item.Username, ItemType = TypeOfItems.Password });
+        }
+        internal static IQueryable<ItemPreview> GetAllWifis(PasswordManagerEntities db, string userId)
+        {
+            if (db is null || string.IsNullOrEmpty(userId)) return null;
+            return db.Wifis
+            .Where(item => item.UserId == userId)
+            .OrderByDescending(p => p.NumOfVisits)
+            .ThenBy(p => p.Name)
+            .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = "Wi-Fi", ItemType = TypeOfItems.Wifi });
+        }
+        internal static IQueryable<ItemPreview> GetAllNotes(PasswordManagerEntities db, string userId)
+        {
+            if (db is null || string.IsNullOrEmpty(userId)) return null;
+            return db.Notes
+            .Where(item => item.UserId == userId)
+            .OrderByDescending(p => p.NumOfVisits)
+            .ThenBy(p => p.Name)
+            .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = TypeOfItems.Note.ToString(), ItemType = TypeOfItems.Note });
+        }
+        internal static IQueryable<ItemPreview> GetAllPaymentCards(PasswordManagerEntities db, string userId)
+        {
+            if (db is null || string.IsNullOrEmpty(userId)) return null;
+            return db.PaymentCards
+            .Where(note => note.UserId == userId)
+            .OrderByDescending(note => note.NumOfVisits)
+            .ThenBy(note => note.Name)
+            .Select(note => new ItemPreview() { Id = note.Id, Title = note.Name, SubTitle = "Payment card", ItemType = TypeOfItems.PaymentCard });
+        }
         //GET api/EntireItems
         public IHttpActionResult Get()//get latest passwords preview
         {
@@ -26,8 +60,7 @@ namespace PassManager_WebApi.Controllers
         {
             var previews = SearchItems(searchString);
 
-            if(previews is null)
-                return BadRequest("Your search string can't be empty!");
+            if (previews is null) return BadRequest("Your search string could not be empty!");
 
             return Ok(previews.Reverse());//reverse list to order better items type
         }
@@ -35,23 +68,13 @@ namespace PassManager_WebApi.Controllers
         {
             string userId = User.Identity.GetUserId();
             //take passwords
-            var items = db.Passwords
-            .Where(item => item.UserId == userId)
-            .OrderByDescending(p => p.NumOfVisits)
-            .ThenBy(p => p.Name)
-            .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = item.Username, ItemType = TypeOfItems.Password })
-            .Union//take wifis
-            (db.Wifis
-            .Where(item => item.UserId == userId)
-            .OrderByDescending(p => p.NumOfVisits)
-            .ThenBy(p => p.Name)
-            .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = "Wi-Fi", ItemType = TypeOfItems.Wifi }))
+            var items = GetAllPasswords(db, userId)
             .Union
-            (db.Notes//take notes
-            .Where(item => item.UserId == userId)
-            .OrderByDescending(p => p.NumOfVisits)
-            .ThenBy(p => p.Name)
-            .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = TypeOfItems.Note.ToString(), ItemType = TypeOfItems.Note }));
+            (GetAllWifis(db, userId))
+            .Union
+            (GetAllNotes(db, userId))
+            .Union
+            (GetAllPaymentCards(db, userId));
             //return them
             return items;
         }
@@ -61,26 +84,17 @@ namespace PassManager_WebApi.Controllers
             //get current user id
             string userId = User.Identity.GetUserId();
             //get items from db
-            var items = db.Passwords//take passwords
-                .Where(item => item.UserId == userId)
-                .OrderByDescending(p => p.NumOfVisits)
-                .ThenBy(p => p.Name)
-                .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = item.Username, ItemType = TypeOfItems.Password })
-                .Where(item => item.Title.Contains(searchString))
-                .Union
-                (db.Wifis//take wifis
-                .Where(item => item.UserId == userId)
-                .OrderByDescending(p => p.NumOfVisits)
-                .ThenBy(p => p.Name)
-                .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = "Wi-Fi", ItemType = TypeOfItems.Wifi }))
-                .Where(item => item.Title.Contains(searchString))
-                .Union
-                (db.Notes//take notes
-                .Where(item => item.UserId == userId)
-                .OrderByDescending(p => p.NumOfVisits)
-                .ThenBy(p => p.Name)
-                .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = TypeOfItems.Note.ToString(), ItemType = TypeOfItems.Note })
-                .Where(item => item.Title.Contains(searchString)));
+            var items = GetAllPasswords(db, userId)
+                .Where(s => s.Title.Contains(searchString))
+            .Union//take wifis
+            (GetAllWifis(db, userId))
+            .Where(s => s.Title.Contains(searchString))
+            .Union
+            (GetAllNotes(db, userId))
+            .Where(s => s.Title.Contains(searchString))
+            .Union
+            (GetAllPaymentCards(db, userId))
+            .Where(s => s.Title.Contains(searchString));
             //return them
             return items;
         }

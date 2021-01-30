@@ -103,7 +103,7 @@
           <Property Name="ExpirationDate" Type="datetime" />
           <Property Name="NameOnCard" Type="nvarchar" MaxLength="108" />
           <Property Name="CardType" Type="nvarchar" MaxLength="64" />
-          <Property Name="CardNumber" Type="nvarchar" MaxLength="32" />
+          <Property Name="CardNumber" Type="nvarchar" MaxLength="44" />
           <Property Name="SecurityCode" Type="nvarchar" MaxLength="24" />
           <Property Name="CreateDate" Type="datetime" Nullable="false" />
           <Property Name="LastModified" Type="datetime" Nullable="false" />
@@ -493,7 +493,7 @@
           <Property Name="ExpirationDate" Type="DateTime" Precision="3" />
           <Property Name="NameOnCard" Type="String" MaxLength="108" FixedLength="false" Unicode="true" />
           <Property Name="CardType" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
-          <Property Name="CardNumber" Type="String" MaxLength="32" FixedLength="false" Unicode="true" />
+          <Property Name="CardNumber" Type="String" MaxLength="44" FixedLength="false" Unicode="true" />
           <Property Name="SecurityCode" Type="String" MaxLength="24" FixedLength="false" Unicode="true" />
           <Property Name="CreateDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="LastModified" Type="DateTime" Nullable="false" Precision="3" />

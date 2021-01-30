@@ -11,19 +11,15 @@ namespace PassManager_WebApi.Controllers
 {
     [Authorize]
     [RoutePrefix("api/PaymentCards")]
-    public class PaymentCardsController : ApiController
+    public class PaymentCardsController : ApiController, IBaseItemController<PaymentCardVM>
     {
         private PasswordManagerEntities db = new PasswordManagerEntities();
         public IHttpActionResult Get()
         {
             string userId = User.Identity.GetUserId();
-            string subTitle = TypeOfItems.PaymentCard.ToSampleString();
             //bring from db just the item preview for payment card
-            IEnumerable<ItemPreview> paymentCards = db.PaymentCards
-                .Where(note => note.UserId == userId)
-                .OrderByDescending(note => note.NumOfVisits)
-                .ThenBy(note => note.Name)
-                .Select(note => new ItemPreview() { Id = note.Id, Title = note.Name, SubTitle = subTitle, ItemType = TypeOfItems.PaymentCard });
+            IEnumerable<ItemPreview> paymentCards = EntireItemsController.GetAllPaymentCards(db, userId);
+            
             return Ok(paymentCards);
         }
         public IHttpActionResult Get(bool lastCreated)
@@ -52,6 +48,7 @@ namespace PassManager_WebApi.Controllers
         }
         public IHttpActionResult Post([FromBody] PaymentCardVM item)
         {
+            return BadRequest();
             if (item is null) return BadRequest("Payment card does not exist!");
             var isModelValid = item.IsModelValid();
             if (!string.IsNullOrEmpty(isModelValid)) return BadRequest(isModelValid);
