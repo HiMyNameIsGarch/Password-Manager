@@ -1,6 +1,5 @@
 ﻿using System;
 
-
 namespace PassManager.Models.Items
 {
     public class Wifi : ICloneable
@@ -20,7 +19,7 @@ namespace PassManager.Models.Items
         {
             return this.MemberwiseClone();
         }
-        internal bool IsChanged(Wifi wifi)
+        public bool IsChanged(Wifi wifi)
         {
             if(wifi is null)//check currect props if changed from default
             {

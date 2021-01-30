@@ -48,7 +48,6 @@ namespace PassManager_WebApi.Controllers
         }
         public IHttpActionResult Post([FromBody] PaymentCardVM item)
         {
-            return BadRequest();
             if (item is null) return BadRequest("Payment card does not exist!");
             var isModelValid = item.IsModelValid();
             if (!string.IsNullOrEmpty(isModelValid)) return BadRequest(isModelValid);

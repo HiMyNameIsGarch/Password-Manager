@@ -8,6 +8,12 @@ using Newtonsoft.Json;
 using PassManager.Views.Popups;
 using Xamarin.Essentials;
 using PassManager.Models.Interfaces;
+using PassManager.Models.Items;
+using Rg.Plugins.Popup.Services;
+using System.Linq;
+using PassManager.Models.Api.Processors;
+using PassManager.Models.Api;
+using PassManager.Models.CallStatus;
 
 namespace PassManager.ViewModels.Bases
 {
@@ -19,14 +25,14 @@ namespace PassManager.ViewModels.Bases
         {
             //set defaults values in case no parameter passed
             ChangeProps(ItemPageState.Null, "Save", "No data provided", true);
-            ItemType = itemType.ToSampleString();
+            ItemType = itemType;
             _goBack = new Command(GoBackButton);
             _save = new Command(ChangePageType);
             _displayMoreActions = new Command(DisplayMore);
             _deleteItem = new Command(AskToDeleteItemAsync);
         }
         //variables
-        private readonly string ItemType;
+        private readonly TypeOfItems ItemType;
         protected private ItemPageState PageState;
         private string _actionBtnText;
         private bool _readOnly;
@@ -144,7 +150,17 @@ namespace PassManager.ViewModels.Bases
         }
 
         //functions for commands
-        public abstract void GoBackButton();
+        public async void GoBackButton()
+        {
+            if (IsItemChanged())
+            {
+                bool wantsToLeave = await PageService.DisplayAlert("Wait!", "Are you sure you want to leave?", "Yes", "No");
+                if (wantsToLeave)
+                    await Shell.Current.Navigation.PopToRootAsync();
+            }
+            else
+                await Shell.Current.Navigation.PopToRootAsync();
+        }
         private async void AskToDeleteItemAsync()
         {
             bool accept = await PageService.DisplayAlert("Delete","Do you really want to delete this item?","Yes","No");
@@ -155,13 +171,21 @@ namespace PassManager.ViewModels.Bases
                     await PageService.PushPopupAsync(new WaitForActionView());
                     try
                     {
-                        await Delete();
+                        var status = await DeleteAsync();
+                        if (status.IsCallSucces)
+                        {
+                            UpdateModel model = new UpdateModel(TypeOfUpdates.Delete, new ItemPreview() { Id = status.Id, ItemType = ItemType});
+                            await GoTo(ItemType.ToString(), model);
+                        }
+                        else
+                            await PageService.PushPopupAsync(new ErrorView($"Something went wrong and your {ItemType.ToSampleString()} has not been deleted, try again!"));
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         HandleException(ex);
                     }
-                    await PageService.PopPopupAsync(false);
+                    if(!PopupNavigation.Instance.PopupStack.Where(s => s.ToString().Contains("Error")).Any())
+                        await PageService.PopPopupAsync(false);
                 }
             }
         }
@@ -185,31 +209,95 @@ namespace PassManager.ViewModels.Bases
                 switch (PageState)
                 {
                     case ItemPageState.Create:
+                        //handle creation of item
                         var createStatus = IsModelValid();
-                        if (!createStatus.IsError)
-                            Create().AwaitWithPopup(HandleException, false);
-                        else
+                        if (createStatus.IsError)
+                        {
                             await DisplayPopupError(createStatus.Message);
+                            break;
+                        }
+                        await PageService.PopAllAsync();
+                        await PageService.PushPopupAsync(new WaitForActionView(), false);
+                        bool isCallSucces = false;
+                        try
+                        {
+                            isCallSucces = await CreateAsync();
+                        }
+                        catch (Exception ex)
+                        {
+                            HandleException(ex);
+                            break;
+                        }
+                        await PageService.PopPopupAsync(false);
+                        if (isCallSucces)
+                        {
+                            var latestCreatedItem = await EntireItemsProcessor.GetLatestCreated(ApiHelper.ApiClient, ItemType);
+                            if (latestCreatedItem is null)
+                            {
+                                await PageService.PushPopupAsync(new ErrorView($"Something went wrong and your {ItemType.ToSampleString()} has not been created, try again!"));
+                            }
+                            else
+                            {
+                                UpdateModel model = new UpdateModel(TypeOfUpdates.Create, latestCreatedItem);
+                                await GoTo(ItemType.ToString(), model);
+                            }
+                        }
+                        else
+                            await PageService.PushPopupAsync(new ErrorView($"Something went wrong and your {ItemType.ToSampleString()} has not been created, try again!"));
                         break;
                     case ItemPageState.View:
-                        ChangeProps(ItemPageState.Edit, "Save", $"Edit {ItemType}", false);
+                        ChangeProps(ItemPageState.Edit, "Save", $"Edit {ItemType.ToSampleString()}", false);
                         break;
                     case ItemPageState.Edit:
+                        //handle editing of an item
                         var editStatus = IsModelValid();
-                        if (!editStatus.IsError)
-                            Modify(_itemId).AwaitWithPopup(HandleException, false);
-                        else 
+                        if (editStatus.IsError)
+                        {
                             await DisplayPopupError(editStatus.Message);
+                            break;
+                        }
+                        if (!IsItemChanged())
+                        {
+                            await Shell.Current.Navigation.PopToRootAsync();
+                            break;
+                        }
+                        await PageService.PopAllAsync();
+                        await PageService.PushPopupAsync(new WaitForActionView(), false);
+                        ModifyCallStatus status = null;
+                        try
+                        {
+                            status = await ModifyAsync(_itemId);
+                        }
+                        catch (Exception ex)
+                        {
+                            HandleException(ex);
+                            break;
+                        }
+                        await PageService.PopPopupAsync(false);
+
+                        if (status.IsCallSucces)
+                        {
+                            if (status.ItemPreviewChanged)
+                            {
+                                UpdateModel model = new UpdateModel(TypeOfUpdates.Modify, status.ItemPreview);
+                                await GoTo(ItemType.ToString(), model);
+                            }
+                            else
+                                await GoTo(ItemType.ToString());
+                        }
+                        else
+                            await PageService.PushPopupAsync(new ErrorView($"Something went wrong and your {ItemType.ToSampleString()} has not been modified, try again!"));
                         break;
                 }
             }
         }
         //basic actions for item page
-        private protected abstract Task Create();
-        private protected abstract Task Delete();
-        private protected abstract Task Modify(int id);
-        private protected abstract Task GetDataAsync(int id);
+        private protected abstract bool IsItemChanged();
         private protected abstract Models.TaskStatus IsModelValid();//this function will check if the item is valid(title not to be more than 25 char etc etc) other wise will display a popup with the info
+        private protected abstract Task GetDataAsync(int id);
+        private protected abstract Task<bool> CreateAsync();
+        private protected abstract Task<ModifyCallStatus> ModifyAsync(int id);
+        private protected abstract Task<DeleteCallStatus> DeleteAsync();
         private protected abstract object EncryptItem(object obj);//gen an object(an item for that particular page) and return the encrypted version
         private protected abstract object DecryptItem(object obj);//get an object(an item for that particular page) and return the decrypted version
         //functions
