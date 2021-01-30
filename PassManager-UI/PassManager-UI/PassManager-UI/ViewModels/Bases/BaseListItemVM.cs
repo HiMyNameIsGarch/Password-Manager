@@ -164,18 +164,12 @@ namespace PassManager.ViewModels.Bases
 
                 await PageService.PopAllAsync(false);
                 if (IsListChanged(items))
-                {
                     Items = UpdateItems(items);
-                }
                 else
-                {
                     await PageService.PushPopupAsync(new WarningView("Your items are up to date!"));
-                }
             }
             else
-            {
                 IsRefreshing = false;
-            }
         }
         private async void SelectItemToAdd()
         {
@@ -250,7 +244,7 @@ namespace PassManager.ViewModels.Bases
                 //serialize it
                 string pageToCreateString = JsonConvert.SerializeObject(pageToCreate);
                 //send it
-                await Shell.Current.GoToAsync($"Create{itemType}?createPage={pageToCreateString}");
+                await Shell.Current.GoToAsync($"Create{itemType.ToSampleString()}?createPage={pageToCreateString}");
             }
         }
         private protected bool IsListChanged(IEnumerable<Grouping<string, ItemPreview>> newList)

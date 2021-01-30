@@ -18,96 +18,84 @@
             <Button Grid.Column="2" Command="{Binding DisplayMoreActions}" Text="{Binding ActionsText}" Style="{DynamicResource NavigationBtn}"/>
         </Grid>
     </Shell.TitleView>
-    <StackLayout>
-        <Grid IsVisible="{Binding NeedMoreActions}" Margin="15,10,15,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" BackgroundColor="{DynamicResource PageTopColor}" TextColor="{DynamicResource  FrameBottomColor}" 
-                    Text="Delete" Command="{Binding DeleteItem}" HorizontalOptions="FillAndExpand" IsVisible="{Binding CanDelete}" />
-            <Button Grid.Column="1" Text="Generate password" Command="{Binding GeneratePassword}" HorizontalOptions="FillAndExpand"
-                    BackgroundColor="{DynamicResource PageTopColor}" TextColor="{DynamicResource  FrameBottomColor}"/>
-        </Grid>
-        <ScrollView>
-            <StackLayout Margin="10">
-                <!--Actions-->
-                <StackLayout IsVisible="{Binding IsUwp}" Orientation="Horizontal">
-                    <Button Text="{Binding ActionBtnText}" Command="{Binding SaveChanges}" WidthRequest="100" BackgroundColor="{DynamicResource PageTopColor}"
-                            TextColor="{DynamicResource  FrameBottomColor}" HorizontalOptions="FillAndExpand"/>
-                    <Button Text="{Binding ActionsText}" WidthRequest="100" Command="{Binding DisplayMoreActions}" HorizontalOptions="FillAndExpand" 
-                            BackgroundColor="{DynamicResource PageTopColor}" TextColor="{DynamicResource  FrameBottomColor}"/>
-                </StackLayout>
-                
-                <!--Name label-->
-                <Label Text="Name:" Style="{StaticResource LabelForEntries}"/>
-                <Frame Style="{StaticResource CustomFrame}">
-                    <CRender:CustomEntry Text="{Binding Wifi.Name}" IsReadOnly="{Binding ReadOnly}" 
-                                                      Style="{StaticResource CustomEntry}"/>
-                </Frame>
-                
-                <!--Password label-->
-                <Label Text="Password:" Style="{StaticResource LabelForEntries}"/>
-                <StackLayout Orientation="Horizontal">
-                    <Frame Style="{StaticResource CustomFrame}">
-                        <StackLayout Orientation="Horizontal">
-                            <CRender:CustomEntry Text="{Binding Wifi.PasswordEncrypted}"  IsPassword="{Binding IsPasswordVisible}"
-                                                              IsReadOnly="{Binding ReadOnly}" Style="{StaticResource CustomEntry}"/>
-                            <Frame Style="{StaticResource RoundFrame}">
-                                <Image Source="{Binding PassEntryIcon}" Aspect="AspectFill" Margin="0">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding ChangeVisOfPassword}" />
-                                    </Image.GestureRecognizers>
-                                </Image>
-                            </Frame>
-                        </StackLayout>
-                    </Frame>
-                    <Button Command="{Binding CopyPassword}" Style="{DynamicResource CopyEntryBtn}"/>
-                </StackLayout>
-
-                <!--SSID-->
-                <Label Text="SSID:" Style="{StaticResource LabelForEntries}"/>
-                <StackLayout Orientation="Horizontal">
-                    <Frame Style="{StaticResource CustomFrame}">
-                        <CRender:CustomEntry Text="{Binding Wifi.SSID}" IsReadOnly="{Binding ReadOnly}" 
-                                                          Style="{StaticResource CustomEntry}"/>
-                    </Frame>
-                    <Button Command="{Binding CopySSID}" Style="{DynamicResource CopyEntryBtn}"/>
-                </StackLayout>
-                
-                <!--Settings Password-->
-                <Label Text="Settings Password:" Style="{StaticResource LabelForEntries}"/>
-                <StackLayout Orientation="Horizontal">
-                    <Frame Style="{StaticResource CustomFrame}">
-                        <StackLayout Orientation="Horizontal">
-                            <CRender:CustomEntry Text="{Binding Wifi.SettingsPassword}" IsReadOnly="{Binding ReadOnly}" 
-                                                              IsPassword="{Binding IsSettingsPassVis}" Style="{StaticResource CustomEntry}"/>
-                            <Frame Style="{StaticResource RoundFrame}">
-                                <Image Source="{Binding SettingsPassEntryIcon}" Aspect="AspectFill" Margin="0">
-                                    <Image.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding ChangeVisOfSettingsPassword}" />
-                                    </Image.GestureRecognizers>
-                                </Image>
-                            </Frame>
-                        </StackLayout>
-                    </Frame>
-                    <Button Command="{Binding CopySettingsPassword}" Style="{DynamicResource CopyEntryBtn}"/>
-                </StackLayout>
-
-                <!--Connection type-->
-                <Label Text="Connection Type:" Style="{StaticResource LabelForEntries}"/>
-                <Frame Style="{StaticResource CustomFrame}">
-                    <CRender:CustomEntry Text="{Binding Wifi.ConnectionType}" IsReadOnly="{Binding ReadOnly}" 
-                                                      Style="{StaticResource CustomEntry}"/>
-                </Frame>
-
-                <!--Notes-->
-                <Label Text="Notes:" Style="{StaticResource LabelForEntries}"/>
-                <Frame Style="{StaticResource CustomFrame}">
-                    <CRender:CustomEditor Text="{Binding Wifi.Notes}" IsReadOnly="{Binding ReadOnly}" AutoSize="TextChanges"
-                                        Style="{StaticResource CustomEntry}"/>
-                </Frame>
+    <ScrollView>
+        <StackLayout Margin="10">
+            <!--Actions-->
+            <StackLayout IsVisible="{Binding IsUwp}" Orientation="Horizontal">
+                <Button Text="{Binding ActionBtnText}" Command="{Binding SaveChanges}" WidthRequest="100" BackgroundColor="{DynamicResource PageTopColor}"
+                        TextColor="{DynamicResource  FrameBottomColor}" HorizontalOptions="FillAndExpand"/>
+                <Button Text="More" WidthRequest="100" Command="{Binding DisplayMoreActions}" HorizontalOptions="FillAndExpand" 
+                        BackgroundColor="{DynamicResource PageTopColor}" TextColor="{DynamicResource  FrameBottomColor}"/>
             </StackLayout>
-        </ScrollView>
-    </StackLayout>
+            
+            <!--Name label-->
+            <Label Text="Name:" Style="{StaticResource LabelForEntries}"/>
+            <Frame Style="{StaticResource CustomFrame}">
+                <CRender:CustomEntry Text="{Binding Wifi.Name}" IsReadOnly="{Binding ReadOnly}" 
+                                                  Style="{StaticResource CustomEntry}"/>
+            </Frame>
+            
+            <!--Password label-->
+            <Label Text="Password:" Style="{StaticResource LabelForEntries}"/>
+            <StackLayout Orientation="Horizontal">
+                <Frame Style="{StaticResource CustomFrame}">
+                    <StackLayout Orientation="Horizontal">
+                        <CRender:CustomEntry Text="{Binding Wifi.PasswordEncrypted}"  IsPassword="{Binding IsPasswordVisible}"
+                                                          IsReadOnly="{Binding ReadOnly}" Style="{StaticResource CustomEntry}"/>
+                        <Frame Style="{StaticResource RoundFrame}">
+                            <Image Source="{Binding PassEntryIcon}" Aspect="AspectFill" Margin="0">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ChangeVisOfPassword}" />
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+                    </StackLayout>
+                </Frame>
+                <Button Command="{Binding CopyPassword}" Style="{DynamicResource CopyEntryBtn}"/>
+            </StackLayout>
+
+            <!--SSID-->
+            <Label Text="SSID:" Style="{StaticResource LabelForEntries}"/>
+            <StackLayout Orientation="Horizontal">
+                <Frame Style="{StaticResource CustomFrame}">
+                    <CRender:CustomEntry Text="{Binding Wifi.SSID}" IsReadOnly="{Binding ReadOnly}" 
+                                                      Style="{StaticResource CustomEntry}"/>
+                </Frame>
+                <Button Command="{Binding CopySSID}" Style="{DynamicResource CopyEntryBtn}"/>
+            </StackLayout>
+            
+            <!--Settings Password-->
+            <Label Text="Settings Password:" Style="{StaticResource LabelForEntries}"/>
+            <StackLayout Orientation="Horizontal">
+                <Frame Style="{StaticResource CustomFrame}">
+                    <StackLayout Orientation="Horizontal">
+                        <CRender:CustomEntry Text="{Binding Wifi.SettingsPassword}" IsReadOnly="{Binding ReadOnly}" 
+                                                          IsPassword="{Binding IsSettingsPassVis}" Style="{StaticResource CustomEntry}"/>
+                        <Frame Style="{StaticResource RoundFrame}">
+                            <Image Source="{Binding SettingsPassEntryIcon}" Aspect="AspectFill" Margin="0">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ChangeVisOfSettingsPassword}" />
+                                </Image.GestureRecognizers>
+                            </Image>
+                        </Frame>
+                    </StackLayout>
+                </Frame>
+                <Button Command="{Binding CopySettingsPassword}" Style="{DynamicResource CopyEntryBtn}"/>
+            </StackLayout>
+
+            <!--Connection type-->
+            <Label Text="Connection Type:" Style="{StaticResource LabelForEntries}"/>
+            <Frame Style="{StaticResource CustomFrame}">
+                <CRender:CustomEntry Text="{Binding Wifi.ConnectionType}" IsReadOnly="{Binding ReadOnly}" 
+                                                  Style="{StaticResource CustomEntry}"/>
+            </Frame>
+
+            <!--Notes-->
+            <Label Text="Notes:" Style="{StaticResource LabelForEntries}"/>
+            <Frame Style="{StaticResource CustomFrame}">
+                <CRender:CustomEditor Text="{Binding Wifi.Notes}" IsReadOnly="{Binding ReadOnly}" AutoSize="TextChanges"
+                                    Style="{StaticResource CustomEntry}"/>
+            </Frame>
+        </StackLayout>
+    </ScrollView>
 </ContentPage>
