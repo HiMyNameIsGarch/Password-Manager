@@ -12,7 +12,7 @@ using PassManager.Enums;
 
 namespace PassManager.ViewModels.CreateItems
 {
-    public class CreateWifiVM : BaseItemVM, IBackButtonBehavior
+    public class CreateWifiVM : BaseItemVM
     {
         public CreateWifiVM() : base(Enums.TypeOfItems.Wifi)
         {
@@ -21,7 +21,6 @@ namespace PassManager.ViewModels.CreateItems
             SettingsPassEntryIcon = PassEntryIcon = ImageSource.FromResource($"PassManager-UI.Images.Locked.png");
             _wifi = new Wifi();
             //set commands
-            _goBack = new Command(GoBackButton);
             _copyPassword = new Command(CopyPasswordToClipboard);
             _copySSID = new Command(CopySSIDToClipboard);
             _copySettingsPassword = new Command(CopySettingsPasswordToClipboard);
@@ -31,7 +30,6 @@ namespace PassManager.ViewModels.CreateItems
         //private fields
         private Wifi _wifi;
         private Wifi _tempWifi;
-        private ICommand _goBack;
         private ICommand _copyPassword;
         private ICommand _copySSID;
         private ICommand _copySettingsPassword;
@@ -68,9 +66,6 @@ namespace PassManager.ViewModels.CreateItems
             private set { _isSettingsPassVis = value; NotifyPropertyChanged(); }
         }
         //commands
-        public ICommand GoBack {
-            get { return _goBack; }
-        }
         public ICommand CopyPassword
         {
             get { return _copyPassword; }
@@ -92,7 +87,7 @@ namespace PassManager.ViewModels.CreateItems
             get { return _changeVisOfSettingsPassword; }
         }
         //implementaions for commands
-        public async void GoBackButton()
+        public override async void GoBackButton()
         {
             if (Wifi.IsChanged(_tempWifi))
             {
