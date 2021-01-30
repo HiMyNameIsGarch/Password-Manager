@@ -5,12 +5,13 @@ using PassManager_WebApi.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using PassManager_WebApi.Models.Interfaces;
 
 namespace PassManager_WebApi.Controllers
 {
     [Authorize]
     [RoutePrefix("api/Notes")]
-    public class NotesController : ApiController
+    public class NotesController : ApiController, IBaseItemController<NoteVM>
     {
         private PasswordManagerEntities db = new PasswordManagerEntities();
         //GET api/Notes
@@ -18,11 +19,8 @@ namespace PassManager_WebApi.Controllers
         {
             string userId = User.Identity.GetUserId();
             //bring from db just the item preview for notes
-            IEnumerable<ItemPreview> notes = db.Notes
-                .Where(note => note.UserId == userId)
-                .OrderByDescending(note => note.NumOfVisits)
-                .ThenBy(note => note.Name)
-                .Select(note => new ItemPreview() { Id = note.Id, Title = note.Name, SubTitle = TypeOfItems.Note.ToString(), ItemType = TypeOfItems.Note});
+            IEnumerable<ItemPreview> notes = EntireItemsController.GetAllNotes(db, userId);
+
             return Ok(notes);
         }
         //GET api/Notes?lastCreated=true

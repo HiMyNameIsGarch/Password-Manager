@@ -265,10 +265,10 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NotesController.cs" />
     <Compile Include="Controllers\PasswordsController.cs" />
+    <Compile Include="Controllers\PaymentCardsController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Controllers\WifisController.cs" />
     <Compile Include="Enums\TypeOfItems.cs" />
-    <Compile Include="Enums\TypeOfUpdates.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -293,6 +293,7 @@
     <Compile Include="Models\EnumExtensions.cs" />
     <Compile Include="Models\Grouping.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\Interfaces\IBaseItemController.cs" />
     <Compile Include="Models\Interfaces\IModelValid.cs" />
     <Compile Include="Models\ItemPreview.cs" />
     <Compile Include="Models\Note.cs">
@@ -329,6 +330,7 @@
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\NoteVM.cs" />
     <Compile Include="ViewModels\PasswordVM.cs" />
+    <Compile Include="ViewModels\PaymentCardVM.cs" />
     <Compile Include="ViewModels\WifiVM.cs" />
   </ItemGroup>
   <ItemGroup>

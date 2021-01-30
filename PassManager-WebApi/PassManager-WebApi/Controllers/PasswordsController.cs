@@ -5,12 +5,13 @@ using System.Linq;
 using System.Web.Http;
 using PassManager_WebApi.ViewModels;
 using PassManager_WebApi.Enums;
+using PassManager_WebApi.Models.Interfaces;
 
 namespace PassManager_WebApi.Controllers
 {
     [Authorize]
     [RoutePrefix("api/Passwords")]
-    public class PasswordsController : ApiController
+    public class PasswordsController : ApiController, IBaseItemController<PasswordVM>
     {
         private PasswordManagerEntities db = new PasswordManagerEntities();
 
@@ -19,11 +20,7 @@ namespace PassManager_WebApi.Controllers
         {
             string userId = User.Identity.GetUserId();
             //bring from db just the item preview for passwords
-            IEnumerable<ItemPreview> passwords = db.Passwords
-                .Where(item => item.UserId == userId)
-                .OrderByDescending(item => item.NumOfVisits)
-                .ThenBy(item => item.Name)
-                .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = item.Username, ItemType = TypeOfItems.Password });
+            IEnumerable<ItemPreview> passwords = EntireItemsController.GetAllPasswords(db, userId); ;
             
             return Ok(passwords);
         }

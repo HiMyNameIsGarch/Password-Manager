@@ -5,12 +5,13 @@ using PassManager_WebApi.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using PassManager_WebApi.Models.Interfaces;
 
 namespace PassManager_WebApi.Controllers
 {
     [Authorize]
     [RoutePrefix("api/Wifis")]
-    public class WifisController : ApiController
+    public class WifisController : ApiController, IBaseItemController<WifiVM>
     {
         private PasswordManagerEntities db = new PasswordManagerEntities();
 
@@ -19,11 +20,7 @@ namespace PassManager_WebApi.Controllers
         {
             string userId = User.Identity.GetUserId();
             //take all ordered wifis
-            IEnumerable<ItemPreview> wifis = db.Wifis
-                .Where(item => item.UserId == userId)
-                .OrderByDescending(item => item.NumOfVisits)
-                .ThenBy(item => item.Name)
-                .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = "Wi-Fi", ItemType = TypeOfItems.Wifi });
+            IEnumerable<ItemPreview> wifis = EntireItemsController.GetAllWifis(db, userId);
             
             return Ok(wifis);
         }
