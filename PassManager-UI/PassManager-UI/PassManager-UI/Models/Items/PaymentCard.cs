@@ -9,7 +9,7 @@ namespace PassManager.Models.Items
         public PaymentCard()
         {
             Name = NameOnCard = CardType = CardNumber = SecurityCode = Notes = string.Empty;
-            StartDate = ExpirationDate = DateTime.MinValue;
+            StartDate = ExpirationDate = DateTime.Today;
         }
         public int Id { get; set; }
         public string Name { get; set; }

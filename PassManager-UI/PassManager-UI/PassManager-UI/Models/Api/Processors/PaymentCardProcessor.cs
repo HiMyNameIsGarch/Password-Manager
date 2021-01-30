@@ -105,6 +105,7 @@ namespace PassManager.Models.Api.Processors
             return new FormUrlEncodedContent(new[]
             {
                  new KeyValuePair<string, string>("Id", paymentCard.Id.ToString()),
+                 new KeyValuePair<string, string>("Name", paymentCard.Name),
                  new KeyValuePair<string, string>("StartDate", paymentCard.StartDate.ToString()),
                  new KeyValuePair<string, string>("ExpirationDate", paymentCard.ExpirationDate.ToString()),
                  new KeyValuePair<string, string>("NameOnCard", paymentCard.NameOnCard),

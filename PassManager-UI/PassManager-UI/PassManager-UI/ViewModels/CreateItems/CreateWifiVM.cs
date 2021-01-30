@@ -1,6 +1,5 @@
 ﻿using System.Windows.Input;
 using Xamarin.Forms;
-using PassManager.Models.Interfaces;
 using System.Threading.Tasks;
 using PassManager.ViewModels.Bases;
 using PassManager.Models.Items;
@@ -9,12 +8,13 @@ using PassManager.Models.Api;
 using PassManager.Views.Popups;
 using PassManager.Models;
 using PassManager.Enums;
+using PassManager.Models.CallStatus;
 
 namespace PassManager.ViewModels.CreateItems
 {
     public class CreateWifiVM : BaseItemVM
     {
-        public CreateWifiVM() : base(Enums.TypeOfItems.Wifi)
+        public CreateWifiVM() : base(TypeOfItems.Wifi)
         {
             //set some default values
             IsPasswordVisible = IsSettingsPassVis = true;
@@ -87,17 +87,6 @@ namespace PassManager.ViewModels.CreateItems
             get { return _changeVisOfSettingsPassword; }
         }
         //implementaions for commands
-        public override async void GoBackButton()
-        {
-            if (Wifi.IsChanged(_tempWifi))
-            {
-                bool wantsToLeave = await PageService.DisplayAlert("Wait!", "Are you sure you want to leave?", "Yes", "No");
-                if (wantsToLeave)
-                    await Shell.Current.Navigation.PopToRootAsync();
-            }
-            else
-                await Shell.Current.Navigation.PopToRootAsync(true);
-        }
         private async void CopyPasswordToClipboard() { await CopyToClipboard(Wifi.PasswordEncrypted); }
         private async void CopySSIDToClipboard() { await CopyToClipboard(Wifi.SSID); }
         private async void CopySettingsPasswordToClipboard() { await CopyToClipboard(Wifi.SettingsPassword); }
@@ -112,6 +101,10 @@ namespace PassManager.ViewModels.CreateItems
             IsPasswordVisible = !IsPasswordVisible;
         }
         //override functions
+        private protected override bool IsItemChanged()
+        {
+            return Wifi.IsChanged(_tempWifi);
+        }
         private protected override async Task GetDataAsync(int id)
         {
             Wifi wifi = await WifiProcessor.GetWifi(ApiHelper.ApiClient, id);
@@ -126,56 +119,22 @@ namespace PassManager.ViewModels.CreateItems
                 await PageService.PushPopupAsync(new ErrorView("Something went wrong and we couldn't get your wifi, try again!"));
             }
         }
-        private protected override async Task Create()
+        private protected override async Task<bool> CreateAsync()
         {
             var encryptedWifi = (Wifi)EncryptItem(Wifi);
             bool isSuccess = await WifiProcessor.CreateWifi(ApiHelper.ApiClient, encryptedWifi);
-            if (isSuccess)
-            {
-                var latestCreatedItem = await EntireItemsProcessor.GetLatestCreated(ApiHelper.ApiClient, TypeOfItems.Wifi);
-                if (latestCreatedItem is null)
-                {
-                    await PageService.PushPopupAsync(new ErrorView("Something went wrong and your password has not been created, try again!"));
-                }
-                else
-                {
-                    UpdateModel model = new UpdateModel(TypeOfUpdates.Create, latestCreatedItem);
-                    await GoTo("Wifi", model);
-                }
-            }
-            else
-            {
-                await PageService.PushPopupAsync(new ErrorView("Something went wrong and your wifi has not been created, try again!"));
-            }
+            return isSuccess;
         }
-        private protected override async Task Modify(int id)
+        private protected override async Task<ModifyCallStatus> ModifyAsync(int id)
         {
-            if (!Wifi.IsChanged(_tempWifi)) await Shell.Current.Navigation.PopToRootAsync();
             var encryptedWifi = (Wifi)EncryptItem(Wifi);
             bool isSuccess = await WifiProcessor.Modify(ApiHelper.ApiClient, id, encryptedWifi);
-            if (isSuccess)
-            {
-                if (_tempWifi.Name != Wifi.Name)
-                {
-                    UpdateModel model = new UpdateModel(TypeOfUpdates.Modify, new ItemPreview(Wifi.Id, Wifi.Name, TypeOfItems.Wifi.ToSampleString(), TypeOfItems.Wifi));
-                    await GoTo("Wifi", model);
-                }
-                else
-                    await GoTo("Wifi");
-            }
-            else
-                await PageService.PushPopupAsync(new ErrorView("Something went wrong and your wifi has not been modified, try again!"));
+            return new ModifyCallStatus(isSuccess, _tempWifi.Name != Wifi.Name, new ItemPreview(Wifi.Id, Wifi.Name, TypeOfItems.Wifi.ToSampleString(), TypeOfItems.Wifi));
         }
-        private protected override async Task Delete()
+        private protected override async Task<DeleteCallStatus> DeleteAsync()
         {
             bool isSuccess = await WifiProcessor.Delete(ApiHelper.ApiClient, Wifi.Id);
-            if (isSuccess)
-            {
-                UpdateModel model = new UpdateModel(TypeOfUpdates.Delete, new ItemPreview() { Id = Wifi.Id, ItemType = TypeOfItems.Wifi });
-                await GoTo("Wifi", model);
-            }
-            else
-                await PageService.PushPopupAsync(new ErrorView("Something went wrong and your wifi has not been deleted, try again!"));
+            return new DeleteCallStatus(isSuccess, Wifi.Id);
         }
         private protected override Models.TaskStatus IsModelValid()
         {
@@ -189,11 +148,7 @@ namespace PassManager.ViewModels.CreateItems
                 msgToDisplay = "Your SSID must be max 64 characters long!";
             else if (Wifi.ConnectionType.Length > 64)
                 msgToDisplay = "Your Connection Type must be max 64 characters long!";
-
-            if (string.IsNullOrEmpty(msgToDisplay))
-                return new Models.TaskStatus(false, string.Empty);
-            else 
-                return new Models.TaskStatus(true, msgToDisplay);
+            return Models.TaskStatus.Status(msgToDisplay);
         }
         private protected override object EncryptItem(object obj)
         {

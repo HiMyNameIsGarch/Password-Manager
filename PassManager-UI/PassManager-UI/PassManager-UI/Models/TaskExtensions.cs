@@ -15,7 +15,6 @@ namespace PassManager.Models
         public async static void AwaitWithPopup(this Task task, Action<Exception> errorCallBack, bool animate = true)
         {
             await PageService.PopAllAsync();
-            //if (!CheckIfPageExists(nameof(WaitForActionView)))
             await PageService.PushPopupAsync(new WaitForActionView(), animate);
             try
             {
@@ -25,8 +24,7 @@ namespace PassManager.Models
             {
                 errorCallBack?.Invoke(ex);
             }
-            if (PopupNavigation.Instance.PopupStack.Count > 0)
-                await PageService.PopPopupAsync(animate);
+            await PageService.PopPopupAsync(animate);
         }
         //awaits a task(in a constructor or in a setter)
         public async static void Await(this Task task)

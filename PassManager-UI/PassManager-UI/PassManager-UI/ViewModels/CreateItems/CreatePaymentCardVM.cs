@@ -2,11 +2,11 @@
 using PassManager.Models;
 using PassManager.Models.Api;
 using PassManager.Models.Api.Processors;
+using PassManager.Models.CallStatus;
 using PassManager.Models.Items;
 using PassManager.ViewModels.Bases;
 using PassManager.Views.Popups;
 using System.Threading.Tasks;
-using Xamarin.Forms;
 
 namespace PassManager.ViewModels.CreateItems
 {
@@ -19,22 +19,16 @@ namespace PassManager.ViewModels.CreateItems
         //variables
         private PaymentCard _paymentCard;
         private PaymentCard _tempPaymentCard;
+        //props
         public PaymentCard PaymentCard
         {
             get { return _paymentCard; }
             set { _paymentCard = value; NotifyPropertyChanged(); }
         }
-        
-        public override async void GoBackButton()
+        //functions
+        private protected override bool IsItemChanged()
         {
-            if (PaymentCard.IsChanged(_tempPaymentCard))
-            {
-                bool wantsToLeave = await PageService.DisplayAlert("Wait!", "Are you sure you want to leave?", "Yes", "No");
-                if (wantsToLeave)
-                    await Shell.Current.Navigation.PopToRootAsync();
-            }
-            else
-                await Shell.Current.Navigation.PopToRootAsync();
+            return PaymentCard.IsChanged(_tempPaymentCard);
         }
         private protected override async Task GetDataAsync(int id)
         {
@@ -48,54 +42,22 @@ namespace PassManager.ViewModels.CreateItems
             else
                 await PageService.PushPopupAsync(new ErrorView("Something went wrong and we couldn't get your payment card, try again!"));
         }
-        private protected override async Task Create()
+        private protected override async Task<bool> CreateAsync()
         {
             var encryptedCard = (PaymentCard)EncryptItem(PaymentCard);
             bool isSuccess = await PaymentCardProcessor.CreateCard(ApiHelper.ApiClient, encryptedCard);
-            if (isSuccess)
-            {
-                var latestCreatedItem = await EntireItemsProcessor.GetLatestCreated(ApiHelper.ApiClient, TypeOfItems.PaymentCard);
-                if (latestCreatedItem is null)
-                {
-                    await PageService.PushPopupAsync(new ErrorView("Something went wrong and your payment card has not been created, try again!"));
-                }
-                else
-                {
-                    UpdateModel model = new UpdateModel(TypeOfUpdates.Create, latestCreatedItem);
-                    await GoTo("PaymentCard", model);
-                }
-            }
-            else
-                await PageService.PushPopupAsync(new ErrorView("Something went wrong and your payment card has not been created, try again!"));
+            return isSuccess;
         }
-        private protected override async Task Modify(int id)
+        private protected override async Task<ModifyCallStatus> ModifyAsync(int id)
         {
-            if (!PaymentCard.IsChanged(_tempPaymentCard)) await Shell.Current.Navigation.PopToRootAsync();
             var encryptedCard = (PaymentCard)EncryptItem(PaymentCard);
             bool isSuccess = await PaymentCardProcessor.Modify(ApiHelper.ApiClient, id, encryptedCard);
-            if (isSuccess)
-            {
-                if (_tempPaymentCard.Name != PaymentCard.Name)//if some props from itempreviews changed, then update the item
-                {
-                    UpdateModel model = new UpdateModel(TypeOfUpdates.Modify, new ItemPreview(PaymentCard.Id, PaymentCard.Name, TypeOfItems.PaymentCard.ToSampleString(), TypeOfItems.PaymentCard));
-                    await GoTo("PaymentCard", model);
-                }
-                else
-                    await GoTo("PaymentCard");
-            }
-            else
-                await PageService.PushPopupAsync(new ErrorView("Something went wrong and your payment card has not been modified, try again!"));
+            return new ModifyCallStatus(isSuccess, _tempPaymentCard.Name != PaymentCard.Name, new ItemPreview(PaymentCard.Id, PaymentCard.Name, TypeOfItems.PaymentCard.ToSampleString(), TypeOfItems.PaymentCard));
         }
-        private protected override async Task Delete()
+        private protected override async Task<DeleteCallStatus> DeleteAsync()
         {
             bool isSuccess = await PaymentCardProcessor.Delete(ApiHelper.ApiClient, PaymentCard.Id);
-            if (isSuccess)
-            {
-                UpdateModel model = new UpdateModel(TypeOfUpdates.Delete, new ItemPreview() { Id = PaymentCard.Id, ItemType = TypeOfItems.PaymentCard });
-                await GoTo("PaymentCard", model);
-            }
-            else
-                await PageService.PushPopupAsync(new ErrorView("Something went wrong and your payment card has not been deleted, try again!"));
+            return new DeleteCallStatus(isSuccess, PaymentCard.Id);
         }
         private protected override Models.TaskStatus IsModelValid()
         {

@@ -1,5 +1,4 @@
 ﻿using System.Windows.Input;
-using PassManager.Models.Interfaces;
 using PassManager.Models.Items;
 using Xamarin.Forms;
 using PassManager.Models.Api;
@@ -9,6 +8,7 @@ using PassManager.Views.Popups;
 using PassManager.ViewModels.Bases;
 using PassManager.Models.Api.Processors;
 using PassManager.Enums;
+using PassManager.Models.CallStatus;
 
 namespace PassManager.ViewModels.CreateItems
 {
@@ -68,17 +68,6 @@ namespace PassManager.ViewModels.CreateItems
             get { return _copyPassword; }
         }
         //implementation for commands
-        public override async void GoBackButton()
-        {
-            if (Password.IsChanged(_tempPassword))
-            {
-                bool wantsToLeave = await PageService.DisplayAlert("Wait!", "Are you sure you want to leave?", "Yes", "No");
-                if (wantsToLeave)
-                    await Shell.Current.Navigation.PopToRootAsync();
-            }
-            else
-                await Shell.Current.Navigation.PopToRootAsync();
-        }
         private async void CopyUsernameToClipboard() { await CopyToClipboard(Password.Username); }
         private async void CopyPasswordToClipboard() { await CopyToClipboard(Password.PasswordEncrypted); }
         private async void CopyUrlToClipboard() { await CopyToClipboard(Password.Url); }
@@ -88,6 +77,10 @@ namespace PassManager.ViewModels.CreateItems
             IsPasswordVisible = !IsPasswordVisible;
         }
         //override functions
+        private protected override bool IsItemChanged()
+        {
+            return Password.IsChanged(_tempPassword);
+        }
         private protected async override Task GetDataAsync(int id)
         {
             Password password = await PasswordProcessor.GetPassword(ApiHelper.ApiClient, id);
@@ -100,54 +93,22 @@ namespace PassManager.ViewModels.CreateItems
             else
                 await PageService.PushPopupAsync(new ErrorView("Something went wrong and we couldn't get your password, try again!"));
         }
-        private protected async override Task Create()
+        private protected async override Task<bool> CreateAsync()
         {
             var encryptedPass = (Password)EncryptItem(Password);
             bool isSuccess = await PasswordProcessor.CreatePassword(ApiHelper.ApiClient, encryptedPass);
-            if (isSuccess)
-            {
-                var latestCreatedItem = await EntireItemsProcessor.GetLatestCreated(ApiHelper.ApiClient, TypeOfItems.Password);
-                if(latestCreatedItem is null)
-                {
-                    await PageService.PushPopupAsync(new ErrorView("Something went wrong and your password has not been created, try again!"));
-                }
-                else
-                {
-                    UpdateModel model = new UpdateModel(TypeOfUpdates.Create, latestCreatedItem);
-                    await GoTo("Password", model);
-                }
-            }
-            else
-                await PageService.PushPopupAsync(new ErrorView("Something went wrong and your password has not been created, try again!"));
+            return isSuccess;
         }
-        private protected async override Task Delete()
+        private protected async override Task<DeleteCallStatus> DeleteAsync()
         {
             bool isSuccess = await PasswordProcessor.Delete(ApiHelper.ApiClient, Password.Id);
-            if (isSuccess)
-            {
-                UpdateModel model = new UpdateModel(TypeOfUpdates.Delete, new ItemPreview() { Id = Password.Id, ItemType = TypeOfItems.Password });
-                await GoTo("Password", model);
-            }
-            else
-                await PageService.PushPopupAsync(new ErrorView("Something went wrong and your password has not been deleted, try again!"));
+            return new DeleteCallStatus(isSuccess, Password.Id);
         }
-        private protected async override Task Modify(int id)
+        private protected async override Task<ModifyCallStatus> ModifyAsync(int id)
         {
-            if (!Password.IsChanged(_tempPassword)) await Shell.Current.Navigation.PopToRootAsync();
             var encryptedPass = (Password)EncryptItem(Password);
             bool isSuccess = await PasswordProcessor.Modify(ApiHelper.ApiClient, id, encryptedPass);
-            if (isSuccess)
-            {
-                if ((_tempPassword.Name != Password.Name) || (_tempPassword.Username != Password.Username))//if some props from itempreviews changed, then update the item
-                {
-                    UpdateModel model = new UpdateModel(TypeOfUpdates.Modify, new ItemPreview(Password.Id, Password.Name, Password.Username, TypeOfItems.Password));
-                    await GoTo("Password", model);
-                }
-                else
-                    await GoTo("Password");
-            }
-            else
-                await PageService.PushPopupAsync(new ErrorView("Something went wrong and your password has not been modified, try again!"));
+            return new ModifyCallStatus(isSuccess, (_tempPassword.Name != Password.Name) || (_tempPassword.Username != Password.Username), new ItemPreview(Password.Id, Password.Name, Password.Username, TypeOfItems.Password));
         }
         private protected override Models.TaskStatus IsModelValid()
         {
@@ -161,10 +122,7 @@ namespace PassManager.ViewModels.CreateItems
             else if (Password.Url?.Length > 256)
                 msgToDisplay = "Your URL must be max 264 characters long!";
 
-            if (string.IsNullOrEmpty(msgToDisplay))
-                return new Models.TaskStatus(false, string.Empty);
-            else
-                return new Models.TaskStatus(true, msgToDisplay);
+            return Models.TaskStatus.Status(msgToDisplay);
         }
         private protected override object EncryptItem(object obj)
         {
