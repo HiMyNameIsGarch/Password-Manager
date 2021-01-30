@@ -2,7 +2,6 @@
 using PassManager.Models;
 using PassManager.Models.Api;
 using PassManager.Models.Api.Processors;
-using PassManager.Models.Interfaces;
 using PassManager.Models.Items;
 using PassManager.ViewModels.Bases;
 using PassManager.Views.Popups;
@@ -10,34 +9,27 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace PassManager.ViewModels.CreateItems
 {
-    public class CreateNoteVM : BaseItemVM, IBackButtonBehavior
+    public class CreateNoteVM : BaseItemVM
     {
         public CreateNoteVM() : base(TypeOfItems.Note)
         {
-            _goBack = new Command(GoBackButton);
             _note = new Note();
         }
         //variables
         private Note _note;
         private Note _tempNote;
-        private ICommand _goBack;
         //props
         public Note Note 
         {
             get { return _note; }
             set { _note = value; NotifyPropertyChanged(); }
         }
-        //commands
-        public ICommand GoBack { 
-            get { return _goBack; } 
-        }
         //implementation for commands
-        public async void GoBackButton()
+        public override async void GoBackButton()
         {
             if (Note.IsChanged(_tempNote))
             {

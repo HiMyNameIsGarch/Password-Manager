@@ -7,11 +7,12 @@ using System;
 using Newtonsoft.Json;
 using PassManager.Views.Popups;
 using Xamarin.Essentials;
+using PassManager.Models.Interfaces;
 
 namespace PassManager.ViewModels.Bases
 {
     [QueryProperty("CreatePage", "createPage")]
-    public abstract class BaseItemVM : BaseViewModel
+    public abstract class BaseItemVM : BaseViewModel, IBackButtonBehavior
     {
         //constructors
         public BaseItemVM(TypeOfItems itemType)
@@ -19,6 +20,7 @@ namespace PassManager.ViewModels.Bases
             //set defaults values in case no parameter passed
             ChangeProps(ItemPageState.Null, "Save", "No data provided", true);
             ItemType = itemType.ToSampleString();
+            _goBack = new Command(GoBackButton);
             _save = new Command(ChangePageType);
             _displayMoreActions = new Command(DisplayMore);
             _deleteItem = new Command(AskToDeleteItemAsync);
@@ -32,6 +34,7 @@ namespace PassManager.ViewModels.Bases
         private ICommand _save;
         private ICommand _displayMoreActions;
         private ICommand _deleteItem;
+        private ICommand _goBack;
         private bool _needMoreActions = false;
         private bool _canDelete;
         private string _actionsText = "More";
@@ -135,7 +138,13 @@ namespace PassManager.ViewModels.Bases
         {
             get { return _displayMoreActions; }
         }
+        public ICommand GoBack
+        {
+            get { return _goBack; } 
+        }
+
         //functions for commands
+        public abstract void GoBackButton();
         private async void AskToDeleteItemAsync()
         {
             bool accept = await PageService.DisplayAlert("Delete","Do you really want to delete this item?","Yes","No");

@@ -12,7 +12,7 @@ using PassManager.Enums;
 
 namespace PassManager.ViewModels.CreateItems
 {
-    public class CreatePasswordVM : BaseItemVM, IBackButtonBehavior
+    public class CreatePasswordVM : BaseItemVM
     {
         public CreatePasswordVM() : base(TypeOfItems.Password)
         {
@@ -20,7 +20,6 @@ namespace PassManager.ViewModels.CreateItems
             IsPasswordVisible = true;
             PassEntryIcon = ImageSource.FromResource($"PassManager-UI.Images.Locked.png");
             //set commands
-            _goBack = new Command(GoBackButton);
             _copyUsername = new Command(CopyUsernameToClipboard);
             _copyPassword = new Command(CopyPasswordToClipboard);
             _copyUrl = new Command(CopyUrlToClipboard);
@@ -30,7 +29,6 @@ namespace PassManager.ViewModels.CreateItems
         //variables
         private Password _password;
         private Password _tempPassword;
-        private ICommand _goBack;
         private ICommand _copyUrl;
         private ICommand _copyUsername;
         private ICommand _copyPassword;
@@ -69,12 +67,8 @@ namespace PassManager.ViewModels.CreateItems
         {
             get { return _copyPassword; }
         }
-        public ICommand GoBack
-        {
-            get { return _goBack; }
-        }
         //implementation for commands
-        public async void GoBackButton()
+        public override async void GoBackButton()
         {
             if (Password.IsChanged(_tempPassword))
             {

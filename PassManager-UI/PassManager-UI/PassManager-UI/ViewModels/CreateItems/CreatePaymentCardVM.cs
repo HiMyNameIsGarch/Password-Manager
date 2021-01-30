@@ -2,37 +2,30 @@
 using PassManager.Models;
 using PassManager.Models.Api;
 using PassManager.Models.Api.Processors;
-using PassManager.Models.Interfaces;
 using PassManager.Models.Items;
 using PassManager.ViewModels.Bases;
 using PassManager.Views.Popups;
 using System.Threading.Tasks;
-using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace PassManager.ViewModels.CreateItems
 {
-    public class CreatePaymentCardVM : BaseItemVM, IBackButtonBehavior
+    public class CreatePaymentCardVM : BaseItemVM
     {
         public CreatePaymentCardVM() : base(TypeOfItems.PaymentCard)
         {
-            _goBack = new Command(GoBackButton);
             _paymentCard = new PaymentCard();
         }
         //variables
         private PaymentCard _paymentCard;
         private PaymentCard _tempPaymentCard;
-        private ICommand _goBack;
         public PaymentCard PaymentCard
         {
             get { return _paymentCard; }
             set { _paymentCard = value; NotifyPropertyChanged(); }
         }
-        public ICommand GoBack
-        {
-            get { return _goBack; }
-        }
-        public async void GoBackButton()
+        
+        public override async void GoBackButton()
         {
             if (PaymentCard.IsChanged(_tempPaymentCard))
             {
