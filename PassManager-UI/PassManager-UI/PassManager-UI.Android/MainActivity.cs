@@ -5,6 +5,7 @@ using Android.Runtime;
 using Android.Views;
 using Xamarin.Forms;
 using Android.OS;
+using Plugin.CurrentActivity;
 
 namespace PassManager_UI.Droid
 {
@@ -18,15 +19,18 @@ namespace PassManager_UI.Droid
 
             base.OnCreate(savedInstanceState);
 
+            CrossCurrentActivity.Current.Init(this, savedInstanceState);
+
             Rg.Plugins.Popup.Popup.Init(this, savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.SetFlags("Brush_Experimental");
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
-            Window.SetStatusBarColor(Android.Graphics.Color.Rgb(132, 169, 140));
+            var mainColor = Android.Graphics.Color.Rgb(29, 53, 87);
+            Window.SetStatusBarColor(mainColor);
             if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop)
             {
-                Window.SetNavigationBarColor(Android.Graphics.Color.Rgb(202, 210, 197));
+                Window.SetNavigationBarColor(mainColor);
             }
         }
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
