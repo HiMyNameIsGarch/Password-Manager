@@ -60,7 +60,7 @@ namespace PassManager.ViewModels.Bases
                     switch (PageState)
                     {
                         case ItemPageState.Create:
-                            PageTitle = $"Add {ItemType}";
+                            PageTitle = $"Add {ItemType.ToSampleString()}";
                             ReadOnly = false;
                             break;
                         case ItemPageState.View:

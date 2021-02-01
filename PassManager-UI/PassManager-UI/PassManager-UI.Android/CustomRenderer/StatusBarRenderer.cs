@@ -26,14 +26,5 @@ namespace PassManager_UI.Droid.CustomRenderer
             var Window = CrossCurrentActivity.Current.Activity.Window;
             Window.SetStatusBarColor(color);
         }
-        public Android.Graphics.Color ColorFromHex(string hexValue)
-        {
-            if (hexValue.Length != 6) return Android.Graphics.Color.Red;
-            var color = ColorTranslator.FromHtml(hexValue);
-            int r = Convert.ToInt16(color.R);
-            int g = Convert.ToInt16(color.G);
-            int b = Convert.ToInt16(color.B);
-            return Android.Graphics.Color.Rgb(r,g,b);
-        }
     }
 }

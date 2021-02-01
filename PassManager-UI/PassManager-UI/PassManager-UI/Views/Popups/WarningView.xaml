@@ -4,8 +4,8 @@
              xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
              x:Class="PassManager.Views.Popups.WarningView">
     <StackLayout Orientation="Vertical" VerticalOptions="Center" HorizontalOptions="Center" 
-                 BackgroundColor="{StaticResource FrameTopColor}" Padding="30" Margin="30">
-        <Label Text="{Binding PageTitle}" TextColor="{StaticResource WarningColor}" FontSize="Medium" VerticalTextAlignment="Center"/>
+                 BackgroundColor="{DynamicResource PrussianBlueColor}" Padding="30" Margin="30">
+        <Label Text="{Binding PageTitle}" TextColor="{StaticResource OrangeColor}" FontSize="Medium" VerticalTextAlignment="Center"/>
         <Button Text="Ok" Command="{Binding ClosePopup}" Style="{StaticResource Key=PopupBtn}"/>
     </StackLayout>
 </pages:PopupPage>

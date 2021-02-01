@@ -140,7 +140,7 @@ namespace PassManager.ViewModels.Bases
                 typeOfItems[i] = Items[i].Key;
             }
             string itemToGo = await PageService.DisplayActionSheet("Select item you wanna go to", "Cancel", null, typeOfItems);
-            if (itemToGo is null) return;
+            if (itemToGo is null || itemToGo == "Cancel" ) return;
             var item = Items.Where(s => s.Key == itemToGo).FirstOrDefault().FirstOrDefault();
             if (item is null) return;
             OnScroll?.Invoke(item, list);

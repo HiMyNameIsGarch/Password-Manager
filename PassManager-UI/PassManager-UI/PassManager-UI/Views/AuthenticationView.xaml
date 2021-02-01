@@ -3,14 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:CRender="clr-namespace:PassManager.CustomRenderer"
              x:Class="PassManager.Views.AuthenticationView">
-    <Grid>
+    <Grid BackgroundColor="{DynamicResource PrussianBlueColor}">
             <!--#region Main grid settings-->
-        <Grid.Background>
-            <LinearGradientBrush EndPoint="0,1">
-                <GradientStop Color="{StaticResource PageTopColor}" Offset="0.1"/>
-                <GradientStop Color="{StaticResource PageBottomColor}" Offset="1.0"/>
-            </LinearGradientBrush>
-        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="3*"/>
@@ -23,41 +17,33 @@
         </Grid.ColumnDefinitions>
             <!--#endregion-->
         <StackLayout Grid.Row="2" Grid.Column="1" HorizontalOptions="End" VerticalOptions="Start" Orientation="Horizontal">
-            <Label Text="{Binding QuestionForUser}" VerticalOptions="Center" FontSize="14" TextColor="#354f52"/>
+            <Label Text="{Binding QuestionForUser}" VerticalOptions="Center" FontSize="{OnPlatform Android=14, UWP=16}" TextColor="{DynamicResource PowderBlueColor}"/>
             <Button Text="{Binding AnotherPageText}" Command="{Binding ChangePageCommand}" Style="{StaticResource BasicBtn}"/>
         </StackLayout>
-        <Grid Grid.Row="1" Grid.Column="1">
+        <Grid Grid.Row="1" Grid.Column="1" BackgroundColor="{DynamicResource CeladonBlueColor}">
                 <!--#region Second grid settings-->
-            <Grid.Background>
-                <LinearGradientBrush EndPoint="0,1">
-                    <GradientStop Color="{StaticResource FrameTopColor}" Offset="0.1"/>
-                    <GradientStop Color="{StaticResource FrameBottomColor}" Offset="1.0"/>
-                </LinearGradientBrush>
-            </Grid.Background>
             <Grid.RowDefinitions>
                 <RowDefinition Height="6*"/>
                 <RowDefinition Height="13*"/>
             </Grid.RowDefinitions>
                 <!--#endregion-->
-            <Label Grid.Row="0" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Text="{Binding PageTitle}" FontSize="26" 
-                   FontAttributes="Bold"/>
+            <Label Grid.Row="0" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" Text="{Binding PageTitle}" FontSize="{OnPlatform Android=26, UWP=30}" 
+                   FontAttributes="Bold" TextColor="{DynamicResource HoneyDewColor}"/>
             <!--#region Fields-->
             <StackLayout Grid.Row="1" VerticalOptions="Start">
                 <StackLayout Padding="0,5,0,5">
                     <!--Email-->
                     <Frame Style="{StaticResource CustomFrame}">
                         <StackLayout Orientation="Horizontal">
-                            <CRender:CustomEntry Keyboard="Email" Placeholder="Email" HorizontalTextAlignment="Start"
-                                   Margin="15,0,15,0" FontSize="17" HorizontalOptions="FillAndExpand" 
-                                   Text="{Binding Username, Mode=TwoWay}"/>
+                            <CRender:CustomEntry Keyboard="Email" Placeholder="Email" Margin="15,0,15,0"
+                                                 Style="{DynamicResource BaseEntry}" Text="{Binding Username, Mode=TwoWay}"/>
                         </StackLayout>
                     </Frame>
                     <!--Password-->
                     <Frame Style="{StaticResource CustomFrame}">
                         <StackLayout Orientation="Horizontal">
-                            <CRender:CustomEntry IsPassword="{Binding IsPasswordVisible}" Placeholder="Password" HorizontalTextAlignment="Start" 
-                                   Margin="15,0,0,0" FontSize="17" HorizontalOptions="FillAndExpand" 
-                                    Text="{Binding Password, Mode=TwoWay}"/>
+                            <CRender:CustomEntry IsPassword="{Binding IsPasswordVisible}" Placeholder="Password" Margin="15,0,0,0" 
+                                                 Style="{DynamicResource BaseEntry}" Text="{Binding Password, Mode=TwoWay}" />
                             <Frame Style="{StaticResource RoundFrame}">
                                 <Image Source="{Binding PassEntryIcon}" Aspect="AspectFill" Margin="0">
                                     <Image.GestureRecognizers>
@@ -70,9 +56,8 @@
                     <!--Confirm password-->
                     <Frame Style="{StaticResource CustomFrame}" IsEnabled="{Binding IsRegisterPage}" IsVisible="{Binding IsRegisterPage}">
                         <StackLayout Orientation="Horizontal">
-                            <CRender:CustomEntry IsPassword="{Binding IsConfirmPassVisible}" Placeholder="Confirm password" HorizontalTextAlignment="Start" 
-                                   Margin="15,0,0,0" FontSize="17" HorizontalOptions="FillAndExpand" 
-                                   Text="{Binding ConfirmPass, Mode=TwoWay}"/>
+                            <CRender:CustomEntry IsPassword="{Binding IsConfirmPassVisible}" Placeholder="Confirm password" Margin="15,0,0,0"
+                                                 Style="{DynamicResource BaseEntry}" Text="{Binding ConfirmPass, Mode=TwoWay}"/>
                             <Frame Style="{StaticResource RoundFrame}">
                                 <Image Source="{Binding ConfirmPassEntryIcon}" Aspect="AspectFill" Margin="0">
                                     <Image.GestureRecognizers>
@@ -84,7 +69,7 @@
                     </Frame>
                 </StackLayout>
                     <!--#endregion-->
-                <Button Text="{Binding PageTitle}" IsEnabled="{Binding ActionStatus}" Command="{Binding ActionCommand}" Style="{StaticResource BasicBtn}"/>
+                <Button Text="{Binding ActionBtnText}" Command="{Binding ActionCommand}" Style="{StaticResource BasicBtn}"/>
             </StackLayout>
         </Grid>
     </Grid>

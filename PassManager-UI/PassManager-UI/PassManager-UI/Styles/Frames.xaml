@@ -14,7 +14,7 @@
     
     <Style x:Key="CustomFrame" TargetType="Frame">
         <Setter Property="BackgroundColor" Value="Transparent"/>
-        <Setter Property="BorderColor" Value="DarkGray"/>
+        <Setter Property="BorderColor" Value="{DynamicResource PowderBlueColor}"/>
         <Setter Property="Padding" Value="0"/>
         <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
         <Setter Property="CornerRadius" Value="{OnPlatform Android=30, UWP=25}"/>

@@ -5,8 +5,8 @@
              x:Class="PassManager.Views.Popups.WaitForActionView"
              CloseWhenBackgroundIsClicked="False">
     <StackLayout Orientation="Horizontal" VerticalOptions="Center" HorizontalOptions="Center" 
-                 BackgroundColor="{StaticResource FrameTopColor}" Padding="30" Margin="30">
-        <ActivityIndicator IsVisible="true" IsRunning="True" Color="{StaticResource TextColor}"/>
-        <Label Text="Please wait..." TextColor="{StaticResource TextColor}" FontSize="Medium" VerticalTextAlignment="Center"/>
+                 BackgroundColor="{DynamicResource PrussianBlueColor}" Padding="30" Margin="30">
+        <ActivityIndicator IsVisible="true" IsRunning="True" Color="{DynamicResource CeladonBlueColor}"/>
+        <Label Text="Please wait..." TextColor="{DynamicResource CeladonBlueColor}" FontSize="Medium" VerticalTextAlignment="Center"/>
     </StackLayout>
 </pages:PopupPage>

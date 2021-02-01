@@ -4,21 +4,25 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
     
     <Style x:Key="LabelForEntries" TargetType="Label">
-        <Setter Property="TextColor" Value="{DynamicResource TextColor}"/>
-        <Setter Property="FontSize" Value="17"/>
+        <Setter Property="TextColor" Value="{DynamicResource HoneyDewColor}"/>
+        <Setter Property="FontSize" Value="16"/>
     </Style>
     <Style x:Key="NavigationLabel" TargetType="Label">
         <Setter Property="FontSize" Value="20"/>
         <Setter Property="HorizontalTextAlignment" Value="Start"/>
         <Setter Property="VerticalTextAlignment" Value="Center"/>
-        <Setter Property="TextColor" Value="White"/>
+        <Setter Property="TextColor" Value="{DynamicResource PowderBlueColor}"/>
         <Setter Property="LineBreakMode" Value="TailTruncation"/>
     </Style>
     <Style x:Key="GroupKeyLabel" TargetType="Label">
-        <Setter Property="FontSize" Value="17"/>
-        <Setter Property="TextColor" Value="{DynamicResource TextColor}"/>
+        <Setter Property="FontSize" Value="{OnPlatform Android=15, UWP=17}"/>
+        <Setter Property="TextColor" Value="{DynamicResource PowderBlueColor}"/>
         <Setter Property="Margin" Value="10,5,5,5"/>
         <Setter Property="HorizontalOptions" Value="Start"/>
         <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="VerticalTextAlignment" Value="Center"/>
+    </Style>
+    <Style x:Key="NavTitleLabel" TargetType="Label" BasedOn="{StaticResource NavigationLabel}">
+        <Setter Property="Text" Value="{Binding PageTitle}"/>
     </Style>
 </ResourceDictionary>

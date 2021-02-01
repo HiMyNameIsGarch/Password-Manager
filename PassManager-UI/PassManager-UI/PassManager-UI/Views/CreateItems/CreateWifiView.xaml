@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:CRender="clr-namespace:PassManager.CustomRenderer"
-             x:Class="PassManager.Views.CreateItems.CreateWifiView" BackgroundColor="{DynamicResource PageBottomColor}" Title="{Binding PageTitle}">
+             x:Class="PassManager.Views.CreateItems.CreateWifiView" BackgroundColor="{DynamicResource CeladonBlueColor}" Title="{Binding PageTitle}">
     <Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding GoBack}" />
     </Shell.BackButtonBehavior>
@@ -13,26 +13,23 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Text="{Binding PageTitle}" Style="{DynamicResource NavigationLabel}"/>
-            <Button Grid.Column="1" Text="{Binding ActionBtnText}" Command="{Binding SaveChanges}" Style="{DynamicResource NavigationBtn}" />
-            <Button Grid.Column="2" Command="{Binding DisplayMoreActions}" Text="{Binding ActionsText}" Style="{DynamicResource NavigationBtn}"/>
+            <Label Grid.Column="0" Style="{DynamicResource NavTitleLabel}"/>
+            <Button Grid.Column="1" Style="{DynamicResource SaveBtn}"/>
+            <Button Grid.Column="2" Style="{DynamicResource MoreActionsBtn}"/>
         </Grid>
     </Shell.TitleView>
     <ScrollView>
         <StackLayout Margin="10">
             <!--Actions-->
             <StackLayout IsVisible="{Binding IsUwp}" Orientation="Horizontal">
-                <Button Text="{Binding ActionBtnText}" Command="{Binding SaveChanges}" WidthRequest="100" BackgroundColor="{DynamicResource PageTopColor}"
-                        TextColor="{DynamicResource  FrameBottomColor}" HorizontalOptions="FillAndExpand"/>
-                <Button Text="More" WidthRequest="100" Command="{Binding DisplayMoreActions}" HorizontalOptions="FillAndExpand" 
-                        BackgroundColor="{DynamicResource PageTopColor}" TextColor="{DynamicResource  FrameBottomColor}"/>
+                <Button Style="{DynamicResource SaveBtn}"/>
+                <Button Style="{DynamicResource MoreActionsBtn}"/>
             </StackLayout>
             
             <!--Name label-->
             <Label Text="Name:" Style="{StaticResource LabelForEntries}"/>
             <Frame Style="{StaticResource CustomFrame}">
-                <CRender:CustomEntry Text="{Binding Wifi.Name}" IsReadOnly="{Binding ReadOnly}" 
-                                                  Style="{StaticResource CustomEntry}"/>
+                <CRender:CustomEntry Text="{Binding Wifi.Name}" Style="{StaticResource CustomEntry}"/>
             </Frame>
             
             <!--Password label-->
@@ -40,8 +37,8 @@
             <StackLayout Orientation="Horizontal">
                 <Frame Style="{StaticResource CustomFrame}">
                     <StackLayout Orientation="Horizontal">
-                        <CRender:CustomEntry Text="{Binding Wifi.PasswordEncrypted}"  IsPassword="{Binding IsPasswordVisible}"
-                                                          IsReadOnly="{Binding ReadOnly}" Style="{StaticResource CustomEntry}"/>
+                        <CRender:CustomEntry Text="{Binding Wifi.PasswordEncrypted}" IsPassword="{Binding IsPasswordVisible}" 
+                                             Style="{StaticResource CustomEntry}"/>
                         <Frame Style="{StaticResource RoundFrame}">
                             <Image Source="{Binding PassEntryIcon}" Aspect="AspectFill" Margin="0">
                                 <Image.GestureRecognizers>
@@ -58,8 +55,7 @@
             <Label Text="SSID:" Style="{StaticResource LabelForEntries}"/>
             <StackLayout Orientation="Horizontal">
                 <Frame Style="{StaticResource CustomFrame}">
-                    <CRender:CustomEntry Text="{Binding Wifi.SSID}" IsReadOnly="{Binding ReadOnly}" 
-                                                      Style="{StaticResource CustomEntry}"/>
+                    <CRender:CustomEntry Text="{Binding Wifi.SSID}" Style="{StaticResource CustomEntry}"/>
                 </Frame>
                 <Button Command="{Binding CopySSID}" Style="{DynamicResource CopyEntryBtn}"/>
             </StackLayout>
@@ -69,8 +65,8 @@
             <StackLayout Orientation="Horizontal">
                 <Frame Style="{StaticResource CustomFrame}">
                     <StackLayout Orientation="Horizontal">
-                        <CRender:CustomEntry Text="{Binding Wifi.SettingsPassword}" IsReadOnly="{Binding ReadOnly}" 
-                                                          IsPassword="{Binding IsSettingsPassVis}" Style="{StaticResource CustomEntry}"/>
+                        <CRender:CustomEntry Text="{Binding Wifi.SettingsPassword}" IsPassword="{Binding IsSettingsPassVis}" 
+                                             Style="{StaticResource CustomEntry}"/>
                         <Frame Style="{StaticResource RoundFrame}">
                             <Image Source="{Binding SettingsPassEntryIcon}" Aspect="AspectFill" Margin="0">
                                 <Image.GestureRecognizers>
@@ -86,15 +82,13 @@
             <!--Connection type-->
             <Label Text="Connection Type:" Style="{StaticResource LabelForEntries}"/>
             <Frame Style="{StaticResource CustomFrame}">
-                <CRender:CustomEntry Text="{Binding Wifi.ConnectionType}" IsReadOnly="{Binding ReadOnly}" 
-                                                  Style="{StaticResource CustomEntry}"/>
+                <CRender:CustomEntry Text="{Binding Wifi.ConnectionType}" Style="{StaticResource CustomEntry}"/>
             </Frame>
 
             <!--Notes-->
             <Label Text="Notes:" Style="{StaticResource LabelForEntries}"/>
             <Frame Style="{StaticResource CustomFrame}">
-                <CRender:CustomEditor Text="{Binding Wifi.Notes}" IsReadOnly="{Binding ReadOnly}" AutoSize="TextChanges"
-                                    Style="{StaticResource CustomEntry}"/>
+                <CRender:CustomEditor Text="{Binding Wifi.Notes}" AutoSize="TextChanges" Style="{StaticResource CustomEntry}"/>
             </Frame>
         </StackLayout>
     </ScrollView>
