@@ -2,20 +2,15 @@
 <?xaml-comp compile="true" ?>
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
-    
     <ControlTemplate x:Key="ListViewItemTemplate">
-        <StackLayout>
-            <StackLayout Orientation="Horizontal" IsVisible="{TemplateBinding BindingContext.IsUwp}">
-                <Button Text="Search" Command="{TemplateBinding BindingContext.Search}" HorizontalOptions="FillAndExpand"
-                                TextColor="{StaticResource PageTopColor}" BackgroundColor="{StaticResource FrameBottomColor}"
-                                Margin="5" FontSize="15"/>
-                <Button Text="Refresh" Command="{TemplateBinding BindingContext.Refresh}" HorizontalOptions="FillAndExpand"
-                                TextColor="{StaticResource PageTopColor}" BackgroundColor="{StaticResource FrameBottomColor}"
-                                Margin="5" FontSize="15"/>
+        <StackLayout BackgroundColor="{DynamicResource CeladonBlueColor}">
+            <StackLayout Orientation="Horizontal" IsVisible="{TemplateBinding BindingContext.IsUwp}" BackgroundColor="{DynamicResource PrussianBlueColor}" Margin="0,0,0,-6">
+                <Button Text="Search" Command="{TemplateBinding BindingContext.Search}" Style="{DynamicResource UpListBtn}"/>
+                <Button Text="Refresh" Command="{TemplateBinding BindingContext.Refresh}" Style="{DynamicResource UpListBtn}"/>
             </StackLayout>
             <Label Text="{TemplateBinding BindingContext.NoItemsText}"
                             FontSize="20" Padding="10"
-                            VerticalOptions="End" TextColor="{StaticResource WarningColor}"
+                            VerticalOptions="End" TextColor="{StaticResource OrangeColor}"
                             HorizontalOptions="Center" IsVisible="{TemplateBinding BindingContext.HasItems}"/>
             <ListView x:Name="mainListView" x:FieldModifier="Private" ItemsSource="{TemplateBinding BindingContext.Items}" HasUnevenRows="True" SelectedItem="{TemplateBinding BindingContext.SelectedItem, Mode=TwoWay}"
                               IsPullToRefreshEnabled="True" RefreshCommand="{TemplateBinding BindingContext.Refresh}" IsRefreshing="{TemplateBinding BindingContext.IsRefreshing}"
@@ -23,11 +18,11 @@
                 <ListView.GroupHeaderTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <StackLayout Orientation="Horizontal">
+                            <StackLayout Orientation="Horizontal" BackgroundColor="{DynamicResource CeladonGreyColor}">
                                 <Label Text="{Binding Key}" Style="{DynamicResource GroupKeyLabel}"/>
                                 <Button HorizontalOptions="EndAndExpand" Text="Go To" Command="{TemplateBinding BindingContext.GoToItem}" FontAttributes="Bold"
-                                        TextColor="{DynamicResource TextColor}" IsEnabled="{TemplateBinding BindingContext.CanScroll}" BackgroundColor="Transparent"
-                                        CommandParameter="{Binding Source={x:Reference mainListView}}" FontSize="15" IsVisible="{TemplateBinding BindingContext.CanScroll}"
+                                        TextColor="{DynamicResource PowderBlueColor}" IsEnabled="{TemplateBinding BindingContext.CanScroll}" BackgroundColor="Transparent"
+                                        CommandParameter="{Binding Source={x:Reference mainListView}}" FontSize="{OnPlatform Android=13, UWP=15}" IsVisible="{TemplateBinding BindingContext.CanScroll}"
                                         Margin="0,0,10,0"/>
                             </StackLayout>
                         </ViewCell>
@@ -36,18 +31,18 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <StackLayout Padding="10" Orientation="Vertical">
-                                <Label Text="{Binding Title}" FontSize="17" FontAttributes="Bold" TextColor="{StaticResource TextColor}" 
+                            <StackLayout Padding="10" Orientation="Vertical" BackgroundColor="{DynamicResource CeladonBlueColor}">
+                                <Label Text="{Binding Title}" FontSize="17" FontAttributes="Bold" TextColor="{DynamicResource HoneyDewColor}" 
                                                    HorizontalTextAlignment="Center"/>
-                                <Label Text="{Binding SubTitle}" FontSize="15" TextColor="{StaticResource PageTopColor}" HorizontalTextAlignment="Center"/>
+                                <Label Text="{Binding SubTitle}" FontSize="15" TextColor="{DynamicResource PowderBlueColor}" HorizontalTextAlignment="Center"/>
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <Button Text="Add" FontSize="15" FontAttributes="Bold" BackgroundColor="{StaticResource FrameTopColor}" WidthRequest="66" 
-                            TextColor="{StaticResource PageTopColor}" HeightRequest="66" CornerRadius="33"
-                            HorizontalOptions="CenterAndExpand" Padding="10" Margin="15" Command="{TemplateBinding BindingContext.AddItem}"/>
+            <Button Text="Add" FontSize="15" FontAttributes="Bold" BackgroundColor="{DynamicResource PrussianBlueColor}" WidthRequest="66" 
+                            TextColor="{DynamicResource PowderBlueColor}" HeightRequest="66" CornerRadius="33"
+                            HorizontalOptions="CenterAndExpand" Padding="0" Margin="10,0,10,10" Command="{TemplateBinding BindingContext.AddItem}"/>
         </StackLayout>
     </ControlTemplate>
     

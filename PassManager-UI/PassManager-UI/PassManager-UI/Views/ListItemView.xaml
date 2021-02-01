@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              NavigationPage.HasNavigationBar="False"
-             x:Class="PassManager.Views.ListItemView" Title="Select item to add" BackgroundColor="{DynamicResource PageBottomColor}">
+             x:Class="PassManager.Views.ListItemView" Title="Select item to add" BackgroundColor="{DynamicResource CeladonBlueColor}">
     <Shell.TitleView>
         <Label Text="Select item to add" Style="{DynamicResource NavigationLabel}"/>
     </Shell.TitleView>
@@ -12,7 +12,7 @@
                 <ViewCell>
                     <StackLayout>
                         <Label Text="{Binding Name}" FontSize="20" VerticalOptions="FillAndExpand" BackgroundColor="Transparent" 
-                               HorizontalOptions="Center" Padding="20" TextColor="{StaticResource FrameBottomColor}"/>
+                               HorizontalOptions="Center" Padding="20" TextColor="{DynamicResource HoneyDewColor}"/>
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>

@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:CRender="clr-namespace:PassManager.CustomRenderer"
              x:Class="PassManager.Views.CreateItems.CreateNoteView"
-             BackgroundColor="{DynamicResource PageBottomColor}" Title="{Binding PageTitle}">
+             BackgroundColor="{DynamicResource CeladonBlueColor}" Title="{Binding PageTitle}">
     <Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding GoBack}"/>
     </Shell.BackButtonBehavior>
@@ -14,28 +14,26 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Text="{Binding PageTitle}" Style="{DynamicResource NavigationLabel}"/>
-            <Button Grid.Column="1" Text="{Binding ActionBtnText}" Command="{Binding SaveChanges}" Style="{DynamicResource NavigationBtn}" />
-            <Button Grid.Column="2" Command="{Binding DisplayMoreActions}" Text="{Binding ActionsText}" Style="{DynamicResource NavigationBtn}"/>
+            <Label Grid.Column="0" Style="{DynamicResource NavTitleLabel}"/>
+            <Button Grid.Column="1"  Style="{DynamicResource SaveBtn}"/>
+            <Button Grid.Column="2" Style="{DynamicResource MoreActionsBtn}"/>
         </Grid>
     </Shell.TitleView>
     <ScrollView>
         <StackLayout Margin="10">
             <StackLayout IsVisible="{Binding IsUwp}" Orientation="Horizontal">
-                <Button Text="{Binding ActionBtnText}" Command="{Binding SaveChanges}" WidthRequest="100" BackgroundColor="{DynamicResource PageTopColor}" TextColor="{DynamicResource  FrameBottomColor}" HorizontalOptions="FillAndExpand"/>
-                <Button Text="More" WidthRequest="100" Command="{Binding DisplayMoreActions}" HorizontalOptions="FillAndExpand" BackgroundColor="{DynamicResource PageTopColor}" TextColor="{DynamicResource  FrameBottomColor}"/>
+                <Button Style="{DynamicResource SaveBtn}"/>
+                <Button Style="{DynamicResource MoreActionsBtn}"/>
             </StackLayout>
             <!--Name-->
             <Label Text="Name:" Style="{StaticResource LabelForEntries}"/>
             <Frame Style="{StaticResource CustomFrame}">
-                <CRender:CustomEntry Text="{Binding Note.Name}" IsReadOnly="{Binding ReadOnly}" 
-                                                  Style="{StaticResource CustomEntry}"/>
+                <CRender:CustomEntry Text="{Binding Note.Name}" Style="{DynamicResource CustomEntry}"/>
             </Frame>
             <!--Notes-->
             <Label Text="Notes:" Style="{StaticResource LabelForEntries}"/>
             <Frame Style="{StaticResource CustomFrame}">
-                <CRender:CustomEditor Text="{Binding Note.Notes}" IsReadOnly="{Binding ReadOnly}" AutoSize="TextChanges"
-                                    Style="{StaticResource CustomEntry}"/>
+                <CRender:CustomEditor Text="{Binding Note.Notes}" AutoSize="TextChanges" Style="{DynamicResource CustomEntry}"/>
             </Frame>
         </StackLayout>
     </ScrollView>

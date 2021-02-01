@@ -8,6 +8,7 @@ using System;
 using PassManager.Models;
 using PassManager.Views.Popups;
 using System.Threading.Tasks;
+using PassManager.Models.Interfaces;
 
 namespace PassManager.Views
 {
@@ -28,12 +29,13 @@ namespace PassManager.Views
             _changePageCommand = new Command(ChangePage);
             _actionCommand = new Command(Action);
             //set some names for page
-            SetNames("Sign in", TypeOfActions.Register.ToString(), "Create a new account!");
+            SetNames("Sign in", TypeOfActions.Register.ToString(), "Create a new account", "Confirm");
         }
         private TypeOfActions CurrentAction { get; set; }
         //private props
         private string _anotherPageText;
         private string _questionForUser;
+        private string _actionBtnText;
         private string _username;
         private string _password;
         private string _confirmPass;
@@ -101,6 +103,11 @@ namespace PassManager.Views
             get { return _confirmPass; }
             set { _confirmPass = value; NotifyPropertyChanged(); }
         }
+        public string ActionBtnText
+        {
+            get { return _actionBtnText; }
+            private set { _actionBtnText = value; NotifyPropertyChanged(); }
+        }
         public string AnotherPageText
         {
             get { return _anotherPageText; }
@@ -134,12 +141,12 @@ namespace PassManager.Views
                 case TypeOfActions.Sign_In:
                     CurrentAction = TypeOfActions.Register;
                     IsRegisterPage = true;
-                    SetNames("Register", "Sign in", "Already have an account?");
+                    SetNames("Create new account", "Sign in", "Already have an account?", TypeOfActions.Register.ToString());
                     break;
                 case TypeOfActions.Register:
                     CurrentAction = TypeOfActions.Sign_In;
                     IsRegisterPage = false;
-                    SetNames("Sign in", "Register", "Create a new account!");
+                    SetNames("Sign in", TypeOfActions.Register.ToString(), "Create a new account", "Confirm");
                     break;
                 default:
                     break;
@@ -147,20 +154,25 @@ namespace PassManager.Views
             //empty user fields and errors if exists
             Username = Password = ConfirmPass = string.Empty;
         }
-        private void Action()
+        private async void Action()
         {
             switch (CurrentAction)
             {
                 case TypeOfActions.Register:
-                    Register();
+                    await Register();
                     break;
                 case TypeOfActions.Sign_In:
-                    SignIn();
+                    await SignIn();
                     break;
+            }
+            if(Device.RuntimePlatform == Device.Android)
+            {
+                var statusbar = DependencyService.Get<IStatusBarPlatformSpecific>();
+                statusbar.ChangeNavigationBarColor(Android.Graphics.Color.Rgb(69,123,157));
             }
         }
         //methods
-        private async void Register()
+        private async Task Register()
         {
             if (IsInternet())
             {
@@ -203,7 +215,7 @@ namespace PassManager.Views
                 }
             }
         }
-        private async void SignIn()
+        private async Task SignIn()
         {
             if (IsInternet())
             {
@@ -228,13 +240,13 @@ namespace PassManager.Views
                 }
             }
         }
-        private void SetNames(string title, string page, string question)
+        private void SetNames(string title, string pageText, string question, string actionText)
         {
             PageTitle = title;
-            AnotherPageText = page;
+            AnotherPageText = pageText;
+            ActionBtnText = actionText;
             QuestionForUser = question;
         }
-        //the method can be used to clear the errors as well
         private async Task DisplayError(string errorMsg)
         {
             await PageService.PushPopupAsync(new ErrorView(errorMsg));

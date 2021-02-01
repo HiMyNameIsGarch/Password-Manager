@@ -4,40 +4,60 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
     
     <Style x:Key="PopupBtn" TargetType="Button">
-        <Setter Property="BackgroundColor" Value="{DynamicResource PageTopColor}"/>
-        <Setter Property="TextColor" Value="{DynamicResource FrameTopColor}"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource CeladonBlueColor}"/>
+        <Setter Property="TextColor" Value="{DynamicResource PowderBlueColor}"/>
         <Setter Property="Padding" Value="5"/>
         <Setter Property="Margin" Value="10"/>
         <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
         <Setter Property="CornerRadius" Value="{OnPlatform Android=30, UWP=15}"/>
     </Style>
     <Style x:Key="BasicBtn" TargetType="Button">
-        <Setter Property="BackgroundColor" Value="{DynamicResource FrameTopColor}"/>
-        <Setter Property="CornerRadius" Value="20"/>
+        <Setter Property="BackgroundColor" Value="Transparent"/>
         <Setter Property="HorizontalOptions" Value="Center"/>
-        <Setter Property="FontSize" Value="13"/>
-        <Setter Property="WidthRequest" Value="90"/>
-        <Setter Property="HeightRequest" Value="40"/>
-        <Setter Property="TextColor" Value="{DynamicResource PageBottomColor}"/>
+        <Setter Property="FontSize" Value="{OnPlatform Android=14, UWP=18}"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="TextColor" Value="{DynamicResource HoneyDewColor}"/>
     </Style>
     <Style x:Key="NavigationBtn" TargetType="Button">
-        <Setter Property="BackgroundColor" Value="{DynamicResource PageTopColor}"/>
+        <Setter Property="BackgroundColor" Value="Transparent"/>
         <Setter Property="HorizontalOptions" Value="Center"/>
         <Setter Property="VerticalOptions" Value="Center"/>
         <Setter Property="FontSize" Value="11"/>
         <Setter Property="FontAttributes" Value="Bold"/>
-        <Setter Property="TextColor" Value="White"/>
+        <Setter Property="TextColor" Value="{DynamicResource PowderBlueColor}"/>
     </Style>
     <Style x:Key="CopyEntryBtn" TargetType="Button">
         <Setter Property="Text" Value="Copy"/>
         <Setter Property="FontSize" Value="{OnPlatform Android=12, UWP=15}"/>
         <Setter Property="FontAttributes" Value="Bold"/>
-        <Setter Property="TextColor" Value="{DynamicResource TextColor}"/>
+        <Setter Property="TextColor" Value="{DynamicResource HoneyDewColor}"/>
         <Setter Property="Padding" Value="0"/>
         <Setter Property="Margin" Value="0"/>
         <Setter Property="BackgroundColor" Value="Transparent"/>
         <Setter Property="VerticalOptions" Value="Center"/>
         <Setter Property="WidthRequest" Value="{OnPlatform Android=35, UWP=40}"/>
         <Setter Property="IsVisible" Value="{Binding CanCopy}"/>
+    </Style>
+    <Style x:Key="SearchNavBtn" TargetType="Button" BasedOn="{StaticResource NavigationBtn}">
+        <Setter Property="Text" Value="Search"/>
+        <Setter Property="Command" Value="{Binding Search}"/>
+    </Style>
+    <Style x:Key="UpBtnBase" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="Transparent"/>
+        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="FontSize" Value="{OnPlatform Android=11, UWP=16}"/>
+        <Setter Property="TextColor" Value="{DynamicResource PowderBlueColor}"/>
+    </Style>
+    <Style x:Key="UpListBtn" TargetType="Button" BasedOn="{StaticResource UpBtnBase}">
+        <Setter Property="Padding" Value="7"/>
+    </Style>
+    <Style x:Key="MoreActionsBtn" TargetType="Button" BasedOn="{StaticResource UpBtnBase}">
+        <Setter Property="Text" Value="More"/>
+        <Setter Property="Command" Value="{Binding DisplayMoreActions}"/>
+    </Style>
+    <Style x:Key="SaveBtn" TargetType="Button" BasedOn="{StaticResource UpBtnBase}">
+        <Setter Property="Text" Value="{Binding ActionBtnText}"/>
+        <Setter Property="Command" Value="{Binding SaveChanges}"/>
     </Style>
 </ResourceDictionary>
