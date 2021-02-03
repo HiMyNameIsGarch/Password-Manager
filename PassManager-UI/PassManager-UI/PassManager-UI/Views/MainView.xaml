@@ -3,9 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:items="clr-namespace:PassManager.Views.FlyoutItems"
              x:Class="PassManager.Views.MainView"
-             Shell.NavBarHasShadow="False" Shell.TabBarForegroundColor="{DynamicResource PowderBlueColor}" Shell.ForegroundColor="{DynamicResource PowderBlueColor}"
-             FlyoutHeaderBehavior="CollapseOnScroll"
-             Shell.TitleColor="{DynamicResource PowderBlueColor}" FlyoutBackgroundColor="{DynamicResource CeladonBlueColor}">
+             Shell.NavBarHasShadow="False" FlyoutHeaderBehavior="CollapseOnScroll"
+             Shell.TitleColor="{DynamicResource PowderBlueColor}" BackgroundColor="{DynamicResource CeladonBlueColor}">
     <Shell.FlyoutHeaderTemplate>
         <DataTemplate>
             <Grid BackgroundColor="{DynamicResource PrussianBlueColor}"
@@ -28,7 +27,7 @@
             <ShellContent Route="Password" ContentTemplate="{DataTemplate items:PasswordView}"/>
         </Tab>
     </FlyoutItem>
-    <FlyoutItem Title="Wi-Fi">
+    <FlyoutItem Title="Wi-Fis">
         <Tab>
             <ShellContent Route="Wifi" ContentTemplate="{DataTemplate items:WifiPassView}"/>
         </Tab>
@@ -38,7 +37,7 @@
             <ShellContent Route="Note" ContentTemplate="{DataTemplate items:NoteView}"/>
         </Tab>
     </FlyoutItem>
-    <FlyoutItem Title="Payment Card">
+    <FlyoutItem Title="Payment Cards">
         <Tab>
             <ShellContent Route="PaymentCard" ContentTemplate="{DataTemplate items:PaymentCardView}"/>
         </Tab>

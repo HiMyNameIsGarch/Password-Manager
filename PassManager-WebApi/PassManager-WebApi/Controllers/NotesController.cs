@@ -29,11 +29,18 @@ namespace PassManager_WebApi.Controllers
             if (lastCreated)
             {
                 var userId = User.Identity.GetUserId();
+                string iconUrl = IconHelper.GetImageUrl(TypeOfItems.Note);
                 var lastestPass = db.Notes
                     .Where(w => w.UserId == userId)
                     .OrderByDescending(s => s.CreateDate)
                     .Take(1)
-                    .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = TypeOfItems.Note.ToString(), ItemType = TypeOfItems.Note});
+                    .Select(item => new ItemPreview() { 
+                        Id = item.Id, 
+                        Title = item.Name, 
+                        SubTitle = TypeOfItems.Note.ToString(),
+                        ItemType = TypeOfItems.Note,
+                        IconUrl = iconUrl
+                    });
                 return Ok(lastestPass.FirstOrDefault());
             }
             return BadRequest();
@@ -41,10 +48,10 @@ namespace PassManager_WebApi.Controllers
         //GET api/Notes/5
         public IHttpActionResult Get(int id)
         {
-            if (id <= 0) return BadRequest("Id is invalid!");
+            if (id <= 0) return BadRequest(ErrorMsg.InvalidId);
             string userId = User.Identity.GetUserId();
             Note note = db.Notes.FirstOrDefault(n => n.Id == id && n.UserId == userId);
-            if (note is null) return BadRequest("Note does not exist!");
+            if (note is null) return BadRequest(ErrorMsg.ItemDoesNotExist(TypeOfItems.Note));
             note.NumOfVisits++;
             db.SaveChanges();
             return Ok(new NoteVM(note));
@@ -52,7 +59,7 @@ namespace PassManager_WebApi.Controllers
         //POST api/Notes
         public IHttpActionResult Post([FromBody] NoteVM note)
         {
-            if (note is null) return BadRequest("Note does not exist!");
+            if (note is null) return BadRequest(ErrorMsg.ItemDoesNotExist(TypeOfItems.Note));
             var isModelValid = note.IsModelValid();
             if (!string.IsNullOrEmpty(isModelValid)) return BadRequest(isModelValid);
             string userId = User.Identity.GetUserId();
@@ -63,14 +70,14 @@ namespace PassManager_WebApi.Controllers
         //PUT api/Notes/5
         public IHttpActionResult Put(int id, [FromBody] NoteVM note)
         {
-            if (note is null) return BadRequest("Note does not exist!");
-            if (id != note.Id) return BadRequest("Id does not match with the note");
-            if (id <= 0) return BadRequest("Id is invalid!");
+            if (note is null) return BadRequest(ErrorMsg.ItemDoesNotExist(TypeOfItems.Note));
+            if (id != note.Id) return BadRequest(ErrorMsg.InvalidIdMatchingWith(TypeOfItems.Note));
+            if (id <= 0) return BadRequest(ErrorMsg.InvalidId);
             var isModelValid = note.IsModelValid();
             if (!string.IsNullOrEmpty(isModelValid)) return BadRequest(isModelValid);
             string userId = User.Identity.GetUserId();
             Note noteToBeModified = db.Notes.FirstOrDefault(w => w.Id == id && w.UserId == userId);
-            if (noteToBeModified is null) return BadRequest("Note not found!");
+            if (noteToBeModified is null) return BadRequest(ErrorMsg.ItemNotFound(TypeOfItems.Note));
             noteToBeModified.ModifyTo(note);
             db.SaveChanges();
             return Ok();
@@ -78,10 +85,10 @@ namespace PassManager_WebApi.Controllers
         //DELETE api/Notes/5
         public IHttpActionResult Delete(int id)
         {
-            if (id <= 0) return BadRequest("Id is invalid!");
+            if (id <= 0) return BadRequest(ErrorMsg.InvalidId);
             string userId = User.Identity.GetUserId();
             Note noteToBeDeleted = db.Notes.FirstOrDefault(w => w.Id == id && w.UserId == userId);
-            if (noteToBeDeleted is null) return BadRequest("Note not found");
+            if (noteToBeDeleted is null) return BadRequest(ErrorMsg.ItemNotFound(TypeOfItems.Note));
             db.Notes.Remove(noteToBeDeleted);
             db.SaveChanges();
             return Ok();

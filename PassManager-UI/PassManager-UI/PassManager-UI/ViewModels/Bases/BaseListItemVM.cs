@@ -202,8 +202,12 @@ namespace PassManager.ViewModels.Bases
         //methods
         private void UpdateItem(UpdateModel updateModel)
         {
-            var currentItems = Items.Where(k => k.Key == updateModel.ItemPreview.ItemType.ToSampleString())
+            Grouping<string, ItemPreview> currentItems = null;
+            if(Items != null)
+            {
+                currentItems = Items.Where(k => k.Key == updateModel.ItemPreview.ItemType.ToSampleString())
                     .FirstOrDefault();
+            }
             if(currentItems is null)//that means no items of that type are in list
             {
                 //add new item

@@ -42,10 +42,10 @@ namespace PassManager.ViewModels
             get {
                 return new List<CreateItem>
                 {
-                    new CreateItem(TypeOfItems.Password.ToSampleString(), string.Empty),
-                    new CreateItem(TypeOfItems.Wifi.ToSampleString(), string.Empty),
-                    new CreateItem(TypeOfItems.Note.ToSampleString(),string.Empty),
-                    new CreateItem(TypeOfItems.PaymentCard.ToSampleString(),string.Empty)
+                    new CreateItem(TypeOfItems.Password),
+                    new CreateItem(TypeOfItems.Wifi),
+                    new CreateItem(TypeOfItems.Note),
+                    new CreateItem(TypeOfItems.PaymentCard)
                 };
             }
         }

@@ -30,11 +30,18 @@ namespace PassManager_WebApi.Controllers
             if (lastCreated)
             {
                 var userId = User.Identity.GetUserId();
+                string imageUrl = IconHelper.GetImageUrl(TypeOfItems.Password);
                 var lastestPass = db.Passwords
                     .Where(w => w.UserId == userId)
                     .OrderByDescending(s => s.CreateDate)
                     .Take(1)
-                    .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = item.Username, ItemType = TypeOfItems.Password});
+                    .Select(item => new ItemPreview() {
+                        Id = item.Id, 
+                        Title = item.Name, 
+                        SubTitle = item.Username, 
+                        ItemType = TypeOfItems.Password,
+                        IconUrl = imageUrl
+                    });
                 return Ok(lastestPass.FirstOrDefault());
             }
             return BadRequest();
@@ -42,10 +49,10 @@ namespace PassManager_WebApi.Controllers
         //GET api/Passwords/5
         public IHttpActionResult Get(int id)
         {
-            if (id <= 0) return BadRequest("Id is invalid");
+            if (id <= 0) return BadRequest(ErrorMsg.InvalidId);
             string userId = User.Identity.GetUserId();
             Password password = db.Passwords.FirstOrDefault(w => w.Id == id && w.UserId == userId);//get the current password from user
-            if (password is null) return BadRequest("Password does not exist!");//check if that exists
+            if (password is null) return BadRequest(ErrorMsg.ItemDoesNotExist(TypeOfItems.Password));//check if that exists
             password.NumOfVisits++;//modify when is last visited
             db.SaveChanges();//save the changes
             return Ok(new PasswordVM(password));//send
@@ -53,7 +60,7 @@ namespace PassManager_WebApi.Controllers
         //POST api/Passwords
         public IHttpActionResult Post([FromBody] PasswordVM password)
         {
-            if (password is null) return BadRequest("Password does not exist!");
+            if (password is null) return BadRequest(ErrorMsg.ItemDoesNotExist(TypeOfItems.Password));
             var isModelValid = password.IsModelValid();
             if (!string.IsNullOrEmpty(isModelValid)) return BadRequest(isModelValid);
             string userId = User.Identity.GetUserId();
@@ -65,16 +72,16 @@ namespace PassManager_WebApi.Controllers
         public IHttpActionResult Put(int id, [FromBody] PasswordVM password)
         {
             //check if the password id and the id match
-            if (password is null) return BadRequest("Password does not exist!");
-            if (id != password.Id) return BadRequest("Id does not match with the password");
-            if (id <= 0) return BadRequest("Id is invalid!");
+            if (password is null) return BadRequest(ErrorMsg.ItemDoesNotExist(TypeOfItems.Password));
+            if (id != password.Id) return BadRequest(ErrorMsg.InvalidIdMatchingWith(TypeOfItems.Password));
+            if (id <= 0) return BadRequest(ErrorMsg.InvalidId);
             //check is model is valid
             var isModelValid = password.IsModelValid();
             if (!string.IsNullOrEmpty(isModelValid)) return BadRequest(isModelValid);
             //get current user id and modify it
             string userId = User.Identity.GetUserId();
             Password passwordToBeModified = db.Passwords.FirstOrDefault(w => w.Id == id && w.UserId == userId);
-            if (passwordToBeModified is null) return BadRequest("Password not found!");
+            if (passwordToBeModified is null) return BadRequest(ErrorMsg.ItemNotFound(TypeOfItems.Password));
             //modify it
             passwordToBeModified.ModifyTo(password);
             db.SaveChanges();
@@ -83,10 +90,10 @@ namespace PassManager_WebApi.Controllers
         //DELETE api/Passwords/5
         public IHttpActionResult Delete(int id)
         {
-            if (id <= 0) return BadRequest("Id is invalid!");
+            if (id <= 0) return BadRequest(ErrorMsg.InvalidId);
             string userId = User.Identity.GetUserId();
             Password passwordToBeDeleted = db.Passwords.FirstOrDefault(w => w.Id == id && w.UserId == userId);
-            if (passwordToBeDeleted is null) return BadRequest("Password not found");
+            if (passwordToBeDeleted is null) return BadRequest(ErrorMsg.ItemNotFound(TypeOfItems.Password));
             db.Passwords.Remove(passwordToBeDeleted);
             db.SaveChanges();
             return Ok();

@@ -291,7 +291,9 @@
       <DependentUpon>PassManager.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\EnumExtensions.cs" />
+    <Compile Include="Models\ErrorMsg.cs" />
     <Compile Include="Models\Grouping.cs" />
+    <Compile Include="Models\IconHelper.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\Interfaces\IBaseItemController.cs" />
     <Compile Include="Models\Interfaces\IModelValid.cs" />
