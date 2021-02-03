@@ -2,7 +2,13 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:CRender="clr-namespace:PassManager.CustomRenderer"
+             xmlns:converter="clr-namespace:PassManager.Converters"
              x:Class="PassManager.Views.SearchView" BackgroundColor="{DynamicResource CeladonBlueColor}" Title="{Binding PageTitle}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:ImageSourceConverter x:Key="iconConvertor"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <Shell.TitleView>
         <CRender:CustomEntry VerticalOptions="Center" HorizontalOptions="Center" ClearButtonVisibility="WhileEditing" 
                IsTextPredictionEnabled="False" Placeholder="{Binding PageTitle}" Text="{Binding SearchString, Mode=TwoWay}"/>
@@ -23,11 +29,20 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <StackLayout Padding="10" Orientation="Vertical" BackgroundColor="{DynamicResource CeladonBlueColor}">
-                            <Label Text="{Binding Title}" FontSize="17" FontAttributes="Bold" TextColor="{DynamicResource HoneyDewColor}" 
-                                                   HorizontalTextAlignment="Center"/>
-                            <Label Text="{Binding SubTitle}" FontSize="15" TextColor="{DynamicResource PowderBlueColor}" HorizontalTextAlignment="Center"/>
-                        </StackLayout>
+                        <Grid BackgroundColor="{DynamicResource CeladonBlueColor}" Padding="10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="5*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Source="{Binding IconUrl, Converter={StaticResource iconConverter}}" Aspect="AspectFit" Margin="0" WidthRequest="64" HeightRequest="64" />
+                            <Label Grid.Column="1" Grid.Row="0" Text="{Binding Title}" FontSize="17" FontAttributes="Bold" TextColor="{DynamicResource HoneyDewColor}" 
+                                                   HorizontalTextAlignment="Start"/>
+                            <Label Grid.Column="1" Grid.Row="1" Text="{Binding SubTitle}" FontSize="15" TextColor="{DynamicResource PowderBlueColor}" HorizontalTextAlignment="Start"/>
+                        </Grid>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>

@@ -1,7 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <?xaml-comp compile="true" ?>
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converter="clr-namespace:PassManager.Converters">
+    
+    <converter:ImageSourceConverter x:Key="iconConverter"/>
+    
     <ControlTemplate x:Key="ListViewItemTemplate">
         <StackLayout BackgroundColor="{DynamicResource CeladonBlueColor}">
             <StackLayout Orientation="Horizontal" IsVisible="{TemplateBinding BindingContext.IsUwp}" BackgroundColor="{DynamicResource PrussianBlueColor}" Margin="0,0,0,-6">
@@ -31,11 +35,20 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <StackLayout Padding="10" Orientation="Vertical" BackgroundColor="{DynamicResource CeladonBlueColor}">
-                                <Label Text="{Binding Title}" FontSize="17" FontAttributes="Bold" TextColor="{DynamicResource HoneyDewColor}" 
-                                                   HorizontalTextAlignment="Center"/>
-                                <Label Text="{Binding SubTitle}" FontSize="15" TextColor="{DynamicResource PowderBlueColor}" HorizontalTextAlignment="Center"/>
-                            </StackLayout>
+                            <Grid BackgroundColor="{DynamicResource CeladonBlueColor}" Padding="10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="5*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Source="{Binding IconUrl, Converter={StaticResource iconConverter}}" Aspect="AspectFit" Margin="0" WidthRequest="64" HeightRequest="64" />
+                                <Label Grid.Column="1" Grid.Row="0" Text="{Binding Title}" FontSize="17" FontAttributes="Bold" TextColor="{DynamicResource HoneyDewColor}" 
+                                                   HorizontalTextAlignment="Start"/>
+                                <Label Grid.Column="1" Grid.Row="1" Text="{Binding SubTitle}" FontSize="15" TextColor="{DynamicResource PowderBlueColor}" HorizontalTextAlignment="Start"/>
+                            </Grid>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>

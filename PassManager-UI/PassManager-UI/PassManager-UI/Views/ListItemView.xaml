@@ -1,8 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converter="clr-namespace:PassManager.Converters"
              NavigationPage.HasNavigationBar="False"
              x:Class="PassManager.Views.ListItemView" Title="Select item to add" BackgroundColor="{DynamicResource CeladonBlueColor}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:ImageSourceConverter x:Key="iconConvertor"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <Shell.TitleView>
         <Label Text="Select item to add" Style="{DynamicResource NavigationLabel}"/>
     </Shell.TitleView>
@@ -10,10 +16,15 @@
         <ListView.ItemTemplate>
             <DataTemplate>
                 <ViewCell>
-                    <StackLayout>
-                        <Label Text="{Binding Name}" FontSize="20" VerticalOptions="FillAndExpand" BackgroundColor="Transparent" 
-                               HorizontalOptions="Center" Padding="20" TextColor="{DynamicResource HoneyDewColor}"/>
-                    </StackLayout>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="4*"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Grid.Column="0" Source="{Binding IconUrl, Converter={StaticResource iconConvertor}}" Aspect="AspectFit" Margin="0" WidthRequest="64" HeightRequest="64" />
+                        <Label Grid.Column="1" Text="{Binding Name}" FontSize="20" VerticalOptions="CenterAndExpand" BackgroundColor="Transparent" 
+                               HorizontalOptions="Start" Padding="20" TextColor="{DynamicResource HoneyDewColor}"/>
+                    </Grid>
                 </ViewCell>
             </DataTemplate>
         </ListView.ItemTemplate>

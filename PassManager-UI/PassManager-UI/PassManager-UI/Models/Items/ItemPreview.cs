@@ -13,11 +13,13 @@ namespace PassManager.Models.Items
             Title = title;
             SubTitle = subTitle;
             ItemType = itemType;
+            IconUrl = IconHelper.GetImageUrl(ItemType);
         }
         public int Id { get; set; }
         public string Title { get; set; }
         public string SubTitle { get; set; }
         public TypeOfItems ItemType { get; set; }
+        public string IconUrl { get; set; }
         public override int GetHashCode()
         {
             return base.GetHashCode();

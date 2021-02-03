@@ -15,38 +15,44 @@ namespace PassManager_WebApi.Controllers
         internal static IQueryable<ItemPreview> GetAllPasswords(PasswordManagerEntities db, string userId)
         {
             if (db is null || string.IsNullOrEmpty(userId)) return null;
+            string iconUrl = IconHelper.GetImageUrl(TypeOfItems.Password);
             return db.Passwords
                 .Where(item => item.UserId == userId)
                 .OrderByDescending(p => p.NumOfVisits)
                 .ThenBy(p => p.Name)
-                .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = item.Username, ItemType = TypeOfItems.Password });
+                .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = item.Username, ItemType = TypeOfItems.Password, IconUrl = iconUrl });
         }
         internal static IQueryable<ItemPreview> GetAllWifis(PasswordManagerEntities db, string userId)
         {
             if (db is null || string.IsNullOrEmpty(userId)) return null;
+            string iconUrl = IconHelper.GetImageUrl(TypeOfItems.Wifi);
+            string subTitle = TypeOfItems.Wifi.ToSampleString();
             return db.Wifis
             .Where(item => item.UserId == userId)
             .OrderByDescending(p => p.NumOfVisits)
             .ThenBy(p => p.Name)
-            .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = "Wi-Fi", ItemType = TypeOfItems.Wifi });
+            .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = subTitle, ItemType = TypeOfItems.Wifi, IconUrl = iconUrl });
         }
         internal static IQueryable<ItemPreview> GetAllNotes(PasswordManagerEntities db, string userId)
         {
             if (db is null || string.IsNullOrEmpty(userId)) return null;
+            string iconUrl = IconHelper.GetImageUrl(TypeOfItems.Note);
             return db.Notes
             .Where(item => item.UserId == userId)
             .OrderByDescending(p => p.NumOfVisits)
             .ThenBy(p => p.Name)
-            .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = TypeOfItems.Note.ToString(), ItemType = TypeOfItems.Note });
+            .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = TypeOfItems.Note.ToString(), ItemType = TypeOfItems.Note, IconUrl = iconUrl });
         }
         internal static IQueryable<ItemPreview> GetAllPaymentCards(PasswordManagerEntities db, string userId)
         {
             if (db is null || string.IsNullOrEmpty(userId)) return null;
+            string iconUrl = IconHelper.GetImageUrl(TypeOfItems.PaymentCard);
+            string subTitle = TypeOfItems.PaymentCard.ToSampleString();
             return db.PaymentCards
             .Where(note => note.UserId == userId)
             .OrderByDescending(note => note.NumOfVisits)
             .ThenBy(note => note.Name)
-            .Select(note => new ItemPreview() { Id = note.Id, Title = note.Name, SubTitle = "Payment card", ItemType = TypeOfItems.PaymentCard });
+            .Select(note => new ItemPreview() { Id = note.Id, Title = note.Name, SubTitle = subTitle, ItemType = TypeOfItems.PaymentCard, IconUrl = iconUrl });
         }
         //GET api/EntireItems
         public IHttpActionResult Get()//get latest passwords preview
@@ -60,7 +66,7 @@ namespace PassManager_WebApi.Controllers
         {
             var previews = SearchItems(searchString);
 
-            if (previews is null) return BadRequest("Your search string could not be empty!");
+            if (previews is null) return BadRequest(ErrorMsg.InvalidSearchString);
 
             return Ok(previews.Reverse());//reverse list to order better items type
         }

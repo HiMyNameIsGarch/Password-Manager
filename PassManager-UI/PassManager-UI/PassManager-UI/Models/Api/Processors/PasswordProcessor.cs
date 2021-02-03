@@ -1,7 +1,6 @@
 ﻿using PassManager.Models.Items;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -23,8 +22,7 @@ namespace PassManager.Models.Api.Processors
             if (responseMessage.IsSuccessStatusCode)
             {
                 var itemList = await responseMessage.Content.ReadAsAsync<IEnumerable<ItemPreview>>();
-                var groupedItems = itemList.GroupBy(item => item.ItemType)
-                                           .Select(item => new Grouping<string, ItemPreview>(item.Key.ToSampleString(), item));
+                var groupedItems = Grouping<string, ItemPreview>.GroupList(itemList);
                 return groupedItems;
             }
             return null;

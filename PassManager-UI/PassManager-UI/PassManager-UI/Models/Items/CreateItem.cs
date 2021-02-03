@@ -1,13 +1,15 @@
-﻿namespace PassManager.Models.Items
+﻿using PassManager.Enums;
+
+namespace PassManager.Models.Items
 {
     public class CreateItem
     {
-        public CreateItem(string item, string imageUrl)
+        public CreateItem(TypeOfItems itemType)
         {
-            Name = item;
-            ImageUrl = imageUrl;
+            Name = itemType.ToSampleString();
+            IconUrl = IconHelper.GetImageUrl(itemType);
         }
         public string Name { get; set; }
-        public string ImageUrl { get; set; }
+        public string IconUrl { get; set; }
     }
 }

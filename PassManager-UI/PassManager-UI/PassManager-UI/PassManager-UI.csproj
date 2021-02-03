@@ -18,12 +18,20 @@
 
   <ItemGroup>
     <None Remove="Images\Locked.png" />
+    <None Remove="Images\Note.png" />
     <None Remove="Images\Open.png" />
+    <None Remove="Images\Password.png" />
+    <None Remove="Images\PaymentCard.png" />
+    <None Remove="Images\WiFi.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Images\PaymentCard.png" />
     <EmbeddedResource Include="Images\Locked.png" />
+    <EmbeddedResource Include="Images\Note.png" />
     <EmbeddedResource Include="Images\Open.png" />
+    <EmbeddedResource Include="Images\Password.png" />
+    <EmbeddedResource Include="Images\Wifi.png" />
   </ItemGroup>
 
   <ItemGroup>

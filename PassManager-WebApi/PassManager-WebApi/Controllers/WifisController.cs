@@ -30,11 +30,19 @@ namespace PassManager_WebApi.Controllers
             if (lastCreated)
             {
                 var userId = User.Identity.GetUserId();
+                string wifiName = TypeOfItems.Wifi.ToSampleString();
+                string iconUrl = IconHelper.GetImageUrl(TypeOfItems.Wifi);
                 var lastestWifi = db.Wifis
                     .Where(w => w.UserId == userId)
                     .OrderByDescending(s => s.CreateDate)
                     .Take(1)
-                    .Select(item => new ItemPreview() { Id = item.Id, Title = item.Name, SubTitle = "Wi-Fi", ItemType = TypeOfItems.Wifi });
+                    .Select(item => new ItemPreview() {
+                        Id = item.Id,
+                        Title = item.Name, 
+                        SubTitle = wifiName, 
+                        ItemType = TypeOfItems.Wifi, 
+                        IconUrl = iconUrl
+                        });
                 return Ok(lastestWifi.FirstOrDefault());
             }
             return BadRequest();
@@ -42,11 +50,11 @@ namespace PassManager_WebApi.Controllers
         //GET api/Wifis/5
         public IHttpActionResult Get(int id)
         {
-            if (id <= 0) return BadRequest("Id is invalid");
+            if (id <= 0) return BadRequest(ErrorMsg.InvalidId);
             string userId = User.Identity.GetUserId();
             //get current wifi based on userId
             Wifi wifi = db.Wifis.FirstOrDefault(w => w.Id == id && w.UserId == userId);
-            if (wifi is null) return BadRequest("Wifi does not exist!");
+            if (wifi is null) return BadRequest(ErrorMsg.ItemDoesNotExist(TypeOfItems.Wifi));
             wifi.NumOfVisits++;
             db.SaveChanges();
             return Ok(new WifiVM(wifi));
@@ -54,7 +62,7 @@ namespace PassManager_WebApi.Controllers
         //POST api/Wifi
         public IHttpActionResult Post([FromBody] WifiVM wifi)
         {
-            if (wifi is null) return BadRequest("Wifi does not exist!");
+            if (wifi is null) return BadRequest(ErrorMsg.ItemDoesNotExist(TypeOfItems.Wifi));
             var isModelValid = wifi.IsModelValid();
             if (!string.IsNullOrEmpty(isModelValid)) return BadRequest(isModelValid);
             string userId = User.Identity.GetUserId();
@@ -66,16 +74,16 @@ namespace PassManager_WebApi.Controllers
         public IHttpActionResult Put(int id, [FromBody] WifiVM wifi)
         {
             //check if the wifi and the id match
-            if (wifi is null) return BadRequest("Wifi does not exist!");
-            if (id != wifi.Id) return BadRequest("Id does not match with the wifi");
-            if (id <= 0) return BadRequest("Id is invalid");
+            if (wifi is null) return BadRequest(ErrorMsg.ItemDoesNotExist(TypeOfItems.Wifi));
+            if (id != wifi.Id) return BadRequest(ErrorMsg.InvalidIdMatchingWith(TypeOfItems.Wifi));
+            if (id <= 0) return BadRequest(ErrorMsg.InvalidId);
             //check if wifi is valid
             var isModelValid = wifi.IsModelValid();
             if (!string.IsNullOrEmpty(isModelValid)) return BadRequest(isModelValid);
             //get current user id and modify wifi
             string userId = User.Identity.GetUserId();
             Wifi wifiToBeModified = db.Wifis.FirstOrDefault(w => w.Id == id && w.UserId == userId);
-            if (wifiToBeModified is null) return BadRequest("Wifi not found");
+            if (wifiToBeModified is null) return BadRequest(ErrorMsg.ItemNotFound(TypeOfItems.Wifi));
             wifiToBeModified.ModifyTo(wifi);
             db.SaveChanges();
             return Ok();
@@ -83,10 +91,10 @@ namespace PassManager_WebApi.Controllers
         //DELETE api/Wifi/5
         public IHttpActionResult Delete(int id)
         {
-            if (id <= 0) return BadRequest("Id is invalid");
+            if (id <= 0) return BadRequest(ErrorMsg.InvalidId);
             string userId = User.Identity.GetUserId();
             Wifi wifiToBeDeleted = db.Wifis.FirstOrDefault(w => w.Id == id && w.UserId == userId);
-            if (wifiToBeDeleted is null) return BadRequest("Wifi not found");
+            if (wifiToBeDeleted is null) return BadRequest(ErrorMsg.ItemNotFound(TypeOfItems.Wifi));
             db.Wifis.Remove(wifiToBeDeleted);
             db.SaveChanges();
             return Ok();
