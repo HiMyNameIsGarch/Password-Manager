@@ -30,7 +30,7 @@ namespace PassManager_WebApi.App_Start
             using (StreamWriter writer = File.AppendText(FullName))
             {
                 writer.Write("\rPassword Manager start at: ");
-                writer.WriteLine($"{DateTime.Now.ToLongTimeString()} {DateTime.Now.ToLongDateString()}\n");
+                writer.WriteLine($"{DateTime.Now.ToLongTimeString()} {DateTime.Now.ToLongDateString()}");
             }
         }
         private void SetCurrentLogFile()
@@ -84,24 +84,24 @@ namespace PassManager_WebApi.App_Start
         private void Log(MessageType messageType, string message, Exception exception = null)
         {
             //add date time when the log occurs
-            string toLog = DateTime.Now.ToString("HH:mm:ss FFF");
+            string toLog = string.Empty;
             //add prefix
             switch (messageType)
             {
                 case MessageType.Debug:
-                    toLog += " DEBUG: ";
+                    toLog += "DEBUG: ";
                     break;
                 case MessageType.Info:
-                    toLog += " INFO: ";
+                    toLog += "INFO: ";
                     break;
                 case MessageType.Warning:
-                    toLog += " WARNING: ";
+                    toLog += "WARNING: ";
                     break;
                 case MessageType.Error:
-                    toLog += " ERROR: ";
+                    toLog += "ERROR: ";
                     break;
                 case MessageType.Fatal:
-                    toLog += " FATAL: ";
+                    toLog += "FATAL: ";
                     break;
             }
             //add msg
