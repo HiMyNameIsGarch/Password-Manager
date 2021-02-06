@@ -11,7 +11,8 @@
     </ContentPage.Resources>
     <Shell.TitleView>
         <CRender:CustomEntry VerticalOptions="Center" HorizontalOptions="Center" ClearButtonVisibility="WhileEditing" 
-               IsTextPredictionEnabled="False" Placeholder="{Binding PageTitle}" Text="{Binding SearchString, Mode=TwoWay}"/>
+               IsTextPredictionEnabled="False" Placeholder="{Binding PageTitle}" Text="{Binding SearchString, Mode=TwoWay}"
+               TextColor="{DynamicResource PowderBlueColor}"/>
     </Shell.TitleView>
     <StackLayout>
         <CRender:CustomEntry IsVisible="{Binding IsUwp}" ClearButtonVisibility="WhileEditing" IsTextPredictionEnabled="False" Placeholder="{Binding PageTitle}" 

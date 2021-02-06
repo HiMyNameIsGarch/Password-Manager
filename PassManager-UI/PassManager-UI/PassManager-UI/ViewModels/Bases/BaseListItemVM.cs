@@ -16,15 +16,25 @@ namespace PassManager.ViewModels.Bases
     [QueryProperty("Update", "update")]
     public abstract class BaseListItemVM : BaseViewModel
     {
-        //constructors
-        public BaseListItemVM(string pageTitle) : base(pageTitle)
+        private void SetDefaultValues()
         {
             _addItem = new Command(SelectItemToAdd);
             _items = new ObservableCollection<Grouping<string, ItemPreview>>();
             _refresh = new Command(RefreshCommand);
             _goToItem = new Command(GoToItemAsync);
         }
+        //constructors
+        public BaseListItemVM(string pageTitle) : base(pageTitle)
+        {
+            SetDefaultValues();
+        }
+        public BaseListItemVM(TypeOfItems itemType) : base(itemType.ToPluralString())
+        {
+            ItemType = itemType;
+            SetDefaultValues();
+        }
         //private variables
+        private readonly TypeOfItems ItemType;
         private bool _isRefreshing;
         private ItemPreview _selectedItem;
         private ICommand _addItem;
@@ -166,7 +176,7 @@ namespace PassManager.ViewModels.Bases
                 if (IsListChanged(items))
                     Items = UpdateItems(items);
                 else
-                    await PageService.PushPopupAsync(new WarningView("Your items are up to date!"));
+                    await PageService.PushPopupAsync(new WarningView($"Your {ItemType.ToPluralString()} are up to date!"));
             }
             else
                 IsRefreshing = false;
@@ -196,7 +206,7 @@ namespace PassManager.ViewModels.Bases
             if(Items.Count == 1 && Items.FirstOrDefault().Count == 0 || Items.Count == 0)
             {
                 Items = null;
-                DisplayMsg("You have no passwords yet, click on button below to add a new one!", true);
+                DisplayMsg($"You have no {ItemType.ToPluralString()} yet, click on button below to add a new one!", true);
             }
         }
         //methods
@@ -205,14 +215,18 @@ namespace PassManager.ViewModels.Bases
             Grouping<string, ItemPreview> currentItems = null;
             if(Items != null)
             {
-                currentItems = Items.Where(k => k.Key == updateModel.ItemPreview.ItemType.ToSampleString())
+                currentItems = Items.Where(k => k.Key == updateModel.ItemPreview.ItemType.ToPluralString())
                     .FirstOrDefault();
+            }
+            else if(Items is null)
+            {
+                Items = new ObservableCollection<Grouping<string, ItemPreview>>();
             }
             if(currentItems is null)//that means no items of that type are in list
             {
                 //add new item
                 DisplayMsg("", false);//make sure there is no msg
-                Items.Add(new Grouping<string, ItemPreview>(updateModel.ItemPreview.ItemType.ToSampleString(), new List<ItemPreview>() { updateModel.ItemPreview }));
+                Items.Add(new Grouping<string, ItemPreview>(updateModel.ItemPreview.ItemType.ToPluralString(), new List<ItemPreview>() { updateModel.ItemPreview }));
             }
             else if(updateModel.UpdateType == TypeOfUpdates.Create)
             {
@@ -289,9 +303,9 @@ namespace PassManager.ViewModels.Bases
                 DisplayMsg(string.Empty, false);
                 Items = UpdateItems(itemsToDisplay);
             }
-            else if (itemsToDisplay.Count() == 0)
+            else if (itemsToDisplay?.Count() == 0 || itemsToDisplay is null)
             {
-                DisplayMsg($"You have no items yet, click on button below to add a new one!", true);
+                DisplayMsg($"You have no {ItemType.ToPluralString()} yet, click on button below to add a new one!", true);
             }
         }
         private protected ObservableCollection<Grouping<string, ItemPreview>> UpdateItems(IEnumerable<Grouping<string, ItemPreview>> newList)

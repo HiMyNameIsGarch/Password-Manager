@@ -15,5 +15,16 @@ namespace PassManager.Models
             }
             return string.Empty;
         }
+        public static string ToPluralString(this TypeOfItems item)
+        {
+            switch (item)
+            {
+                case TypeOfItems.Password: return "Passwords";
+                case TypeOfItems.Wifi: return "Wi-Fis";
+                case TypeOfItems.Note: return "Notes";
+                case TypeOfItems.PaymentCard: return "Payment Cards";
+            }
+            return string.Empty;
+        }
     }
 }
