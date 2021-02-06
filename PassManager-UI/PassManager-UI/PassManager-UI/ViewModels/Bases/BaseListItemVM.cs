@@ -149,7 +149,7 @@ namespace PassManager.ViewModels.Bases
             {
                 typeOfItems[i] = Items[i].Key;
             }
-            string itemToGo = await PageService.DisplayActionSheet("Select item you wanna go to", "Cancel", null, typeOfItems);
+            string itemToGo = await PageService.DisplayActionSheet("Go to...", "Select item you wanna go to", "Cancel", typeOfItems);
             if (itemToGo is null || itemToGo == "Cancel" ) return;
             var item = Items.Where(s => s.Key == itemToGo).FirstOrDefault().FirstOrDefault();
             if (item is null) return;

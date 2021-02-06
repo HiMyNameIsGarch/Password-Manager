@@ -1,6 +1,9 @@
-﻿using Rg.Plugins.Popup.Extensions;
+﻿using PassManager.ViewModels.Popups;
+using PassManager.Views.Popups;
+using Rg.Plugins.Popup.Extensions;
 using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -38,11 +41,17 @@ namespace PassManager.Models
         }
         public async static Task<bool> DisplayAlert(string title, string message, string accept, string cancel)
         {
-            return await MainPage.DisplayAlert(title, message,accept,cancel);
+            var popup = new DisplayActionSheetView(title, message, accept, cancel);
+            await PopupNavigation.Instance.PushAsync(popup);
+            var response = await popup.PopupClosedTask;
+            return response;
         }
-        public async static Task<string> DisplayActionSheet(string title, string cancel, string destruction, params string[] buttons)
+        public async static Task<string> DisplayActionSheet(string title, string message, string cancel, IEnumerable<string> buttons)
         {
-            return await MainPage.DisplayActionSheet(title,cancel,destruction,buttons);
+            var popup = new DisplayActionSheetPopup(title, message, cancel, buttons);
+            await PopupNavigation.Instance.PushAsync(popup);
+            var response = await popup.PopupClosedTask;
+            return response;
         }
     }
 }

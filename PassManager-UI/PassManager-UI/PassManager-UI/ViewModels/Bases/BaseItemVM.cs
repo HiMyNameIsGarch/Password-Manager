@@ -163,7 +163,7 @@ namespace PassManager.ViewModels.Bases
             ICollection<string> options = new List<string>(){"Generate Password" };
             if (CanDelete)
                 options.Add("Delete Item");
-            var response = await PageService.DisplayActionSheet("What do you want to do?","Cancel",null, options.ToArray());
+            var response = await PageService.DisplayActionSheet("What do you want to do?","Cancel",null, options);
             switch (response)
             {
                 case "Generate Password":
