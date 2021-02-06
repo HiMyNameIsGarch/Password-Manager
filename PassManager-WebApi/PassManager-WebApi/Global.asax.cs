@@ -24,6 +24,7 @@ namespace PassManager_WebApi
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
             GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            GlobalConfiguration.Configuration.Filters.Add(new CustomExceptionFilterAttribute());
         }
         public static void RegisterWebApiFilters(System.Web.Http.Filters.HttpFilterCollection filters)
         {

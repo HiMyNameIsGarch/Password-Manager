@@ -226,7 +226,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ActionFilters\CustomExceptionAttribute.cs" />
+    <Compile Include="ActionFilters\CustomExceptionFilterAttribute.cs" />
     <Compile Include="ActionFilters\LoggingAtribute.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />

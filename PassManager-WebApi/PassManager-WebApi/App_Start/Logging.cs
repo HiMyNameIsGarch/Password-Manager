@@ -29,8 +29,10 @@ namespace PassManager_WebApi.App_Start
             SetCurrentLogFile();
             using (StreamWriter writer = File.AppendText(FullName))
             {
-                writer.Write("\rPassword Manager start at: ");
+                writer.WriteLine("\n-----------------------------------------------------------------");
+                writer.Write("Password Manager start at: ");
                 writer.WriteLine($"{DateTime.Now.ToLongTimeString()} {DateTime.Now.ToLongDateString()}");
+                writer.WriteLine("-----------------------------------------------------------------\n");
             }
         }
         private void SetCurrentLogFile()
@@ -110,9 +112,9 @@ namespace PassManager_WebApi.App_Start
             if (exception != null)
             {
                 toLog += Environment.NewLine;
-                toLog += "Exception Message: " + exception.Message;
+                toLog += "Exception Message:\n" + exception.Message;
                 toLog += Environment.NewLine;
-                toLog += "Exception StackTrace: " + exception.StackTrace;
+                toLog += "Exception StackTrace:\n" + exception.StackTrace;
             }
             //write to file
             using (StreamWriter streamWriter = File.AppendText(FullName))
