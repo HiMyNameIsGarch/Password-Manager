@@ -40,7 +40,7 @@ namespace PassManager.ViewModels.CreateItems
                 _tempPaymentCard = (PaymentCard)decryptedCard.Clone();//store a temp card for future verifications
             }
             else
-                await PageService.PushPopupAsync(new ErrorView("Something went wrong and we couldn't get your payment card, try again!"));
+                await PageService.PushPopupAsync(new ErrorView(ErrorMsg.CouldNotGetItem(ItemType)));
         }
         private protected override async Task<bool> CreateAsync()
         {
@@ -63,19 +63,17 @@ namespace PassManager.ViewModels.CreateItems
         {
             string msgToDisplay = string.Empty;
             if (string.IsNullOrEmpty(PaymentCard.Name))
-                msgToDisplay = "You need to complete at least Name in order to save!";
+                msgToDisplay = ErrorMsg.CompleteFields("Name");
             if (PaymentCard.NameOnCard?.Length > 64)
-                msgToDisplay = "Your name on card must be maximum 64 characters!";
+                msgToDisplay = ErrorMsg.FieldMaxCharLong("Name On Card", 64);
             if (PaymentCard.CardType?.Length > 32)
-                msgToDisplay = "Your Card Type must be maximum 32 characters!";
+                msgToDisplay = ErrorMsg.FieldMaxCharLong("Card Type", 32);
             if (PaymentCard.CardNumber?.Length > 19)
-                msgToDisplay = "Your Card Number must be maximum 19 characters!";
+                msgToDisplay = ErrorMsg.FieldMaxCharLong("Card Number", 19);
             if (PaymentCard.SecurityCode?.Length > 3)
-                msgToDisplay = "Your Security Code must be maximum 3 characters!";
-            if (string.IsNullOrEmpty(msgToDisplay))
-                return new Models.TaskStatus(false, string.Empty);
-            else
-                return new Models.TaskStatus(true, msgToDisplay);
+                msgToDisplay = ErrorMsg.FieldMaxCharLong("Security Code", 3);
+
+            return Models.TaskStatus.Status(msgToDisplay);
         }
         private protected override object EncryptItem(object obj)
         {

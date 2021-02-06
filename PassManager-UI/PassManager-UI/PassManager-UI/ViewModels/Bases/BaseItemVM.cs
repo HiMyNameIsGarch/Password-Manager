@@ -14,7 +14,6 @@ using System.Linq;
 using PassManager.Models.Api.Processors;
 using PassManager.Models.Api;
 using PassManager.Models.CallStatus;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace PassManager.ViewModels.Bases
@@ -33,7 +32,7 @@ namespace PassManager.ViewModels.Bases
             _displayMoreActions = new Command(DisplayMore);
         }
         //variables
-        private readonly TypeOfItems ItemType;
+        private protected readonly TypeOfItems ItemType;
         private ItemPageState PageState;
         private bool CanDelete;
         private string _actionBtnText;
@@ -147,7 +146,7 @@ namespace PassManager.ViewModels.Bases
                             await GoTo(ItemType.ToString(), model);
                         }
                         else
-                            await PageService.PushPopupAsync(new ErrorView($"Something went wrong and your {ItemType.ToSampleString()} has not been deleted, try again!"));
+                            await PageService.PushPopupAsync(new ErrorView(ErrorMsg.ItemNotDeleted(ItemType)));
                     }
                     catch (Exception ex)
                     {
@@ -163,7 +162,7 @@ namespace PassManager.ViewModels.Bases
             ICollection<string> options = new List<string>(){"Generate Password" };
             if (CanDelete)
                 options.Add("Delete Item");
-            var response = await PageService.DisplayActionSheet("What do you want to do?","Cancel",null, options);
+            var response = await PageService.DisplayActionSheet("Options: ", "What do you want to do?", "Cancel", options);
             switch (response)
             {
                 case "Generate Password":
@@ -207,7 +206,7 @@ namespace PassManager.ViewModels.Bases
                             var latestCreatedItem = await EntireItemsProcessor.GetLatestCreated(ApiHelper.ApiClient, ItemType);
                             if (latestCreatedItem is null)
                             {
-                                await PageService.PushPopupAsync(new ErrorView($"Something went wrong and your {ItemType.ToSampleString()} has not been created, try again!"));
+                                await PageService.PushPopupAsync(new ErrorView(ErrorMsg.ItemNotCreated(ItemType)));
                             }
                             else
                             {
@@ -216,7 +215,7 @@ namespace PassManager.ViewModels.Bases
                             }
                         }
                         else
-                            await PageService.PushPopupAsync(new ErrorView($"Something went wrong and your {ItemType.ToSampleString()} has not been created, try again!"));
+                            await PageService.PushPopupAsync(new ErrorView(ErrorMsg.ItemNotCreated(ItemType)));
                         break;
                     case ItemPageState.View:
                         ChangeProps(ItemPageState.Edit, "Save", $"Edit {ItemType.ToSampleString()}", false);
@@ -259,12 +258,12 @@ namespace PassManager.ViewModels.Bases
                                 await GoTo(ItemType.ToString());
                         }
                         else
-                            await PageService.PushPopupAsync(new ErrorView($"Something went wrong and your {ItemType.ToSampleString()} has not been modified, try again!"));
+                            await PageService.PushPopupAsync(new ErrorView(ErrorMsg.ItemNotModified(ItemType)));
                         break;
                 }
             }
         }
-        //basic actions for item page
+        //abstract methods for item page
         private protected abstract bool IsItemChanged();
         private protected abstract Models.TaskStatus IsModelValid();//this function will check if the item is valid(title not to be more than 25 char etc etc) other wise will display a popup with the info
         private protected abstract Task GetDataAsync(int id);

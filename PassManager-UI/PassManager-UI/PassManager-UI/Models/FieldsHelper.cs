@@ -70,9 +70,5 @@ namespace PassManager.Models
             if (specialChar == 0) return new TaskStatus(true, "Your password must contain at least one special character!");
             return new TaskStatus(false);
         }
-        public static bool VerifyPhoneNumber(string phone)
-        {
-            return true;
-        }
     }
 }

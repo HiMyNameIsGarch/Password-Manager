@@ -19,8 +19,8 @@ namespace PassManager.Views
             //set some default values
             IsConfirmPassVisible = true;
             IsPasswordVisible = true;
-            PassEntryIcon = ImageSource.FromResource($"PassManager-UI.Images.Locked.png");
-            ConfirmPassEntryIcon = ImageSource.FromResource($"PassManager-UI.Images.Locked.png");
+            PassEntryIcon = ImageSource.FromResource(IconHelper.GetImageUrl("Locked"));
+            ConfirmPassEntryIcon = ImageSource.FromResource(IconHelper.GetImageUrl("Locked"));
             CurrentAction = TypeOfActions.Sign_In;
             IsRegisterPage = false;
             //set commands
@@ -31,8 +31,8 @@ namespace PassManager.Views
             //set some names for page
             SetNames("Sign in", TypeOfActions.Register.ToString(), "Create a new account", "Confirm");
         }
-        private TypeOfActions CurrentAction { get; set; }
         //private props
+        private TypeOfActions CurrentAction;
         private string _anotherPageText;
         private string _questionForUser;
         private string _actionBtnText;
@@ -165,10 +165,10 @@ namespace PassManager.Views
                     await SignIn();
                     break;
             }
-            if(Device.RuntimePlatform == Device.Android)
+            if (Device.RuntimePlatform == Device.Android)
             {
                 var statusbar = DependencyService.Get<IStatusBarPlatformSpecific>();
-                statusbar.ChangeNavigationBarColor(Android.Graphics.Color.Rgb(69,123,157));
+                statusbar.ChangeNavigationBarColor(Android.Graphics.Color.Rgb(69, 123, 157));
             }
         }
         //methods
@@ -177,7 +177,7 @@ namespace PassManager.Views
             if (IsInternet())
             {
                 //check if all fields are completed
-                if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password) || String.IsNullOrWhiteSpace(ConfirmPass)) await DisplayError("You need to complete all fields in order to register!");
+                if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password) || String.IsNullOrWhiteSpace(ConfirmPass)) await DisplayError(ErrorMsg.CompleteAllFieldsError);
                 else
                 {
                     //verify status of fields
@@ -189,7 +189,7 @@ namespace PassManager.Views
                         {
                             if (ConfirmPass == Password)
                             {
-                                if (!Password.Contains(Username))
+                                if (!Password.ToLower().Contains(Username.ToLower()))
                                 {
                                     await PageService.PushPopupAsync(new WaitForActionView());
                                     string authPassword = VaultManager.CreateAuthPassword(Username, Password);
@@ -207,7 +207,7 @@ namespace PassManager.Views
                                 }
                                 else await DisplayError("Your email can't be in your password!");
                             }
-                            else await DisplayError("Your confirm password is not equal with your password!");
+                            else await DisplayError("Your Confirm Password and your Password are not the same!");
                         }
                         else await DisplayError(passwordStatus.Message);
                     }
@@ -220,7 +220,7 @@ namespace PassManager.Views
             if (IsInternet())
             {
                 //check if fields are completed
-                if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password)) await DisplayError("You need to complete all fields in order to register!");
+                if (String.IsNullOrWhiteSpace(Username) || String.IsNullOrWhiteSpace(Password)) await DisplayError(ErrorMsg.CompleteAllFieldsError);
                 else
                 {
                     await PageService.PushPopupAsync(new WaitForActionView());

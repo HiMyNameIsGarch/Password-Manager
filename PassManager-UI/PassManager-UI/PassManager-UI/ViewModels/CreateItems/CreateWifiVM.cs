@@ -18,7 +18,7 @@ namespace PassManager.ViewModels.CreateItems
         {
             //set some default values
             IsPasswordVisible = IsSettingsPassVis = true;
-            SettingsPassEntryIcon = PassEntryIcon = ImageSource.FromResource($"PassManager-UI.Images.Locked.png");
+            SettingsPassEntryIcon = PassEntryIcon = ImageSource.FromResource(IconHelper.GetImageUrl("Locked"));
             _wifi = new Wifi();
             //set commands
             _copyPassword = new Command(CopyPasswordToClipboard);
@@ -116,7 +116,7 @@ namespace PassManager.ViewModels.CreateItems
             }
             else
             {
-                await PageService.PushPopupAsync(new ErrorView("Something went wrong and we couldn't get your wifi, try again!"));
+                await PageService.PushPopupAsync(new ErrorView(ErrorMsg.CouldNotGetItem(ItemType)));
             }
         }
         private protected override async Task<bool> CreateAsync()
@@ -141,13 +141,13 @@ namespace PassManager.ViewModels.CreateItems
             string msgToDisplay = string.Empty;
 
             if (string.IsNullOrEmpty(Wifi.Name) || string.IsNullOrEmpty(Wifi.PasswordEncrypted))
-                msgToDisplay = "You need to complete at least \"Name\" and \"Username\" in order to save!";
+                msgToDisplay = ErrorMsg.CompleteFields("Name", "Password");
             else if (Wifi.Name.Length > 64)
-                msgToDisplay = "Your Name must be max 64 characters long!";
+                msgToDisplay = ErrorMsg.FieldMaxCharLong("Name", 64);
             else if (Wifi.SSID.Length > 64)
-                msgToDisplay = "Your SSID must be max 64 characters long!";
+                msgToDisplay = ErrorMsg.FieldMaxCharLong("SSID", 64);
             else if (Wifi.ConnectionType.Length > 64)
-                msgToDisplay = "Your Connection Type must be max 64 characters long!";
+                msgToDisplay = ErrorMsg.FieldMaxCharLong("Connection Type", 64);
             return Models.TaskStatus.Status(msgToDisplay);
         }
         private protected override object EncryptItem(object obj)

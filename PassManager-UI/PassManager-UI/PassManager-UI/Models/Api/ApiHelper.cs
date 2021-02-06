@@ -1,14 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
+using Xamarin.Forms;
 
 namespace PassManager.Models.Api
 {
     public class ApiHelper
     {
-        internal const string SERVER = "https://localhost:44364";
+        internal static string SERVER
+        {
+            get
+            {
+                return Device.RuntimePlatform == Device.Android ? "https://192.168.0.143:45455" : "https://localhost:44364";
+            }
+        }
         private static HttpClient _httpClient;
         internal static HttpClient ApiClient
         {
@@ -23,14 +28,14 @@ namespace PassManager.Models.Api
                             //bypass
                             return true;
                         },
-                    } , false
+                    }, false
                 );
                 return _httpClient;
             }
         }
         internal static void InitializeClient()
         {
-            if(_httpClient is null)
+            if (_httpClient is null)
             {
                 ApiClient.BaseAddress = new Uri(SERVER);
                 ApiClient.DefaultRequestHeaders.Accept.Clear();
@@ -39,16 +44,24 @@ namespace PassManager.Models.Api
         }
         internal static TaskStatus ServerIsOpen(Exception ex)
         {
-            string msg = ex.InnerException.Message;
+            string msg = ex.InnerException?.Message;
+            if (msg is null) msg = ex.Message;
             return (msg.Contains("connection") && msg.Contains("server") && msg.Contains("not") && msg.Contains("established"))
-                ? new TaskStatus(true, "Our server is down, please try again later!")
-                : new TaskStatus(false, "Something went wrong, try again!");
+                ? new TaskStatus(true, ErrorMsg.ServerError)
+                : new TaskStatus(false, ErrorMsg.BasicError);
         }
         internal static void AddAuthorization(string tokenType, string token)
         {
-            if(_httpClient.DefaultRequestHeaders.Authorization is null)
+            if (_httpClient.DefaultRequestHeaders.Authorization is null)
             {
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(tokenType, token);
+            }
+        }
+        internal static void DeleteAuthorization()
+        {
+            if (_httpClient.DefaultRequestHeaders.Authorization != null)
+            {
+                _httpClient.DefaultRequestHeaders.Authorization = null;
             }
         }
     }

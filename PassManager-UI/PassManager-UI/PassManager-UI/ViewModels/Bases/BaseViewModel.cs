@@ -47,11 +47,11 @@ namespace PassManager.ViewModels.Bases
             await PopupNavigation.Instance.PopAllAsync(false);
             if (status.IsError)
             {
-                await PageService.PushPopupAsync(new ErrorView("Oops... We couldn't connect to server, try again later!", true), true);
+                await PageService.PushPopupAsync(new ErrorView(ErrorMsg.ServerError, true), true);
             }
             else
             {
-                await PageService.PushPopupAsync(new ErrorView("Oops... Something went wrong, try again!", false), true);
+                await PageService.PushPopupAsync(new ErrorView(ErrorMsg.BasicError, false), true);
             }
         }
     }

@@ -206,7 +206,7 @@ namespace PassManager.ViewModels.Bases
             if(Items.Count == 1 && Items.FirstOrDefault().Count == 0 || Items.Count == 0)
             {
                 Items = null;
-                DisplayMsg($"You have no {ItemType.ToPluralString()} yet, click on button below to add a new one!", true);
+                DisplayMsg(ErrorMsg.NoItems(ItemType), true);
             }
         }
         //methods
@@ -305,7 +305,7 @@ namespace PassManager.ViewModels.Bases
             }
             else if (itemsToDisplay?.Count() == 0 || itemsToDisplay is null)
             {
-                DisplayMsg($"You have no {ItemType.ToPluralString()} yet, click on button below to add a new one!", true);
+                DisplayMsg(ErrorMsg.NoItems(ItemType), true);
             }
         }
         private protected ObservableCollection<Grouping<string, ItemPreview>> UpdateItems(IEnumerable<Grouping<string, ItemPreview>> newList)

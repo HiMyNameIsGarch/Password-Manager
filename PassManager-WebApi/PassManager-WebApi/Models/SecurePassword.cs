@@ -1,23 +1,17 @@
-﻿using System.Security.Cryptography;
-using System.Text;
+﻿using System;
+using System.Security.Cryptography;
 
 namespace PassManager_WebApi.Models
 {
     public class SecurePassword
     {
         private const int HASH_SIZE = 32; // size in bytes
-        private const int ITERATIONS = 100000; // default number of pbkdf2 iterations
+        private const int ITERATIONS = 10000; // default number of pbkdf2 iterations
         internal static byte[] HashPassword(string salt, string password, int iterations = ITERATIONS)
         {
-            var newSalt = GenerateSalt(salt);
+            var newSalt = Convert.FromBase64String(salt);
             var newPass = CreatePBKDF2Hash(password, newSalt, iterations);
             return newPass;
-        }
-        private static byte[] GenerateSalt(string input)
-        {
-            HashAlgorithm sha = SHA1.Create();
-            var bytes = Encoding.UTF8.GetBytes(input);
-            return sha.ComputeHash(bytes);
         }
         private static byte[] CreatePBKDF2Hash(string input, byte[] salt, int iterations)
         {
