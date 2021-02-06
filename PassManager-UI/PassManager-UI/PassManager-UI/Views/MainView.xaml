@@ -4,12 +4,13 @@
              xmlns:items="clr-namespace:PassManager.Views.FlyoutItems"
              x:Class="PassManager.Views.MainView"
              Shell.NavBarHasShadow="False" FlyoutHeaderBehavior="CollapseOnScroll"
-             Shell.TitleColor="{DynamicResource PowderBlueColor}" BackgroundColor="{DynamicResource CeladonBlueColor}">
+             Shell.TitleColor="{DynamicResource PowderBlueColor}"
+             FlyoutBackgroundColor="{DynamicResource CeladonBlueColor}">
     <Shell.FlyoutHeaderTemplate>
         <DataTemplate>
             <Grid BackgroundColor="{DynamicResource PrussianBlueColor}"
               HeightRequest="300">
-                <Label Text="Welcome user {user}"
+                <Label Text="Welcome user!"
                    TextColor="{DynamicResource HoneyDewColor}"
                    FontAttributes="Bold"
                    HorizontalTextAlignment="Center"

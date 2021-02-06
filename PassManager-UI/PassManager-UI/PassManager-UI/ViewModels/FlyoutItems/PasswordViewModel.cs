@@ -5,12 +5,13 @@ using System.Threading.Tasks;
 using PassManager.Models;
 using PassManager.ViewModels.Bases;
 using PassManager.Models.Api.Processors;
+using PassManager.Enums;
 
 namespace PassManager.ViewModels.FlyoutItems
 {
     public class PasswordViewModel : BaseListItemVM
     {
-        public PasswordViewModel() : base("Passwords")
+        public PasswordViewModel() : base(TypeOfItems.Password)
         {
             if (IsInternet())
             {

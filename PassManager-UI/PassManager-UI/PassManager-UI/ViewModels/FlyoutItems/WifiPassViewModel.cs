@@ -5,12 +5,13 @@ using PassManager.ViewModels.Bases;
 using PassManager.Models;
 using PassManager.Models.Api;
 using System.Collections.Generic;
+using PassManager.Enums;
 
 namespace PassManager.ViewModels.FlyoutItems
 {
     public class WifiPassViewModel : BaseListItemVM
     {
-        public WifiPassViewModel() : base("Wifi")
+        public WifiPassViewModel() : base(TypeOfItems.Wifi)
         {
             if (IsInternet())
             {

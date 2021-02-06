@@ -21,7 +21,7 @@ namespace PassManager.Models
             if (items is null || items.Count() == 0) return null;
             return items
                     .GroupBy(item => item.ItemType)
-                    .Select(item => new Grouping<string, ItemPreview>(item.Key.ToSampleString(), item));
+                    .Select(item => new Grouping<string, ItemPreview>(item.Key.ToPluralString(), item));
         }
         internal protected void SetNewItem(int index, T newItem)
         {

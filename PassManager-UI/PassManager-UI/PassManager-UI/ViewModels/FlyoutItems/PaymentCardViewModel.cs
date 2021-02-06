@@ -1,4 +1,5 @@
-﻿using PassManager.Models;
+﻿using PassManager.Enums;
+using PassManager.Models;
 using PassManager.Models.Api;
 using PassManager.Models.Api.Processors;
 using PassManager.Models.Items;
@@ -10,7 +11,7 @@ namespace PassManager.ViewModels.FlyoutItems
 {
     public class PaymentCardViewModel : BaseListItemVM
     {
-        public PaymentCardViewModel() : base("Payment Cards")
+        public PaymentCardViewModel() : base(TypeOfItems.PaymentCard)
         {
             if (IsInternet())
             {

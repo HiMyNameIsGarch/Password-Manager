@@ -109,7 +109,7 @@ namespace PassManager.ViewModels
                 //serialize it
                 string pageToCreateString = JsonConvert.SerializeObject(pageToCreate);
                 //send it
-                await Shell.Current.GoToAsync($"Create{itemType}?createPage={pageToCreateString}");
+                await Shell.Current.GoToAsync($"Create{itemType.ToSampleString()}?createPage={pageToCreateString}");
             }
         }
     }
