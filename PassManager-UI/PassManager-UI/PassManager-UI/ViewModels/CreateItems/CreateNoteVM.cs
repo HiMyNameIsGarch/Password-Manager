@@ -40,7 +40,7 @@ namespace PassManager.ViewModels.CreateItems
                 _tempNote = (Note)decryptedNote.Clone();//store a temp password for future verifications
             }
             else
-                await PageService.PushPopupAsync(new ErrorView("Something went wrong and we couldn't get your note, try again!"));
+                await PageService.PushPopupAsync(new ErrorView(ErrorMsg.CouldNotGetItem(ItemType)));
         }
         private protected override async Task<bool> CreateAsync()
         {
@@ -63,9 +63,9 @@ namespace PassManager.ViewModels.CreateItems
         {
             string msgToDisplay = string.Empty;
             if (string.IsNullOrEmpty(Note.Name))
-                msgToDisplay = "You need to complete at least Name in order to save!";
+                msgToDisplay = ErrorMsg.CompleteFields("Name");
             else if (Note.Name.Length > 64)
-                msgToDisplay = "Your Name must be max 64 characters long!";
+                msgToDisplay = ErrorMsg.FieldMaxCharLong("Name", 64);
             return Models.TaskStatus.Status(msgToDisplay);
         }
         private protected override object EncryptItem(object obj)

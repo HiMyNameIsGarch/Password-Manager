@@ -2,7 +2,7 @@
 
 namespace PassManager.Models.Items
 {
-    public class Password : ICloneable
+    public class Password 
     {
         public Password()
         {
@@ -18,7 +18,7 @@ namespace PassManager.Models.Items
         {
             return this.MemberwiseClone();
         }
-        internal bool IsChanged(Password password)
+        public bool IsChanged(Password password)
         {
             if(password is null)
             {

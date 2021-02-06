@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
-using Xamarin.Essentials;
-using Xamarin.Forms;
 
 namespace PassManager.Models.Api.Processors
 {
@@ -36,7 +33,7 @@ namespace PassManager.Models.Api.Processors
                 if (errorMsg.Contains("is already taken"))
                     return new TaskStatus(true, $"Email \"{username}\" is already taken, try to log in!");
 
-                return new TaskStatus(true, "Something went wrong please try again!");
+                return new TaskStatus(true, ErrorMsg.BasicError);
             }
         }
         internal static async Task<TaskStatus> LogIn(HttpClient httpClient, string username, string password)

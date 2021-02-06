@@ -1,8 +1,7 @@
-﻿using System;
-
+﻿
 namespace PassManager.Models.Items
 {
-    public class Note : ICloneable
+    public class Note
     {
         public Note()
         {
@@ -11,12 +10,11 @@ namespace PassManager.Models.Items
         public int Id { get; set; }
         public string Name { get; set; }
         public string Notes { get; set; }
-
         public object Clone()
         {
             return this.MemberwiseClone();
         }
-        internal bool IsChanged(Note note)
+        public bool IsChanged(Note note)
         {
             if (note is null)
             {

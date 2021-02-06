@@ -18,7 +18,7 @@ namespace PassManager.ViewModels.CreateItems
         {
             //set some defaults values
             IsPasswordVisible = true;
-            PassEntryIcon = ImageSource.FromResource($"PassManager-UI.Images.Locked.png");
+            PassEntryIcon = ImageSource.FromResource(IconHelper.GetImageUrl("Locked"));
             //set commands
             _copyUsername = new Command(CopyUsernameToClipboard);
             _copyPassword = new Command(CopyPasswordToClipboard);
@@ -91,7 +91,7 @@ namespace PassManager.ViewModels.CreateItems
                 _tempPassword = (Password)decryptedPass.Clone();//store a temp password for future verifications
             }
             else
-                await PageService.PushPopupAsync(new ErrorView("Something went wrong and we couldn't get your password, try again!"));
+                await PageService.PushPopupAsync(new ErrorView(ErrorMsg.CouldNotGetItem(ItemType)));
         }
         private protected async override Task<bool> CreateAsync()
         {
@@ -114,13 +114,13 @@ namespace PassManager.ViewModels.CreateItems
         {
             string msgToDisplay = string.Empty;
             if (string.IsNullOrEmpty(Password.Name) || string.IsNullOrEmpty(Password.Username) || string.IsNullOrEmpty(Password.PasswordEncrypted))
-                msgToDisplay = "You need to complete at least \"name\", \"username\" and \"password\" in order to save!";
+                msgToDisplay = ErrorMsg.CompleteFields("Name", "Username", "Password");
             else if (Password.Name.Length > 64)
-                msgToDisplay = "Your Name must be max 64 characters long!";
+                msgToDisplay = ErrorMsg.FieldMaxCharLong("Name", 64);
             else if (Password.Username.Length > 64)
-                msgToDisplay = "Your Username must be max 64 characters long!";
+                msgToDisplay = ErrorMsg.FieldMaxCharLong("Username", 64);
             else if (Password.Url?.Length > 256)
-                msgToDisplay = "Your URL must be max 264 characters long!";
+                msgToDisplay = ErrorMsg.FieldMaxCharLong("Url", 256);
 
             return Models.TaskStatus.Status(msgToDisplay);
         }
@@ -128,6 +128,7 @@ namespace PassManager.ViewModels.CreateItems
         {
             var passwordToEncrypt = (Password)obj;
             passwordToEncrypt.PasswordEncrypted = VaultManager.EncryptString(passwordToEncrypt.PasswordEncrypted);
+            passwordToEncrypt.Url = VaultManager.EncryptString(passwordToEncrypt.Url);
             passwordToEncrypt.Notes = VaultManager.EncryptString(passwordToEncrypt.Notes);
             return passwordToEncrypt;
         }
@@ -135,6 +136,7 @@ namespace PassManager.ViewModels.CreateItems
         {
             var passwordToDecrypt = (Password)obj;
             passwordToDecrypt.PasswordEncrypted = VaultManager.DecryptString(passwordToDecrypt.PasswordEncrypted);
+            passwordToDecrypt.Url = VaultManager.DecryptString(passwordToDecrypt.Url);
             passwordToDecrypt.Notes = VaultManager.DecryptString(passwordToDecrypt.Notes);
             return passwordToDecrypt;
         }

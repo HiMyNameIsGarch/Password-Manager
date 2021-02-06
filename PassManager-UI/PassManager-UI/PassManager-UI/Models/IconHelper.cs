@@ -8,5 +8,9 @@ namespace PassManager.Models
         {
             return $"PassManager-UI.Images.{itemType}.png";
         }
+        public static string GetImageUrl(string imageName)
+        {
+            return $"PassManager-UI.Images.{imageName}.png";
+        }
     }
 }

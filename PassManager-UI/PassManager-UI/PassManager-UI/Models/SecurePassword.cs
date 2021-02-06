@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace PassManager.Models
@@ -9,15 +10,9 @@ namespace PassManager.Models
         private const int ITERATIONS = 100000; // default number of pbkdf2 iterations
         internal static byte[] HashPassword(string salt, string password, int iterations = ITERATIONS)
         {
-            var newSalt = GenerateSalt(salt);
+            var newSalt = Convert.FromBase64String(salt);
             var newPass = CreatePBKDF2Hash(password, newSalt, iterations);
             return newPass;
-        }
-        private static byte[] GenerateSalt(string input)
-        {
-            HashAlgorithm sha = SHA1.Create();
-            var bytes = Encoding.UTF8.GetBytes(input);
-            return sha.ComputeHash(bytes);
         }
         private static byte[] CreatePBKDF2Hash(string input, byte[] salt, int iterations)
         {
