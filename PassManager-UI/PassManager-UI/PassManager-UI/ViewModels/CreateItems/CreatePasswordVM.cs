@@ -18,7 +18,7 @@ namespace PassManager.ViewModels.CreateItems
         {
             //set some defaults values
             IsPasswordVisible = true;
-            PassEntryIcon = ImageSource.FromResource(IconHelper.GetImageUrl("Locked"));
+            PassEntryIcon = IconHelper.GetImageUrl("Locked");
             //set commands
             _copyUsername = new Command(CopyUsernameToClipboard);
             _copyPassword = new Command(CopyPasswordToClipboard);
@@ -34,14 +34,14 @@ namespace PassManager.ViewModels.CreateItems
         private ICommand _copyPassword;
         private ICommand _changeVisOfPassword;
         private bool _isPasswordVisible;
-        private ImageSource _passEntryIcon;
+        private string _passEntryIcon;
         //props
         public bool IsPasswordVisible
         {
             get { return _isPasswordVisible; }
             private set { _isPasswordVisible = value; NotifyPropertyChanged(); }
         }
-        public ImageSource PassEntryIcon
+        public string PassEntryIcon
         {
             get { return _passEntryIcon; }
             private set { _passEntryIcon = value; NotifyPropertyChanged(); }
@@ -73,7 +73,7 @@ namespace PassManager.ViewModels.CreateItems
         private async void CopyUrlToClipboard() { await CopyToClipboard(Password.Url); }
         private void ChangeVisOfPass()
         {
-            PassEntryIcon = ImageSource.FromResource($"PassManager-UI.Images.{(IsPasswordVisible ? "Open" : "Locked")}.png");
+            PassEntryIcon = IconHelper.GetImageUrl(IsPasswordVisible ? "Open" : "Locked");
             IsPasswordVisible = !IsPasswordVisible;
         }
         //override functions

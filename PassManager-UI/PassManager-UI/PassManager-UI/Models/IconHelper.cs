@@ -13,9 +13,5 @@ namespace PassManager.Models
         {
             return $"PassManager-UI.Images.{imageName}.png";
         }
-        public static ImageSource GetImageSource(string imageName)
-        {
-            return ImageSource.FromResource($"PassManager-UI.Images.{imageName}.png");
-        }
     }
 }

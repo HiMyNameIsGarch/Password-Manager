@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using PassManager.Views.Popups;
-using Rg.Plugins.Popup.Services;
 
 namespace PassManager.Models
 {
@@ -30,15 +29,6 @@ namespace PassManager.Models
         public async static void Await(this Task task)
         {
             await task;
-        }
-        //loops thru all the pages in the stack and if finds the page that match up with the parameter returns true
-        private static bool CheckIfPageExists(string popupName)
-        {
-            foreach (var pageInStack in PopupNavigation.Instance.PopupStack)
-            {
-                if (pageInStack.ToString() == popupName) return true;
-            }
-            return false;
         }
     }
 }

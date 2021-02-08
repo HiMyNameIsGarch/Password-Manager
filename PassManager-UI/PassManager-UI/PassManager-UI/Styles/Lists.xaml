@@ -3,7 +3,7 @@
 <ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:converter="clr-namespace:PassManager.Converters">
-    
+
     <converter:ImageSourceConverter x:Key="iconConverter"/>
     
     <ControlTemplate x:Key="ListViewItemTemplate">
@@ -44,10 +44,9 @@
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
-                                <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Source="{Binding IconUrl, Converter={StaticResource iconConverter}}" Aspect="AspectFit" Margin="0" WidthRequest="64" HeightRequest="64" />
-                                <Label Grid.Column="1" Grid.Row="0" Text="{Binding Title}" FontSize="17" FontAttributes="Bold" TextColor="{DynamicResource HoneyDewColor}" 
-                                                   HorizontalTextAlignment="Start"/>
-                                <Label Grid.Column="1" Grid.Row="1" Text="{Binding SubTitle}" FontSize="15" TextColor="{DynamicResource PowderBlueColor}" HorizontalTextAlignment="Start"/>
+                                <Image Style="{DynamicResource IconForItem}" Source="{Binding IconUrl, Converter={StaticResource iconConverter}}"/>
+                                <Label Style="{DynamicResource ItemTitleLabel}"/>
+                                <Label Style="{DynamicResource ItemSubTitleLabel}"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>

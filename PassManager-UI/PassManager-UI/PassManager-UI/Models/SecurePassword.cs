@@ -1,5 +1,4 @@
-﻿using System;
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 
 namespace PassManager.Models
@@ -16,7 +15,7 @@ namespace PassManager.Models
         }
         private static byte[] CreatePBKDF2Hash(string input, byte[] salt, int iterations)
         {
-            if (string.IsNullOrEmpty(input) || iterations < 2) return null;
+            if (string.IsNullOrEmpty(input) || iterations < 2 || salt.Length > 8) return null;
             Rfc2898DeriveBytes pbkdf2 = new Rfc2898DeriveBytes(input, salt, iterations);
             return pbkdf2.GetBytes(HASH_SIZE);
         }

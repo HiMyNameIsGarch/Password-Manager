@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System;
 using Newtonsoft.Json;
 using PassManager.Views.Popups;
-using Xamarin.Essentials;
 using PassManager.Models.Interfaces;
 using PassManager.Models.Items;
 using Rg.Plugins.Popup.Services;
@@ -326,12 +325,7 @@ namespace PassManager.ViewModels.Bases
         }
         private protected async Task CopyToClipboard(string textToCopy)
         {
-            if (!string.IsNullOrEmpty(textToCopy))
-            {
-                string clipboardText = await Clipboard.GetTextAsync() ?? "";
-                if (textToCopy != clipboardText)
-                    await Clipboard.SetTextAsync(textToCopy);
-            }
+            await ClipboardHelper.CopyToClipboard(textToCopy);
         }
     }
 }

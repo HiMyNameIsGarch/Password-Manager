@@ -2,7 +2,15 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:CRender="clr-namespace:PassManager.CustomRenderer"
+             xmlns:converter="clr-namespace:PassManager.Converters"
              x:Class="PassManager.Views.CreateItems.CreateWifiView" BackgroundColor="{DynamicResource CeladonBlueColor}" Title="{Binding PageTitle}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:ImageSourceConverter x:Key="iconConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding GoBack}" />
     </Shell.BackButtonBehavior>
@@ -40,7 +48,7 @@
                         <CRender:CustomEntry Text="{Binding Wifi.PasswordEncrypted}" IsPassword="{Binding IsPasswordVisible}" 
                                              Style="{StaticResource CustomEntry}"/>
                         <Frame Style="{StaticResource RoundFrame}">
-                            <Image Source="{Binding PassEntryIcon}" Aspect="AspectFill" Margin="0">
+                            <Image Source="{Binding PassEntryIcon, Converter={StaticResource iconConverter}}" Aspect="AspectFill" Margin="0">
                                 <Image.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding ChangeVisOfPassword}" />
                                 </Image.GestureRecognizers>
@@ -68,7 +76,7 @@
                         <CRender:CustomEntry Text="{Binding Wifi.SettingsPassword}" IsPassword="{Binding IsSettingsPassVis}" 
                                              Style="{StaticResource CustomEntry}"/>
                         <Frame Style="{StaticResource RoundFrame}">
-                            <Image Source="{Binding SettingsPassEntryIcon}" Aspect="AspectFill" Margin="0">
+                            <Image Source="{Binding SettingsPassEntryIcon, Converter={StaticResource iconConverter}}" Aspect="AspectFill" Margin="0">
                                 <Image.GestureRecognizers>
                                     <TapGestureRecognizer Command="{Binding ChangeVisOfSettingsPassword}" />
                                 </Image.GestureRecognizers>
