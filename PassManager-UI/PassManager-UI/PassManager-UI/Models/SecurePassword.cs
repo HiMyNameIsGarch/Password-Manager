@@ -10,7 +10,7 @@ namespace PassManager.Models
         private const int ITERATIONS = 100000; // default number of pbkdf2 iterations
         internal static byte[] HashPassword(string salt, string password, int iterations = ITERATIONS)
         {
-            var newSalt = Convert.FromBase64String(salt);
+            var newSalt = Encoding.UTF8.GetBytes(salt);
             var newPass = CreatePBKDF2Hash(password, newSalt, iterations);
             return newPass;
         }
