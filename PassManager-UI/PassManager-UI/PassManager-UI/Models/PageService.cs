@@ -46,9 +46,9 @@ namespace PassManager.Models
             var response = await popup.PopupClosedTask;
             return response;
         }
-        public async static Task<string> DisplayActionSheet(string title, string message, string cancel, IEnumerable<string> buttons)
+        public async static Task<string> DisplayActionSheet(string title, string cancel, IEnumerable<string> buttons)
         {
-            var popup = new DisplayActionSheetPopup(title, message, cancel, buttons);
+            var popup = new DisplayActionSheetPopup(title, cancel, buttons);
             await PopupNavigation.Instance.PushAsync(popup);
             var response = await popup.PopupClosedTask;
             return response;

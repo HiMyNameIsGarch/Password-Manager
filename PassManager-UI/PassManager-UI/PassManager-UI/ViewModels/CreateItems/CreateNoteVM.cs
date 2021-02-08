@@ -71,6 +71,7 @@ namespace PassManager.ViewModels.CreateItems
         private protected override object EncryptItem(object obj)
         {
             var noteToEncrypt = (Note)obj;
+            noteToEncrypt = (Note)noteToEncrypt.Clone();
             noteToEncrypt.Notes = VaultManager.EncryptString(noteToEncrypt.Notes);
             return noteToEncrypt;
         }

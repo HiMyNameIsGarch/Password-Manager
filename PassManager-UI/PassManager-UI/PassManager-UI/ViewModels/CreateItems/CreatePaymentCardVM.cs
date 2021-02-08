@@ -78,6 +78,7 @@ namespace PassManager.ViewModels.CreateItems
         private protected override object EncryptItem(object obj)
         {
             var cardToEncrypt = (PaymentCard)obj;
+            cardToEncrypt = (PaymentCard)cardToEncrypt.Clone();
             cardToEncrypt.NameOnCard = VaultManager.EncryptString(cardToEncrypt.NameOnCard);
             cardToEncrypt.CardType = VaultManager.EncryptString(cardToEncrypt.CardType);
             cardToEncrypt.CardNumber = VaultManager.EncryptString(cardToEncrypt.CardNumber);

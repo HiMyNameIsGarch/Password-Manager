@@ -127,6 +127,7 @@ namespace PassManager.ViewModels.CreateItems
         private protected override object EncryptItem(object obj)
         {
             var passwordToEncrypt = (Password)obj;
+            passwordToEncrypt = (Password)passwordToEncrypt.Clone();
             passwordToEncrypt.PasswordEncrypted = VaultManager.EncryptString(passwordToEncrypt.PasswordEncrypted);
             passwordToEncrypt.Url = VaultManager.EncryptString(passwordToEncrypt.Url);
             passwordToEncrypt.Notes = VaultManager.EncryptString(passwordToEncrypt.Notes);

@@ -4,9 +4,9 @@
              xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
              x:Class="PassManager.Views.Popups.InternetErrorView"
              CloseWhenBackgroundIsClicked="False">
-    <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Margin="20" Padding="20" BackgroundColor="{DynamicResource PrussianBlueColor}">
-        <Label FontSize="Medium" Text="You don't have internet connection!" TextColor="{DynamicResource ImperialRedColor}"/>
-        <StackLayout Orientation="Horizontal" Padding="20">
+    <StackLayout Style="{DynamicResource PopupFrame}">
+        <Label FontSize="{OnPlatform Android=20, UWP=22}" Text="You don't have internet connection!" Margin="{OnPlatform Android='0,10,0,10', UWP='5,10,5,10'}" TextColor="{DynamicResource ImperialRedColor}"/>
+        <StackLayout Orientation="Horizontal" Padding="5">
             <Button Text="Quit" Command="{Binding QuitApp}" Style="{StaticResource Key=PopupBtn}"/>
             <Button Text="Refresh" Command="{Binding RefreshPage}" Style="{StaticResource Key=PopupBtn}"/>
         </StackLayout>
