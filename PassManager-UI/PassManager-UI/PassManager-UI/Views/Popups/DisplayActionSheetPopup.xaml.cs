@@ -10,10 +10,10 @@ namespace PassManager.Views.Popups
     {
         private TaskCompletionSource<string> _taskCompletionSource;
         public Task<string> PopupClosedTask => _taskCompletionSource.Task;
-        public DisplayActionSheetPopup(string title, string message, string cancel, IEnumerable<string> options)
+        public DisplayActionSheetPopup(string title, string cancel, IEnumerable<string> options)
         {
             InitializeComponent();
-            BindingContext = new DisplayActionSheetVM(title, message, cancel, options);
+            BindingContext = new DisplayActionSheetVM(title, cancel, options, ListBtns);
         }
         protected override void OnAppearing()
         {

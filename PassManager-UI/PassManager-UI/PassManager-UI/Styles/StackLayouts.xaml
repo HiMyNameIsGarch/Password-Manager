@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    
+    <Style x:Key="PopupFrame" TargetType="StackLayout">
+        <Setter Property="VerticalOptions" Value="Center"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="Margin" Value="10"/>
+        <Setter Property="Padding" Value="10,0,10,0"/>
+        <Setter Property="BackgroundColor" Value="{DynamicResource PrussianBlueColor}"/>
+        <Setter Property="Orientation" Value="Vertical"/>
+    </Style>
+</ResourceDictionary>

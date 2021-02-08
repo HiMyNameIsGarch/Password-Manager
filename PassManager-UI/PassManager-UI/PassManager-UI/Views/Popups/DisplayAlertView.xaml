@@ -4,10 +4,10 @@
              xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
              x:Class="PassManager.Views.Popups.DisplayActionSheetView"
              CloseWhenBackgroundIsClicked="False">
-    <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Margin="10" Padding="10" BackgroundColor="{DynamicResource PrussianBlueColor}">
-        <Label FontSize="24" Margin="10" Text="{Binding Title}" TextColor="{DynamicResource OrangeColor}"/>
-        <Label FontSize="20" Margin="10" Text="{Binding Message}" TextColor="{DynamicResource CeladonBlueColor}"/>
-        <StackLayout Orientation="Horizontal" Padding="10">
+    <StackLayout VerticalOptions="Center" HorizontalOptions="Center" Margin="10" Padding="10,0,10,0" BackgroundColor="{DynamicResource PrussianBlueColor}">
+        <Label FontSize="24" Margin="{OnPlatform Android='5,10,0,10', UWP='5,10,0,0'}" Text="{Binding Title}" TextColor="{DynamicResource OrangeColor}"/>
+        <Label FontSize="20" Margin="5" Text="{Binding Message}" TextColor="{DynamicResource CeladonBlueColor}"/>
+        <StackLayout Orientation="Horizontal" Padding="5">
             <Button Text="{Binding Cancel}" Command="{Binding CancelCommand}" Style="{StaticResource Key=PopupBtn}"/>
             <Button Text="{Binding Accept}" Command="{Binding YesCommand}" Style="{StaticResource Key=PopupBtn}"/>
         </StackLayout>

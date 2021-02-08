@@ -18,7 +18,7 @@ namespace PassManager.ViewModels.CreateItems
         {
             //set some default values
             IsPasswordVisible = IsSettingsPassVis = true;
-            SettingsPassEntryIcon = PassEntryIcon = ImageSource.FromResource(IconHelper.GetImageUrl("Locked"));
+            SettingsPassEntryIcon = PassEntryIcon = IconHelper.GetImageSource("Locked");
             _wifi = new Wifi();
             //set commands
             _copyPassword = new Command(CopyPasswordToClipboard);
@@ -92,12 +92,12 @@ namespace PassManager.ViewModels.CreateItems
         private async void CopySettingsPasswordToClipboard() { await CopyToClipboard(Wifi.SettingsPassword); }
         private void ChangeVisOfSettingsPass()
         {
-            SettingsPassEntryIcon = ImageSource.FromResource($"PassManager-UI.Images.{(IsSettingsPassVis ? "Open" : "Locked")}.png");
+            SettingsPassEntryIcon = IconHelper.GetImageSource(IsSettingsPassVis ? "Open" : "Locked");
             IsSettingsPassVis = !IsSettingsPassVis;
         }
         private void ChangeVisOfPass()
         {
-            PassEntryIcon = ImageSource.FromResource($"PassManager-UI.Images.{(IsPasswordVisible ? "Open" : "Locked")}.png");
+            PassEntryIcon = IconHelper.GetImageSource(IsPasswordVisible ? "Open" : "Locked");
             IsPasswordVisible = !IsPasswordVisible;
         }
         //override functions
@@ -153,6 +153,7 @@ namespace PassManager.ViewModels.CreateItems
         private protected override object EncryptItem(object obj)
         {
             var wifiToEncrypt = (Wifi)obj;
+            wifiToEncrypt = (Wifi)wifiToEncrypt.Clone();
             wifiToEncrypt.PasswordEncrypted = VaultManager.EncryptString(wifiToEncrypt.PasswordEncrypted);
             wifiToEncrypt.SSID = VaultManager.EncryptString(wifiToEncrypt.SSID);
             wifiToEncrypt.SettingsPassword = VaultManager.EncryptString(wifiToEncrypt.SettingsPassword);

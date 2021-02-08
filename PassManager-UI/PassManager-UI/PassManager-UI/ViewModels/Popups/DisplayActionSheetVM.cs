@@ -7,11 +7,10 @@ namespace PassManager.ViewModels.Popups
 {
     public class DisplayActionSheetVM
     {
-        public DisplayActionSheetVM(string title, string message, string cancel, IEnumerable<string> options)
+        public DisplayActionSheetVM(string title, string cancel, IEnumerable<string> options, ScrollView scrollView)
         {
             //set values for page
             Title = title;
-            Message = message;
             Cancel = cancel;
             //set some commands
             _selectOption = new Command(Select);
@@ -19,30 +18,39 @@ namespace PassManager.ViewModels.Popups
             {
                 await ClosePopUp(Cancel);
             });
+            //set font size for button
+            int fontSize = 0;
+            switch (Device.RuntimePlatform)
+            {
+                case Device.Android:
+                    fontSize = 15;
+                    break;
+                case Device.UWP:
+                    fontSize = 17;
+                    break;
+            }
             //add options
-            Options = new List<Models.Option>();
+            StackLayout st = new StackLayout();
             foreach (var option in options)
             {
-                Options.Add(new Models.Option(option));
+                var btn = new Button()
+                {
+                    Text = option,
+                    TextColor = Color.FromHex("A8DADC"),
+                    FontSize = fontSize,
+                    BackgroundColor = Color.Transparent,
+                    Command = SelectOption,
+                    CommandParameter = option
+                };
+                st.Children.Add(btn);
             }
+            scrollView.Content = st;
         }
         //variables
         private ICommand _selectOption;
-        private Models.Option _currentItem;
         public string ReturnValue;
         //props
-        public ICollection<Models.Option> Options { get; set; }
-        public Models.Option CurrentItem
-        {
-            get { return _currentItem; }
-            set
-            {
-                _currentItem = value;
-                SelectOption.Execute(_currentItem.Text);
-            }
-        }
         public string Title { get; set; }
-        public string Message { get; set; }
         public string Cancel { get; set; }
         //commands
         public ICommand SelectOption

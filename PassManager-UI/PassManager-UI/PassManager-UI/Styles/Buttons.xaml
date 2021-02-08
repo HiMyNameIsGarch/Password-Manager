@@ -4,12 +4,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
     
     <Style x:Key="PopupBtn" TargetType="Button">
-        <Setter Property="BackgroundColor" Value="{DynamicResource CeladonBlueColor}"/>
+        <Setter Property="BackgroundColor" Value="Transparent"/>
         <Setter Property="TextColor" Value="{DynamicResource PowderBlueColor}"/>
-        <Setter Property="Padding" Value="5"/>
-        <Setter Property="Margin" Value="10"/>
-        <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
-        <Setter Property="CornerRadius" Value="{OnPlatform Android=30, UWP=15}"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
+        <Setter Property="FontSize" Value="{OnPlatform Android=15, UWP=18}"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
     </Style>
     <Style x:Key="BasicBtn" TargetType="Button">
         <Setter Property="BackgroundColor" Value="Transparent"/>

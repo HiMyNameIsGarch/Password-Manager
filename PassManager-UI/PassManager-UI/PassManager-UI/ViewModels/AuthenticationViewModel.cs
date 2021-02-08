@@ -9,6 +9,8 @@ using PassManager.Models;
 using PassManager.Views.Popups;
 using System.Threading.Tasks;
 using PassManager.Models.Interfaces;
+using System.Collections.Generic;
+using Xamarin.Forms.Internals;
 
 namespace PassManager.Views
 {
@@ -19,8 +21,8 @@ namespace PassManager.Views
             //set some default values
             IsConfirmPassVisible = true;
             IsPasswordVisible = true;
-            PassEntryIcon = ImageSource.FromResource(IconHelper.GetImageUrl("Locked"));
-            ConfirmPassEntryIcon = ImageSource.FromResource(IconHelper.GetImageUrl("Locked"));
+            PassEntryIcon = IconHelper.GetImageSource("Locked");
+            ConfirmPassEntryIcon = IconHelper.GetImageSource("Locked");
             CurrentAction = TypeOfActions.Sign_In;
             IsRegisterPage = false;
             //set commands
@@ -126,12 +128,12 @@ namespace PassManager.Views
         //commands implementation
         private void ChangeVisOfConfirmPassword()
         {
-            ConfirmPassEntryIcon = ImageSource.FromResource($"PassManager-UI.Images.{(IsConfirmPassVisible ? "Open" : "Locked")}.png");
+            ConfirmPassEntryIcon = IconHelper.GetImageSource(IsPasswordVisible ? "Open" : "Locked");
             IsConfirmPassVisible = !IsConfirmPassVisible;
         }
         private void ChangeVisOfPassword()
         {
-            PassEntryIcon = ImageSource.FromResource($"PassManager-UI.Images.{(IsPasswordVisible ? "Open" : "Locked")}.png");
+            PassEntryIcon = IconHelper.GetImageSource(IsPasswordVisible ? "Open" : "Locked");
             IsPasswordVisible = !IsPasswordVisible;
         }
         private void ChangePage()
@@ -141,7 +143,7 @@ namespace PassManager.Views
                 case TypeOfActions.Sign_In:
                     CurrentAction = TypeOfActions.Register;
                     IsRegisterPage = true;
-                    SetNames("Create new account", "Sign in", "Already have an account?", TypeOfActions.Register.ToString());
+                    SetNames("Create a new account", "Sign in", "Already have an account?", TypeOfActions.Register.ToString());
                     break;
                 case TypeOfActions.Register:
                     CurrentAction = TypeOfActions.Sign_In;
