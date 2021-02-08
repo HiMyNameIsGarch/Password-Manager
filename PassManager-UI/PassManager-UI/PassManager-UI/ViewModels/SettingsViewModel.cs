@@ -1,7 +1,6 @@
 ﻿using PassManager.Models;
 using PassManager.Models.Api;
 using System.Collections.Generic;
-using System.Windows.Input;
 using Xamarin.Forms;
 using PassManager.ViewModels.Bases;
 
@@ -29,15 +28,5 @@ namespace PassManager.ViewModels
                 };
             }
         }
-    }
-    public class SettingModel
-    {
-        public SettingModel(string text, ICommand command)
-        {
-            Text = text;
-            WhenClicked = command;
-        }
-        public string Text { get; set; }
-        public ICommand WhenClicked { get; set; }
     }
 }

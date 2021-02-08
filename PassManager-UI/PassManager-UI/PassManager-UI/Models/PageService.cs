@@ -1,6 +1,4 @@
-﻿using PassManager.ViewModels.Popups;
-using PassManager.Views.Popups;
-using Rg.Plugins.Popup.Extensions;
+﻿using PassManager.Views.Popups;
 using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using System.Collections.Generic;
@@ -11,10 +9,6 @@ namespace PassManager.Models
 {
     internal static class PageService 
     {
-        private static Page MainPage
-        {
-            get { return Application.Current.MainPage; }
-        }
         public static void ChangeMainPage(Page page)
         {
             Application.Current.MainPage = page;

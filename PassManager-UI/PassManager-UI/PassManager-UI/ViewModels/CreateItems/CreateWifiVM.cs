@@ -18,7 +18,7 @@ namespace PassManager.ViewModels.CreateItems
         {
             //set some default values
             IsPasswordVisible = IsSettingsPassVis = true;
-            SettingsPassEntryIcon = PassEntryIcon = IconHelper.GetImageSource("Locked");
+            SettingsPassEntryIcon = PassEntryIcon = IconHelper.GetImageUrl("Locked");
             _wifi = new Wifi();
             //set commands
             _copyPassword = new Command(CopyPasswordToClipboard);
@@ -37,20 +37,20 @@ namespace PassManager.ViewModels.CreateItems
         private ICommand _changeVisOfPassword;
         private bool _isSettingsPassVis;
         private bool _isPasswordVisible;
-        private ImageSource _passEntryIcon;
-        private ImageSource _settingsPassEntryIcon;
+        private string _passEntryIcon;
+        private string _settingsPassEntryIcon;
         //props
         public Wifi Wifi
         {
             get { return _wifi; }
             private set { _wifi = value; NotifyPropertyChanged(); }
         }
-        public ImageSource SettingsPassEntryIcon
+        public string SettingsPassEntryIcon
         {
             get { return _settingsPassEntryIcon; }
             private set { _settingsPassEntryIcon = value; NotifyPropertyChanged(); }
         }
-        public ImageSource PassEntryIcon
+        public string PassEntryIcon
         {
             get { return _passEntryIcon; }
             private set { _passEntryIcon = value; NotifyPropertyChanged(); }
@@ -92,12 +92,12 @@ namespace PassManager.ViewModels.CreateItems
         private async void CopySettingsPasswordToClipboard() { await CopyToClipboard(Wifi.SettingsPassword); }
         private void ChangeVisOfSettingsPass()
         {
-            SettingsPassEntryIcon = IconHelper.GetImageSource(IsSettingsPassVis ? "Open" : "Locked");
+            SettingsPassEntryIcon = IconHelper.GetImageUrl(IsSettingsPassVis ? "Open" : "Locked");
             IsSettingsPassVis = !IsSettingsPassVis;
         }
         private void ChangeVisOfPass()
         {
-            PassEntryIcon = IconHelper.GetImageSource(IsPasswordVisible ? "Open" : "Locked");
+            PassEntryIcon = IconHelper.GetImageUrl(IsPasswordVisible ? "Open" : "Locked");
             IsPasswordVisible = !IsPasswordVisible;
         }
         //override functions

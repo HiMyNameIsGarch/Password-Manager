@@ -2,7 +2,15 @@
 <ContentPage NavigationPage.HasNavigationBar="False" xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:CRender="clr-namespace:PassManager.CustomRenderer"
+             xmlns:converter="clr-namespace:PassManager.Converters"
              x:Class="PassManager.Views.AuthenticationView">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:ImageSourceConverter x:Key="iconConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <Grid BackgroundColor="{DynamicResource PrussianBlueColor}">
             <!--#region Main grid settings-->
         <Grid.RowDefinitions>
@@ -45,7 +53,7 @@
                             <CRender:CustomEntry IsPassword="{Binding IsPasswordVisible}" Placeholder="Password" Margin="15,0,0,0" 
                                                  Style="{DynamicResource BaseEntry}" Text="{Binding Password, Mode=TwoWay}" />
                             <Frame Style="{StaticResource RoundFrame}">
-                                <Image Source="{Binding PassEntryIcon}" Aspect="AspectFill" Margin="0">
+                                <Image Source="{Binding PassEntryIcon, Converter={StaticResource iconConverter}}" Aspect="AspectFill" Margin="0">
                                     <Image.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding ChangeVisOfPass}" />
                                     </Image.GestureRecognizers>
@@ -59,7 +67,7 @@
                             <CRender:CustomEntry IsPassword="{Binding IsConfirmPassVisible}" Placeholder="Confirm password" Margin="15,0,0,0"
                                                  Style="{DynamicResource BaseEntry}" Text="{Binding ConfirmPass, Mode=TwoWay}"/>
                             <Frame Style="{StaticResource RoundFrame}">
-                                <Image Source="{Binding ConfirmPassEntryIcon}" Aspect="AspectFill" Margin="0">
+                                <Image Source="{Binding ConfirmPassEntryIcon, Converter={StaticResource iconConverter}}" Aspect="AspectFill" Margin="0">
                                     <Image.GestureRecognizers>
                                         <TapGestureRecognizer Command="{Binding ChangeVisOfConfirmPass}" />
                                     </Image.GestureRecognizers>

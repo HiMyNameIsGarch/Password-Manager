@@ -21,8 +21,8 @@ namespace PassManager.Views
             //set some default values
             IsConfirmPassVisible = true;
             IsPasswordVisible = true;
-            PassEntryIcon = IconHelper.GetImageSource("Locked");
-            ConfirmPassEntryIcon = IconHelper.GetImageSource("Locked");
+            PassEntryIcon = IconHelper.GetImageUrl("Locked");
+            ConfirmPassEntryIcon = IconHelper.GetImageUrl("Locked");
             CurrentAction = TypeOfActions.Sign_In;
             IsRegisterPage = false;
             //set commands
@@ -41,8 +41,8 @@ namespace PassManager.Views
         private string _username;
         private string _password;
         private string _confirmPass;
-        private ImageSource _passEntryIcon;
-        private ImageSource _confirmPassEntryIcon;
+        private string _passEntryIcon;
+        private string _confirmPassEntryIcon;
         //booleans
         private bool _isRegisterPage;
         private bool _isPasswordVisible;
@@ -70,12 +70,12 @@ namespace PassManager.Views
             get { return _actionCommand; }
         }
         //prop for the view
-        public ImageSource PassEntryIcon
+        public string PassEntryIcon
         {
             get { return _passEntryIcon; }
             private set { _passEntryIcon = value; NotifyPropertyChanged(); }
         }
-        public ImageSource ConfirmPassEntryIcon
+        public string ConfirmPassEntryIcon
         {
             get { return _confirmPassEntryIcon; }
             private set { _confirmPassEntryIcon = value; NotifyPropertyChanged(); }
@@ -128,12 +128,12 @@ namespace PassManager.Views
         //commands implementation
         private void ChangeVisOfConfirmPassword()
         {
-            ConfirmPassEntryIcon = IconHelper.GetImageSource(IsPasswordVisible ? "Open" : "Locked");
+            ConfirmPassEntryIcon = IconHelper.GetImageUrl(IsPasswordVisible ? "Open" : "Locked");
             IsConfirmPassVisible = !IsConfirmPassVisible;
         }
         private void ChangeVisOfPassword()
         {
-            PassEntryIcon = IconHelper.GetImageSource(IsPasswordVisible ? "Open" : "Locked");
+            PassEntryIcon = IconHelper.GetImageUrl(IsPasswordVisible ? "Open" : "Locked");
             IsPasswordVisible = !IsPasswordVisible;
         }
         private void ChangePage()

@@ -1,5 +1,4 @@
 ﻿using PassManager.Models;
-using Xamarin.Essentials;
 using System.Windows.Input;
 using Xamarin.Forms;
 using PassManager.ViewModels.Bases;
@@ -30,10 +29,7 @@ namespace PassManager.ViewModels.Popups
         private ICommand _copyPassword;
         //props
         public bool IncludeUpperCaseLetters {
-            get
-            {
-                return _includeUpperCaseLetters;
-            }
+            get { return _includeUpperCaseLetters; }
             set
             {
                 _includeUpperCaseLetters = value;
@@ -103,11 +99,7 @@ namespace PassManager.ViewModels.Popups
         //functions
         private async void CopyToClipboard()
         {
-            string clipboardText = await Clipboard.GetTextAsync() ?? "";
-            if (Password != clipboardText)
-            {
-                await Clipboard.SetTextAsync(Password);
-            }
+            await ClipboardHelper.CopyToClipboard(Password);
         }
     }
 }

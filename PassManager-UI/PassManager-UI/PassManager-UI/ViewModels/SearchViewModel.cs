@@ -16,7 +16,7 @@ namespace PassManager.ViewModels
 {
     public class SearchViewModel : BaseViewModel
     {
-        public SearchViewModel() : base("Search...")
+        public SearchViewModel() : base("Search")
         {
             _items = new ObservableCollection<Grouping<string, ItemPreview>>();
         }

@@ -18,6 +18,8 @@
         <ResourceDictionary Source="Styles/Buttons.xaml"/>
         <!--Stack Layouts-->
         <ResourceDictionary Source="Styles/StackLayouts.xaml"/>
-        
+        <!--Images-->
+        <ResourceDictionary Source="Styles/Images.xaml"/>
+
     </Application.Resources>
 </Application>

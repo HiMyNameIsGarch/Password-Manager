@@ -25,4 +25,22 @@
     <Style x:Key="NavTitleLabel" TargetType="Label" BasedOn="{StaticResource NavigationLabel}">
         <Setter Property="Text" Value="{Binding PageTitle}"/>
     </Style>
+    <Style x:Key="ItemTitleLabel" TargetType="Label">
+        <Setter Property="Grid.Column" Value="1"/>
+        <Setter Property="Grid.Row" Value="0"/>
+        <Setter Property="Text" Value="{Binding Title}"/>
+        <Setter Property="LineBreakMode" Value="TailTruncation"/>
+        <Setter Property="FontSize" Value="17"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="TextColor" Value="{DynamicResource HoneyDewColor}"/>
+        <Setter Property="HorizontalTextAlignment" Value="Start"/>
+    </Style>
+    <Style x:Key="ItemSubTitleLabel" TargetType="Label">
+        <Setter Property="Grid.Column" Value="1"/>
+        <Setter Property="Grid.Row" Value="1"/>
+        <Setter Property="Text" Value="{Binding SubTitle}"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="TextColor" Value="{DynamicResource PowderBlueColor}"/>
+        <Setter Property="HorizontalTextAlignment" Value="Start"/>
+    </Style>
 </ResourceDictionary>

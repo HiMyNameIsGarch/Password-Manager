@@ -19,10 +19,13 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="5*"/>
                         </Grid.ColumnDefinitions>
-                        <Image Grid.Column="0" Source="{Binding IconUrl, Converter={StaticResource iconConvertor}}" Aspect="AspectFit" Margin="0" WidthRequest="64" HeightRequest="64" />
-                        <Label Grid.Column="1" Text="{Binding Name}" FontSize="20" VerticalOptions="CenterAndExpand" BackgroundColor="Transparent" 
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Image Grid.Column="0" Grid.Row="0" Source="{Binding IconUrl, Converter={StaticResource iconConvertor}}" Aspect="AspectFit" Margin="0" WidthRequest="64" HeightRequest="64" />
+                        <Label Grid.Column="1" Grid.Row="0" Text="{Binding Name}" FontSize="20" VerticalOptions="CenterAndExpand" BackgroundColor="Transparent" 
                                HorizontalOptions="Start" Padding="20" TextColor="{DynamicResource HoneyDewColor}"/>
                     </Grid>
                 </ViewCell>
