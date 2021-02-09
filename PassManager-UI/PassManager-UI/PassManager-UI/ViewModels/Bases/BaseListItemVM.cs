@@ -168,7 +168,7 @@ namespace PassManager.ViewModels.Bases
                 }
                 catch (Exception ex)
                 {
-                    HandleException(ex);
+                    PageService.HandleException(ex);
                 }
                 IsRefreshing = false;
 

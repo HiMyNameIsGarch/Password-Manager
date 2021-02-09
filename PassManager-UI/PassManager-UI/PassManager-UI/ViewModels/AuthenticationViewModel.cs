@@ -8,9 +8,6 @@ using System;
 using PassManager.Models;
 using PassManager.Views.Popups;
 using System.Threading.Tasks;
-using PassManager.Models.Interfaces;
-using System.Collections.Generic;
-using Xamarin.Forms.Internals;
 
 namespace PassManager.Views
 {
@@ -167,11 +164,7 @@ namespace PassManager.Views
                     await SignIn();
                     break;
             }
-            if (Device.RuntimePlatform == Device.Android)
-            {
-                var statusbar = DependencyService.Get<IStatusBarPlatformSpecific>();
-                statusbar.ChangeNavigationBarColor(Android.Graphics.Color.Rgb(69, 123, 157));
-            }
+            PageService.ChangeNavBarColor();
         }
         //methods
         private async Task Register()

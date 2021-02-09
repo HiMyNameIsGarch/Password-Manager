@@ -4,7 +4,6 @@ using System.ComponentModel;
 using Xamarin.Essentials;
 using PassManager.Models;
 using PassManager.Views.Popups;
-using Rg.Plugins.Popup.Services;
 
 namespace PassManager.ViewModels.Bases
 {
@@ -40,19 +39,6 @@ namespace PassManager.ViewModels.Bases
                 PageService.PushPopupAsync(new InternetErrorView());
             }
             return internet;
-        }
-        protected private async void HandleException(Exception ex)
-        {
-            Models.TaskStatus status = Models.Api.ApiHelper.ServerIsOpen(ex);
-            await PopupNavigation.Instance.PopAllAsync(false);
-            if (status.IsError)
-            {
-                await PageService.PushPopupAsync(new ErrorView(ErrorMsg.ServerError, true), true);
-            }
-            else
-            {
-                await PageService.PushPopupAsync(new ErrorView(ErrorMsg.BasicError, false), true);
-            }
         }
     }
 }

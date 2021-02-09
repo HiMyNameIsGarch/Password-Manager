@@ -14,7 +14,7 @@ namespace PassManager.ViewModels.FlyoutItems
         {
             if (IsInternet())
             {
-                GetDataAsync().AwaitWithPopup(HandleException, false);
+                GetDataAsync().AwaitWithPopup(PageService.HandleException, false);
             }
         }
         private protected async override Task GetDataAsync()
