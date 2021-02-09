@@ -2,8 +2,23 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:CRender="clr-namespace:PassManager.CustomRenderer"
+             xmlns:converters="clr-namespace:PassManager.Converters"
              x:Class="PassManager.Views.CreateItems.CreatePaymentCardView"
              BackgroundColor="{DynamicResource CeladonBlueColor}" Title="{Binding PageTitle}">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:DateTimeConverter x:Key="dateTimeConverter"/>
+            
+            <!--Buttons-->
+            <Style x:Key="DateTimeBtn" TargetType="Button">
+                <Setter Property="Margin" Value="5"/>
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+                <Setter Property="FontSize" Value="{OnPlatform  Android=15, UWP=17}"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
     <Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding GoBack}"/>
     </Shell.BackButtonBehavior>
@@ -33,12 +48,14 @@
             <!--Start Date-->
             <Label Text="Start Date:" Style="{StaticResource LabelForEntries}"/>
             <Frame Style="{StaticResource CustomFrame}">
-                <DatePicker Date="{Binding PaymentCard.StartDate}" Margin="10"/>
+                <Button Text="{Binding PaymentCard.StartDate, Converter={StaticResource dateTimeConverter}}" Command="{Binding ChangeStartDate}"
+                        Style="{StaticResource DateTimeBtn}"/>
             </Frame>
             <!--Expiration Date-->
             <Label Text="Expiration Date:" Style="{StaticResource LabelForEntries}"/>
             <Frame Style="{StaticResource CustomFrame}">
-                <DatePicker Date="{Binding PaymentCard.ExpirationDate}" Margin="10"/>
+                <Button Text="{Binding PaymentCard.ExpirationDate, Converter={StaticResource dateTimeConverter}}" Command="{Binding ChangeExpirationDate}"
+                        Style="{StaticResource DateTimeBtn}"/>
             </Frame>
             <!--Name On Card-->
             <Label Text="Name On Card:" Style="{StaticResource LabelForEntries}"/>
