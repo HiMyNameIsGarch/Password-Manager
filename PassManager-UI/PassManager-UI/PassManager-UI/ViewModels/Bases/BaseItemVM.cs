@@ -65,7 +65,7 @@ namespace PassManager.ViewModels.Bases
                             if(_itemId > 0 && IsInternet())//check if id is valid
                             {
                                 //get data from api
-                                GetDataAsync(_itemId).AwaitWithPopup(HandleException, false);
+                                GetDataAsync(_itemId).AwaitWithPopup(PageService.HandleException, false);
                             }
                             ChangeProps(ItemPageState.View, "Edit", $"View {ItemType.ToSampleString()}", true);
                             break;
@@ -149,7 +149,7 @@ namespace PassManager.ViewModels.Bases
                     }
                     catch (Exception ex)
                     {
-                        HandleException(ex);
+                        PageService.HandleException(ex);
                     }
                     if(!PopupNavigation.Instance.PopupStack.Where(s => s.ToString().Contains("Error")).Any())
                         await PageService.PopPopupAsync(false);
@@ -180,84 +180,13 @@ namespace PassManager.ViewModels.Bases
                 switch (PageState)
                 {
                     case ItemPageState.Create:
-                        //handle creation of item
-                        var createStatus = IsModelValid();
-                        if (createStatus.IsError)
-                        {
-                            await DisplayPopupError(createStatus.Message);
-                            break;
-                        }
-                        await PageService.PopAllAsync();
-                        await PageService.PushPopupAsync(new WaitForActionView(), false);
-                        bool isCallSucces = false;
-                        try
-                        {
-                            isCallSucces = await CreateAsync();
-                        }
-                        catch (Exception ex)
-                        {
-                            HandleException(ex);
-                            break;
-                        }
-                        await PageService.PopPopupAsync(false);
-                        if (isCallSucces)
-                        {
-                            var latestCreatedItem = await EntireItemsProcessor.GetLatestCreated(ApiHelper.ApiClient, ItemType);
-                            if (latestCreatedItem is null)
-                            {
-                                await PageService.PushPopupAsync(new ErrorView(ErrorMsg.ItemNotCreated(ItemType)));
-                            }
-                            else
-                            {
-                                UpdateModel model = new UpdateModel(TypeOfUpdates.Create, latestCreatedItem);
-                                await GoTo(ItemType.ToString(), model);
-                            }
-                        }
-                        else
-                            await PageService.PushPopupAsync(new ErrorView(ErrorMsg.ItemNotCreated(ItemType)));
+                        await HandleCreate();
                         break;
                     case ItemPageState.View:
                         ChangeProps(ItemPageState.Edit, "Save", $"Edit {ItemType.ToSampleString()}", false);
                         break;
                     case ItemPageState.Edit:
-                        //handle editing of an item
-                        var editStatus = IsModelValid();
-                        if (editStatus.IsError)
-                        {
-                            await DisplayPopupError(editStatus.Message);
-                            break;
-                        }
-                        if (!IsItemChanged())
-                        {
-                            await Shell.Current.Navigation.PopToRootAsync();
-                            break;
-                        }
-                        await PageService.PopAllAsync();
-                        await PageService.PushPopupAsync(new WaitForActionView(), false);
-                        ModifyCallStatus status = null;
-                        try
-                        {
-                            status = await ModifyAsync(_itemId);
-                        }
-                        catch (Exception ex)
-                        {
-                            HandleException(ex);
-                            break;
-                        }
-                        await PageService.PopPopupAsync(false);
-
-                        if (status.IsCallSucces)
-                        {
-                            if (status.ItemPreviewChanged)
-                            {
-                                UpdateModel model = new UpdateModel(TypeOfUpdates.Modify, status.ItemPreview);
-                                await GoTo(ItemType.ToString(), model);
-                            }
-                            else
-                                await GoTo(ItemType.ToString());
-                        }
-                        else
-                            await PageService.PushPopupAsync(new ErrorView(ErrorMsg.ItemNotModified(ItemType)));
+                        await HandleModify();
                         break;
                 }
             }
@@ -272,6 +201,85 @@ namespace PassManager.ViewModels.Bases
         private protected abstract object EncryptItem(object obj);//gen an object(an item for that particular page) and return the encrypted version
         private protected abstract object DecryptItem(object obj);//get an object(an item for that particular page) and return the decrypted version
         //functions
+        private async Task HandleCreate()
+        {
+            //handle creation of item
+            var createStatus = IsModelValid();
+            if (createStatus.IsError)
+            {
+                await DisplayPopupError(createStatus.Message);
+                return;
+            }
+            await PageService.PopAllAsync();
+            await PageService.PushPopupAsync(new WaitForActionView(), false);
+            bool isCallSucces = false;
+            try
+            {
+                isCallSucces = await CreateAsync();
+            }
+            catch (Exception ex)
+            {
+                PageService.HandleException(ex);
+                return;
+            }
+            await PageService.PopPopupAsync(false);
+            if (isCallSucces)
+            {
+                var latestCreatedItem = await EntireItemsProcessor.GetLatestCreated(ApiHelper.ApiClient, ItemType);
+                if (latestCreatedItem is null)
+                {
+                    await PageService.PushPopupAsync(new ErrorView(ErrorMsg.ItemNotCreated(ItemType)));
+                }
+                else
+                {
+                    UpdateModel model = new UpdateModel(TypeOfUpdates.Create, latestCreatedItem);
+                    await GoTo(ItemType.ToString(), model);
+                }
+            }
+            else
+                await PageService.PushPopupAsync(new ErrorView(ErrorMsg.ItemNotCreated(ItemType)));
+        }
+        private async Task HandleModify()
+        {
+            //handle editing of an item
+            var editStatus = IsModelValid();
+            if (editStatus.IsError)
+            {
+                await DisplayPopupError(editStatus.Message);
+                return;
+            }
+            if (!IsItemChanged())
+            {
+                await Shell.Current.Navigation.PopToRootAsync();
+                return;
+            }
+            await PageService.PopAllAsync();
+            await PageService.PushPopupAsync(new WaitForActionView(), false);
+            ModifyCallStatus status = null;
+            try
+            {
+                status = await ModifyAsync(_itemId);
+            }
+            catch (Exception ex)
+            {
+                PageService.HandleException(ex);
+                return;
+            }
+            await PageService.PopPopupAsync(false);
+
+            if (status.IsCallSucces)
+            {
+                if (status.ItemPreviewChanged)
+                {
+                    UpdateModel model = new UpdateModel(TypeOfUpdates.Modify, status.ItemPreview);
+                    await GoTo(ItemType.ToString(), model);
+                }
+                else
+                    await GoTo(ItemType.ToString());
+            }
+            else
+                await PageService.PushPopupAsync(new ErrorView(ErrorMsg.ItemNotModified(ItemType)));
+        }
         private async Task DisplayPopupError(string msg)
         {
             //pop all popups

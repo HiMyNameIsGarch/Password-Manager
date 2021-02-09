@@ -1,8 +1,8 @@
 ﻿using PassManager.Models;
-using PassManager.Models.Api;
 using System.Collections.Generic;
 using Xamarin.Forms;
 using PassManager.ViewModels.Bases;
+using PassManager.Models.Api.Processors;
 
 namespace PassManager.ViewModels
 {
@@ -22,8 +22,8 @@ namespace PassManager.ViewModels
                     })),
                     new SettingModel("Sign Out", new Command( () => 
                     {
-                        ApiHelper.DeleteAuthorization();
-                        PageService.ChangeMainPage(new Views.AuthenticationView());
+                        UserProcessor.LogOut();
+                        PageService.ChangeNavBarColor();
                     })),
                 };
             }

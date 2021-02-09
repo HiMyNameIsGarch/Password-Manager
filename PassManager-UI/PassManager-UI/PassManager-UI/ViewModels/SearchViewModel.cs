@@ -50,7 +50,7 @@ namespace PassManager.ViewModels
                 }
                 catch(Exception ex)
                 {
-                    HandleException(ex);
+                    PageService.HandleException(ex);
                 }
                 _searchString = null;
             }

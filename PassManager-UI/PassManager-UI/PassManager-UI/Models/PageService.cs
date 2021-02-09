@@ -1,4 +1,5 @@
-﻿using PassManager.Views.Popups;
+﻿using PassManager.Models.Interfaces;
+using PassManager.Views.Popups;
 using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
 using System;
@@ -54,6 +55,27 @@ namespace PassManager.Models
             await PopupNavigation.Instance.PushAsync(popup);
             var response = await popup.PopupClosedTask;
             return response;
+        }
+        public static void ChangeNavBarColor()
+        {
+            if (Device.RuntimePlatform == Device.Android)
+            {
+                var statusbar = DependencyService.Get<IStatusBarPlatformSpecific>();
+                statusbar.ChangeNavigationBarColor(Android.Graphics.Color.Rgb(69, 123, 157));
+            }
+        }
+        public static async void HandleException(Exception ex)
+        {
+            Models.TaskStatus status = Models.Api.ApiHelper.ServerIsOpen(ex);
+            await PopupNavigation.Instance.PopAllAsync(false);
+            if (status.IsError)
+            {
+                await PageService.PushPopupAsync(new ErrorView(ErrorMsg.ServerError, true), true);
+            }
+            else
+            {
+                await PageService.PushPopupAsync(new ErrorView(ErrorMsg.BasicError, false), true);
+            }
         }
     }
 }

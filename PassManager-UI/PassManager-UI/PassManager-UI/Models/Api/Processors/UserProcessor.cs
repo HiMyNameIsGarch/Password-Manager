@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net.Http;
+using Xamarin.Forms;
+using PassManager.Models.Interfaces;
 
 namespace PassManager.Models.Api.Processors
 {
@@ -70,6 +72,11 @@ namespace PassManager.Models.Api.Processors
                 return new TaskStatus(false);
             }
             else return new TaskStatus(true, token.error_description);
+        }
+        internal static void LogOut()
+        {
+            ApiHelper.DeleteAuthorization();
+            PageService.ChangeMainPage(new Views.AuthenticationView());
         }
     }
 }
