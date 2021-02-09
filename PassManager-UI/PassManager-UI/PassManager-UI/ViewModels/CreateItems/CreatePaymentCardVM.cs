@@ -7,6 +7,8 @@ using PassManager.Models.Items;
 using PassManager.ViewModels.Bases;
 using PassManager.Views.Popups;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace PassManager.ViewModels.CreateItems
 {
@@ -15,15 +17,41 @@ namespace PassManager.ViewModels.CreateItems
         public CreatePaymentCardVM() : base(TypeOfItems.PaymentCard)
         {
             _paymentCard = new PaymentCard();
+            _changeStartDate = new Command(GetNewStartDate);
+            _changeExpirationDate = new Command(GetNewExpirationDate);
         }
         //variables
         private PaymentCard _paymentCard;
         private PaymentCard _tempPaymentCard;
+        private ICommand _changeStartDate;
+        private ICommand _changeExpirationDate;
+        //commands
+        public ICommand ChangeStartDate
+        {
+            get { return _changeStartDate; }
+        }
+        public ICommand ChangeExpirationDate
+        {
+            get { return _changeExpirationDate; }
+        }
         //props
         public PaymentCard PaymentCard
         {
             get { return _paymentCard; }
             set { _paymentCard = value; NotifyPropertyChanged(); }
+        }
+        //implementation for commands
+        private async void GetNewStartDate()
+        {
+            var response = await PageService.GetNewDateTime(PaymentCard.StartDate);
+            PaymentCard.StartDate = response;
+            NotifyPropertyChanged("PaymentCard");
+        }
+        private async void GetNewExpirationDate()
+        {
+            var response = await PageService.GetNewDateTime(PaymentCard.ExpirationDate);
+            PaymentCard.ExpirationDate = response;
+            NotifyPropertyChanged("PaymentCard");
         }
         //functions
         private protected override bool IsItemChanged()

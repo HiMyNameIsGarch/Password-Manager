@@ -1,6 +1,7 @@
 ﻿using PassManager.Views.Popups;
 using Rg.Plugins.Popup.Pages;
 using Rg.Plugins.Popup.Services;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xamarin.Forms;
@@ -43,6 +44,13 @@ namespace PassManager.Models
         public async static Task<string> DisplayActionSheet(string title, string cancel, IEnumerable<string> buttons)
         {
             var popup = new DisplayActionSheetPopup(title, cancel, buttons);
+            await PopupNavigation.Instance.PushAsync(popup);
+            var response = await popup.PopupClosedTask;
+            return response;
+        }
+        public async static Task<DateTime> GetNewDateTime(DateTime datetime)
+        {
+            var popup = new DatePickerView(datetime);
             await PopupNavigation.Instance.PushAsync(popup);
             var response = await popup.PopupClosedTask;
             return response;

@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<pages:PopupPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+             xmlns:enums="clr-namespace:PassManager.Enums"
+             x:Class="PassManager.Views.Popups.DatePickerView"
+             CloseWhenBackgroundIsClicked="False">
+    <pages:PopupPage.Resources>
+        <ResourceDictionary>
+            <!--Buttons-->
+            <!--Change value buttons-->
+            <Style x:Key="ArrowBtn" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="TextColor" Value="{DynamicResource PowderBlueColor}"/>
+            </Style>
+            <Style x:Key="UpBtn" TargetType="Button" BasedOn="{StaticResource ArrowBtn}">
+                <Setter Property="Grid.Row" Value="0"/>
+                <Setter Property="Text" Value="Up"/>
+                <Setter Property="CommandParameter" Value="{x:Static enums:ChangeDateMode.Increase}"/>
+            </Style>
+            <Style x:Key="DownBtn" TargetType="Button" BasedOn="{StaticResource ArrowBtn}">
+                <Setter Property="Grid.Row" Value="2"/>
+                <Setter Property="Text" Value="Down"/>
+                <Setter Property="CommandParameter" Value="{x:Static enums:ChangeDateMode.Decrease}"/>
+            </Style>
+            <!--Confirm buttons-->
+            <Style x:Key="CloseWindowBtn" TargetType="Button">
+                <Setter Property="Grid.Row" Value="2"/>
+                <Setter Property="BackgroundColor" Value="Transparent"/>
+                <Setter Property="FontSize" Value="13"/>
+                <Setter Property="TextColor" Value="{DynamicResource HoneyDewColor}"/>
+            </Style>
+            <!--Labels-->
+            <Style x:Key="DateLabel" TargetType="Label">
+                <Setter Property="Grid.Row" Value="1"/>
+                <Setter Property="HorizontalTextAlignment" Value="Center"/>
+                <Setter Property="VerticalTextAlignment" Value="Center"/>
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="TextColor" Value="{DynamicResource HoneyDewColor}"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+            </Style>
+        </ResourceDictionary>
+    </pages:PopupPage.Resources>
+    
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="{OnPlatform Android='4*', UWP='2*'}"/>
+            <RowDefinition Height="3*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Column="1" Grid.Row="1" BackgroundColor="{DynamicResource PrussianBlueColor}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="{Binding PageTitle}" FontSize="16" TextColor="{DynamicResource HoneyDewColor}"
+                    VerticalTextAlignment="Center" HorizontalTextAlignment="Center"/>
+            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Button Grid.Column="0" Command="{Binding ChangeDay}" Style="{StaticResource UpBtn}" />
+                <Button Grid.Column="1" Command="{Binding ChangeMonth}" Style="{StaticResource UpBtn}" />
+                <Button Grid.Column="2" Command="{Binding ChangeYear}" Style="{StaticResource UpBtn}" />
+
+                <Label Grid.Column="0" Text="{Binding Day}" Style="{StaticResource DateLabel}"/>
+                <Label Grid.Column="1" Text="{Binding Month}" Style="{StaticResource DateLabel}"/>
+                <Label Grid.Column="2" Text="{Binding Year}" Style="{StaticResource DateLabel}"/>
+
+                <Button Grid.Column="0" Command="{Binding ChangeDay}" Style="{StaticResource DownBtn}"/>
+                <Button Grid.Column="1" Command="{Binding ChangeMonth}" Style="{StaticResource DownBtn}"/>
+                <Button Grid.Column="2" Command="{Binding ChangeYear}" Style="{StaticResource DownBtn}"/>
+            </Grid>
+            <Button Grid.Column="0" Text="Cancel" Command="{Binding Cancel}" Style="{StaticResource CloseWindowBtn}"/>
+            <Button Grid.Column="1" Text="Confirm" Command="{Binding Confirm}" Style="{StaticResource CloseWindowBtn}"/>
+        </Grid>
+    </Grid>
+</pages:PopupPage>
