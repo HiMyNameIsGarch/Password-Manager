@@ -43,17 +43,23 @@ namespace PassManager.ViewModels.CreateItems
         //implementation for commands
         private async void GetNewStartDate()
         {
+            if (!CanModifyDate()) return;
             var response = await PageService.GetNewDateTime(PaymentCard.StartDate);
             PaymentCard.StartDate = response;
             NotifyPropertyChanged("PaymentCard");
         }
         private async void GetNewExpirationDate()
         {
+            if (!CanModifyDate()) return;
             var response = await PageService.GetNewDateTime(PaymentCard.ExpirationDate);
             PaymentCard.ExpirationDate = response;
             NotifyPropertyChanged("PaymentCard");
         }
         //functions
+        private bool CanModifyDate()
+        {
+            return PageState == ItemPageState.Edit || PageState == ItemPageState.Create;
+        }
         private protected override bool IsItemChanged()
         {
             return PaymentCard.IsChanged(_tempPaymentCard);

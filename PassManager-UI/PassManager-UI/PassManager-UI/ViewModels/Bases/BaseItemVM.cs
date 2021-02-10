@@ -32,7 +32,7 @@ namespace PassManager.ViewModels.Bases
         }
         //variables
         private protected readonly TypeOfItems ItemType;
-        private ItemPageState PageState;
+        private protected ItemPageState PageState;
         private bool CanDelete;
         private string _actionBtnText;
         private bool _readOnly;
@@ -228,7 +228,7 @@ namespace PassManager.ViewModels.Bases
                 var latestCreatedItem = await EntireItemsProcessor.GetLatestCreated(ApiHelper.ApiClient, ItemType);
                 if (latestCreatedItem is null)
                 {
-                    await PageService.PushPopupAsync(new ErrorView(ErrorMsg.ItemNotCreated(ItemType)));
+                    await DisplayPopupError(ErrorMsg.ItemNotCreated(ItemType));
                 }
                 else
                 {
@@ -237,7 +237,7 @@ namespace PassManager.ViewModels.Bases
                 }
             }
             else
-                await PageService.PushPopupAsync(new ErrorView(ErrorMsg.ItemNotCreated(ItemType)));
+                await DisplayPopupError(ErrorMsg.ItemNotCreated(ItemType));
         }
         private async Task HandleModify()
         {
@@ -278,7 +278,7 @@ namespace PassManager.ViewModels.Bases
                     await GoTo(ItemType.ToString());
             }
             else
-                await PageService.PushPopupAsync(new ErrorView(ErrorMsg.ItemNotModified(ItemType)));
+                await DisplayPopupError(ErrorMsg.ItemNotModified(ItemType));
         }
         private async Task DisplayPopupError(string msg)
         {

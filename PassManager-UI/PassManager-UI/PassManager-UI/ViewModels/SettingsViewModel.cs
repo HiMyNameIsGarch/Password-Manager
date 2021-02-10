@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Xamarin.Forms;
 using PassManager.ViewModels.Bases;
 using PassManager.Models.Api.Processors;
+using PassManager.Views.Popups;
 
 namespace PassManager.ViewModels
 {
@@ -16,6 +17,10 @@ namespace PassManager.ViewModels
             {
                 return new List<SettingModel>()
                 {
+                    new SettingModel("Generate Password", new Command(async () => 
+                    {
+                        await PageService.PushPopupAsync(new PasswordGeneratorView());
+                    })),
                     new SettingModel("Delete Account", new Command( () => 
                     {
 
