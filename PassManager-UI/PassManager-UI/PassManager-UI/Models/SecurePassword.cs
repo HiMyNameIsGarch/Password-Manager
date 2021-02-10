@@ -9,9 +9,22 @@ namespace PassManager.Models
         private const int ITERATIONS = 100000; // default number of pbkdf2 iterations
         internal static byte[] HashPassword(string salt, string password, int iterations = ITERATIONS)
         {
-            var newSalt = Encoding.UTF8.GetBytes(salt);
-            var newPass = CreatePBKDF2Hash(password, newSalt, iterations);
-            return newPass;
+            byte[] hashedPassword = null;
+            var byteSalt = Encoding.UTF8.GetBytes(salt);
+            if(byteSalt.Length < 8)
+            {
+                byte[] newSalt = new byte[8];
+                for (int i = 0; i < byteSalt.Length; i++)
+                {
+                    newSalt[i] = byteSalt[i]; 
+                }
+                hashedPassword = CreatePBKDF2Hash(password, newSalt, iterations);
+            }
+            else
+            {
+                hashedPassword = CreatePBKDF2Hash(password, byteSalt, iterations);
+            }
+            return hashedPassword;
         }
         private static byte[] CreatePBKDF2Hash(string input, byte[] salt, int iterations)
         {

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net.Http;
-using Xamarin.Forms;
-using PassManager.Models.Interfaces;
 
 namespace PassManager.Models.Api.Processors
 {
@@ -61,17 +59,11 @@ namespace PassManager.Models.Api.Processors
             ResponseToken token = await responseMessage.Content.ReadAsAsync<ResponseToken>();
             if (responseMessage.IsSuccessStatusCode)
             {
-                try
-                {
-                    ApiHelper.AddAuthorization(token.token_type, token.access_token);
-                }
-                catch (Exception ex)
-                {
-                    return new TaskStatus(true, ex.Message);
-                }
+                ApiHelper.AddAuthorization(token.token_type, token.access_token);
                 return new TaskStatus(false);
             }
-            else return new TaskStatus(true, token.error_description);
+            else 
+                return new TaskStatus(true, token.error_description);
         }
         internal static void LogOut()
         {
