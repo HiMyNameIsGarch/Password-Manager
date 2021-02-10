@@ -12,9 +12,10 @@
             
             <!--Buttons-->
             <Style x:Key="DateTimeBtn" TargetType="Button">
-                <Setter Property="Margin" Value="5"/>
+                <Setter Property="Margin" Value="{OnPlatform Android='2', UWP='5'}"/>
+                <Setter Property="Padding" Value="{OnPlatform Android=0, UWP=5}"/>
                 <Setter Property="BackgroundColor" Value="Transparent"/>
-                <Setter Property="FontSize" Value="{OnPlatform  Android=15, UWP=17}"/>
+                <Setter Property="FontSize" Value="{OnPlatform Android=14, UWP=17}"/>
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>

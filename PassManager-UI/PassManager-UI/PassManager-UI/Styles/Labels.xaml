@@ -42,5 +42,6 @@
         <Setter Property="FontSize" Value="15"/>
         <Setter Property="TextColor" Value="{DynamicResource PowderBlueColor}"/>
         <Setter Property="HorizontalTextAlignment" Value="Start"/>
+        <Setter Property="LineBreakMode" Value="TailTruncation"/>
     </Style>
 </ResourceDictionary>
