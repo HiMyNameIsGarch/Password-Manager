@@ -19,9 +19,9 @@ namespace PassManager_WebApi.Controllers
         {
             string userId = User.Identity.GetUserId();
             //bring from db just the item preview for notes
-            IEnumerable<ItemPreview> notes = EntireItemsController.GetAllNotes(db, userId);
+            IEnumerable<ItemPreview> notes = EntireItems.GetAllNotes(db, userId);
 
-            return Ok(notes);
+            return Ok(notes.GroupItems());
         }
         //GET api/Notes?lastCreated=true
         public IHttpActionResult Get(bool lastCreated)
