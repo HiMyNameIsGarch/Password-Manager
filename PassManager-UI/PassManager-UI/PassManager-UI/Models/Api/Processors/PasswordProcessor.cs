@@ -21,9 +21,8 @@ namespace PassManager.Models.Api.Processors
             }
             if (responseMessage.IsSuccessStatusCode)
             {
-                var itemList = await responseMessage.Content.ReadAsAsync<IEnumerable<ItemPreview>>();
-                var groupedItems = Grouping<string, ItemPreview>.GroupList(itemList);
-                return groupedItems;
+                var itemList = await responseMessage.Content.ReadAsAsync<IEnumerable<Grouping<string, ItemPreview>>>();
+                return Grouping<string, ItemPreview>.AddKeys(itemList);
             }
             return null;
         }

@@ -267,6 +267,7 @@ namespace PassManager.ViewModels.Bases
         }
         private protected bool IsListChanged(IEnumerable<Grouping<string, ItemPreview>> newList)
         {
+            if (newList is null || Items is null) return false;
             int previewsCount = newList.Count();
             int itemsCount = Items.Count();
             bool needUpdate = false;

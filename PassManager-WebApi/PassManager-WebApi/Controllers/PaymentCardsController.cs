@@ -18,9 +18,9 @@ namespace PassManager_WebApi.Controllers
         {
             string userId = User.Identity.GetUserId();
             //bring from db just the item preview for payment card
-            IEnumerable<ItemPreview> paymentCards = EntireItemsController.GetAllPaymentCards(db, userId);
+            IEnumerable<ItemPreview> paymentCards = EntireItems.GetAllPaymentCards(db, userId);
             
-            return Ok(paymentCards);
+            return Ok(paymentCards.GroupItems());
         }
         public IHttpActionResult Get(bool lastCreated)
         {

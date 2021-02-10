@@ -20,9 +20,9 @@ namespace PassManager_WebApi.Controllers
         {
             string userId = User.Identity.GetUserId();
             //bring from db just the item preview for passwords
-            IEnumerable<ItemPreview> passwords = EntireItemsController.GetAllPasswords(db, userId); ;
+            IEnumerable<ItemPreview> passwords = EntireItems.GetAllPasswords(db, userId); ;
             
-            return Ok(passwords);
+            return Ok(passwords.GroupItems());
         }
         //GET api/Password?lastCreated=true
         public IHttpActionResult Get(bool lastCreated)

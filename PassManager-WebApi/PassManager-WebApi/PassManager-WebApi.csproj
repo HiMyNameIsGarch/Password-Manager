@@ -269,7 +269,6 @@
     <Compile Include="Controllers\NotesController.cs" />
     <Compile Include="Controllers\PasswordsController.cs" />
     <Compile Include="Controllers\PaymentCardsController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Controllers\WifisController.cs" />
     <Compile Include="Enums\MessageType.cs" />
     <Compile Include="Enums\TypeOfItems.cs" />
@@ -294,6 +293,7 @@
     <Compile Include="Models\C__MigrationHistory.cs">
       <DependentUpon>PassManager.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\EntireItems.cs" />
     <Compile Include="Models\EnumExtensions.cs" />
     <Compile Include="Models\ErrorMsg.cs" />
     <Compile Include="Models\Grouping.cs" />

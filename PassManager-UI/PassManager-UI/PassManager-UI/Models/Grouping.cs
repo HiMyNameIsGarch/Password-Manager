@@ -16,12 +16,18 @@ namespace PassManager.Models
                 this.Items.Add(item);
             }
         }
-        public static IEnumerable<Grouping<string, ItemPreview>> GroupList(IEnumerable<ItemPreview> items)
+        public static IEnumerable<Grouping<string, ItemPreview>> AddKeys(IEnumerable<Grouping<string, ItemPreview>> items)
         {
             if (items is null || items.Count() == 0) return null;
-            return items
-                    .GroupBy(item => item.ItemType)
-                    .Select(item => new Grouping<string, ItemPreview>(item.Key.ToPluralString(), item));
+            foreach (var item in items)
+            {
+                var firstItem = item.FirstOrDefault();
+                if(firstItem != null)
+                {
+                    item.Key = firstItem.ItemType.ToPluralString();
+                }
+            }
+            return items;
         }
         internal protected void SetNewItem(int index, T newItem)
         {

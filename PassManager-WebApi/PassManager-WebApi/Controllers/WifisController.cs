@@ -20,9 +20,9 @@ namespace PassManager_WebApi.Controllers
         {
             string userId = User.Identity.GetUserId();
             //take all ordered wifis
-            IEnumerable<ItemPreview> wifis = EntireItemsController.GetAllWifis(db, userId);
+            IEnumerable<ItemPreview> wifis = EntireItems.GetAllWifis(db, userId);
             
-            return Ok(wifis);
+            return Ok(wifis.GroupItems());
         }
         //GET api/Wifi?lastCreated=true
         public IHttpActionResult Get(bool lastCreated)
