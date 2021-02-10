@@ -164,7 +164,6 @@ namespace PassManager.Views
                     await SignIn();
                     break;
             }
-            PageService.ChangeNavBarColor();
         }
         //methods
         private async Task Register()
@@ -193,6 +192,7 @@ namespace PassManager.Views
                                     {
                                         Username = Password = ConfirmPass = string.Empty;
                                         PageService.ChangeMainPage(new MainView());
+                                        PageService.ChangeNavBarColor();
                                     }
                                     else
                                     {
@@ -226,6 +226,7 @@ namespace PassManager.Views
                     {
                         Username = Password = string.Empty;
                         PageService.ChangeMainPage(new MainView());
+                        PageService.ChangeNavBarColor();
                     }
                     else
                     {
