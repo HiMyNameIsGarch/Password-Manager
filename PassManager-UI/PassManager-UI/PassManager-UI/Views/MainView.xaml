@@ -5,12 +5,12 @@
              x:Class="PassManager.Views.MainView"
              Shell.NavBarHasShadow="False" FlyoutHeaderBehavior="CollapseOnScroll"
              Shell.TitleColor="{DynamicResource PowderBlueColor}"
-             FlyoutBackgroundColor="{DynamicResource CeladonBlueColor}">
+             FlyoutBackgroundColor="{OnPlatform Android={DynamicResource CeladonBlueColor}, UWP={DynamicResource PrussianBlueColor}}">
     <Shell.FlyoutHeaderTemplate>
         <DataTemplate>
             <Grid BackgroundColor="{DynamicResource PrussianBlueColor}"
               HeightRequest="300">
-                <Label Text="Welcome user!"
+                <Label Text="Welcome to ShaMan!"
                    TextColor="{DynamicResource HoneyDewColor}"
                    FontAttributes="Bold"
                    HorizontalTextAlignment="Center"

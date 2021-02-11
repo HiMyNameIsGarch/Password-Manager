@@ -27,7 +27,7 @@
                                 <Button HorizontalOptions="EndAndExpand" Text="Go To" Command="{TemplateBinding BindingContext.GoToItem}" FontAttributes="Bold"
                                         TextColor="{DynamicResource PowderBlueColor}" IsEnabled="{TemplateBinding BindingContext.CanScroll}" BackgroundColor="Transparent"
                                         CommandParameter="{Binding Source={x:Reference mainListView}}" FontSize="{OnPlatform Android=13, UWP=15}" IsVisible="{TemplateBinding BindingContext.CanScroll}"
-                                        Margin="{OnPlatform Android='-5,-5,10,-5', UWP='5,5,10,5'}" Padding="0"/>
+                                        Margin="{OnPlatform Android='0,0,10,0', UWP='5,5,10,5'}" Padding="0"/>
                             </StackLayout>
                         </ViewCell>
                     </DataTemplate>

@@ -28,7 +28,7 @@ namespace PassManager.ViewModels
                     new SettingModel("Sign Out", new Command( () => 
                     {
                         UserProcessor.LogOut();
-                        PageService.ChangeNavBarColor();
+                        PageService.ChangeNavBarColor(PageService.PrussianBlueColor);
                     })),
                 };
             }

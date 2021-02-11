@@ -11,6 +11,8 @@ namespace PassManager.Models
 {
     internal static class PageService 
     {
+        public static readonly Android.Graphics.Color CeladonBlueColor = Android.Graphics.Color.Rgb(69, 123, 157);
+        public static readonly Android.Graphics.Color PrussianBlueColor = Android.Graphics.Color.Rgb(29, 53, 87);
         public static void ChangeMainPage(Page page)
         {
             Application.Current.MainPage = page;
@@ -56,12 +58,12 @@ namespace PassManager.Models
             var response = await popup.PopupClosedTask;
             return response;
         }
-        public static void ChangeNavBarColor()
+        public static void ChangeNavBarColor(Android.Graphics.Color color)
         {
             if (Device.RuntimePlatform == Device.Android)
             {
                 var statusbar = DependencyService.Get<IStatusBarPlatformSpecific>();
-                statusbar.ChangeNavigationBarColor(Android.Graphics.Color.Rgb(69, 123, 157));
+                statusbar.ChangeNavigationBarColor(color);
             }
         }
         public static async void HandleException(Exception ex)

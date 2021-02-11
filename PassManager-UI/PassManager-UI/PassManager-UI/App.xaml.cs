@@ -31,7 +31,9 @@ namespace PassManager_UI
         {
             if (Timer != null)
                 Timer.Dispose();
-            PageService.ChangeNavBarColor();
+         
+            if(Shell.Current is null)
+                PageService.ChangeNavBarColor(PageService.PrussianBlueColor);
         }
         private void LogOutUser(object sender)
         {
