@@ -192,7 +192,7 @@ namespace PassManager.Views
                                     {
                                         Username = Password = ConfirmPass = string.Empty;
                                         PageService.ChangeMainPage(new MainView());
-                                        PageService.ChangeNavBarColor();
+                                        PageService.ChangeNavBarColor(PageService.CeladonBlueColor);
                                     }
                                     else
                                     {
@@ -226,7 +226,7 @@ namespace PassManager.Views
                     {
                         Username = Password = string.Empty;
                         PageService.ChangeMainPage(new MainView());
-                        PageService.ChangeNavBarColor();
+                        PageService.ChangeNavBarColor(PageService.CeladonBlueColor);
                     }
                     else
                     {
