@@ -75,6 +75,12 @@
                             </Frame>
                         </StackLayout>
                     </Frame>
+
+                    <StackLayout Orientation="Horizontal" Margin="15,5,0,5">
+                        <CheckBox IsChecked="{Binding RememberEmail}" Color="{DynamicResource PowderBlueColor}"/>
+                        <Label Text="Remember email" FontSize="{OnPlatform Android=14, UWP=16}" TextColor="{DynamicResource HoneyDewColor}" VerticalTextAlignment="Center" FontAttributes="None"/>
+                    </StackLayout>
+
                 </StackLayout>
                     <!--#endregion-->
                 <Button Text="{Binding ActionBtnText}" Command="{Binding ActionCommand}" Style="{StaticResource BasicBtn}"/>

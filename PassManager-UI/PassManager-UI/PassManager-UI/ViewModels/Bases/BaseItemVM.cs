@@ -91,12 +91,12 @@ namespace PassManager.ViewModels.Bases
         public string ActionBtnText
         {
             get { return _actionBtnText; }
-            protected private set { _actionBtnText = value; NotifyPropertyChanged(); }
+            private set { _actionBtnText = value; NotifyPropertyChanged(); }
         }
         public bool ReadOnly
         {
             get { return _readOnly; }
-            protected private set { _readOnly = value; NotifyPropertyChanged(); }
+            private set { _readOnly = value; NotifyPropertyChanged(); }
         }
         public bool CanCopy
         {
@@ -287,7 +287,7 @@ namespace PassManager.ViewModels.Bases
             //push main
             await PageService.PushPopupAsync(new ErrorView(msg));
         }
-        private protected void ChangeProps(ItemPageState pageState, string btnText, string pageTitle, bool isReadOnly)
+        private void ChangeProps(ItemPageState pageState, string btnText, string pageTitle, bool isReadOnly)
         {
             if(pageState == ItemPageState.View)
             {
@@ -307,7 +307,7 @@ namespace PassManager.ViewModels.Bases
             PageTitle = pageTitle;
             ReadOnly = isReadOnly;
         }
-        private protected async Task GoTo(string itemPage, UpdateModel updateModel = null)
+        private async Task GoTo(string itemPage, UpdateModel updateModel = null)
         {
             //construct parameters based on model
             string parameters = updateModel != null ? JsonConvert.SerializeObject(updateModel) : "";

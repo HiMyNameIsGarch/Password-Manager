@@ -5,7 +5,7 @@
              x:Class="PassManager.Views.MainView"
              Shell.NavBarHasShadow="False" FlyoutHeaderBehavior="CollapseOnScroll"
              Shell.TitleColor="{DynamicResource PowderBlueColor}"
-             FlyoutBackgroundColor="{OnPlatform Android={DynamicResource CeladonBlueColor}, UWP={DynamicResource PrussianBlueColor}}">
+             FlyoutBackgroundColor="{OnPlatform Android={StaticResource CeladonBlueColor}, UWP={StaticResource PrussianBlueColor}}">
     <Shell.FlyoutHeaderTemplate>
         <DataTemplate>
             <Grid BackgroundColor="{DynamicResource PrussianBlueColor}"

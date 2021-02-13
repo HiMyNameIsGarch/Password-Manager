@@ -8,6 +8,7 @@ using System;
 using PassManager.Models;
 using PassManager.Views.Popups;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 
 namespace PassManager.Views
 {
@@ -16,6 +17,7 @@ namespace PassManager.Views
         public AuthenticationViewModel()
         {
             //set some default values
+            LoadEmail().Await();
             IsConfirmPassVisible = true;
             IsPasswordVisible = true;
             PassEntryIcon = IconHelper.GetImageUrl("Locked");
@@ -31,16 +33,19 @@ namespace PassManager.Views
             SetNames("Sign in", TypeOfActions.Register.ToString(), "Create a new account", "Confirm");
         }
         //private props
+        private const string defaultValueForEmail = " ";
+        private const string emailKey = "user_email";
         private TypeOfActions CurrentAction;
         private string _anotherPageText;
         private string _questionForUser;
         private string _actionBtnText;
-        private string _username;
-        private string _password;
-        private string _confirmPass;
+        private string _username = string.Empty;
+        private string _password = string.Empty;
+        private string _confirmPass = string.Empty;
         private string _passEntryIcon;
         private string _confirmPassEntryIcon;
         //booleans
+        private bool _rememberEmail = false;
         private bool _isRegisterPage;
         private bool _isPasswordVisible;
         private bool _isConfirmPassVisible;
@@ -117,6 +122,11 @@ namespace PassManager.Views
             get { return _questionForUser; }
             private set { _questionForUser = value; NotifyPropertyChanged(); }
         }
+        public bool RememberEmail
+        {
+            get { return _rememberEmail; }
+            set { _rememberEmail = value; NotifyPropertyChanged(); }
+        }
         public bool IsRegisterPage
         {
             get { return _isRegisterPage; }
@@ -155,18 +165,61 @@ namespace PassManager.Views
         }
         private async void Action()
         {
+            bool isAuthSuccess = false;
             switch (CurrentAction)
             {
                 case TypeOfActions.Register:
-                    await Register();
+                    isAuthSuccess = await Register();
                     break;
                 case TypeOfActions.Sign_In:
-                    await SignIn();
+                    isAuthSuccess = await SignIn();
                     break;
+            }
+            if (isAuthSuccess)
+            {
+                if (RememberEmail)
+                {
+                    try
+                    {
+                        await SecureStorage.SetAsync(emailKey, Username);
+                    }
+                    catch
+                    {
+                        await PageService.DisplayAlert("Ooops", "Something went wrong and we couldn't save your email!","Ok","Cancel");
+                    }
+                }
+                else
+                {
+                    await SecureStorage.SetAsync(emailKey, defaultValueForEmail);
+                }
+                Username = Password = ConfirmPass = string.Empty;
+                PageService.ChangeMainPage(new MainView());
+                PageService.ChangeNavBarColor(PageService.CeladonBlueColor);
             }
         }
         //methods
-        private async Task Register()
+        private async Task LoadEmail()
+        {
+            string newEmail = string.Empty;
+            try
+            {
+                newEmail = await SecureStorage.GetAsync(emailKey);
+            }
+            catch
+            {
+                await PageService.DisplayAlert("Ooops", "Something went wrong and we couldn't save your email!", "Ok", "Cancel");
+            }
+            if (string.IsNullOrEmpty(newEmail) || string.IsNullOrWhiteSpace(newEmail))
+            {
+                RememberEmail = false;
+            }
+            else
+            {
+                RememberEmail = true;
+                Username = newEmail;
+            }
+        }
+        private async Task<bool> Register()
         {
             if (IsInternet())
             {
@@ -190,9 +243,7 @@ namespace PassManager.Views
                                     Models.TaskStatus statusRegister = await UserProcessor.Register(ApiHelper.ApiClient, Username, authPassword, authPassword);
                                     if (!statusRegister.IsError)
                                     {
-                                        Username = Password = ConfirmPass = string.Empty;
-                                        PageService.ChangeMainPage(new MainView());
-                                        PageService.ChangeNavBarColor(PageService.CeladonBlueColor);
+                                        return true;
                                     }
                                     else
                                     {
@@ -209,8 +260,9 @@ namespace PassManager.Views
                     else await DisplayError(emailStatus.Message);
                 }
             }
+            return false;
         }
-        private async Task SignIn()
+        private async Task<bool> SignIn()
         {
             if (IsInternet())
             {
@@ -224,9 +276,7 @@ namespace PassManager.Views
                     Models.TaskStatus statusLogin = await UserProcessor.LogIn(ApiHelper.ApiClient, Username, authPassword);
                     if (!statusLogin.IsError)
                     {
-                        Username = Password = string.Empty;
-                        PageService.ChangeMainPage(new MainView());
-                        PageService.ChangeNavBarColor(PageService.CeladonBlueColor);
+                        return true;
                     }
                     else
                     {
@@ -235,6 +285,7 @@ namespace PassManager.Views
                     }
                 }
             }
+            return false;
         }
         private void SetNames(string title, string pageText, string question, string actionText)
         {
