@@ -186,9 +186,10 @@ namespace PassManager.ViewModels.Bases
             if (Shell.Current != null)
                 await Shell.Current.GoToAsync("ListItem");
         }
-        private protected abstract Task<IEnumerable<Grouping<string, ItemPreview>>> RefreshPageAsync();
         //abstract functions
+        private protected abstract Task<IEnumerable<Grouping<string, ItemPreview>>> RefreshPageAsync();
         private protected abstract Task GetDataAsync();
+        //methods
         private void Delete(int id)
         {
             foreach (var item in Items)
@@ -209,7 +210,6 @@ namespace PassManager.ViewModels.Bases
                 DisplayMsg(ErrorMsg.NoItems(ItemType), true);
             }
         }
-        //methods
         private void UpdateItem(UpdateModel updateModel)
         {
             Grouping<string, ItemPreview> currentItems = null;
@@ -248,7 +248,7 @@ namespace PassManager.ViewModels.Bases
             if (IsUwp)
                 Items = UpdateItems(Items);//update the list with itself(bug: (when updating an item it will not be displayed so i updated the current list))
         }
-        private protected void DisplayMsg(string text, bool hasItems)
+        private void DisplayMsg(string text, bool hasItems)
         {
             NoItemsText = text;
             HasItems = hasItems;
@@ -265,7 +265,7 @@ namespace PassManager.ViewModels.Bases
                 await Shell.Current.GoToAsync($"Create{itemType.ToSampleString()}?createPage={pageToCreateString}");
             }
         }
-        private protected bool IsListChanged(IEnumerable<Grouping<string, ItemPreview>> newList)
+        private bool IsListChanged(IEnumerable<Grouping<string, ItemPreview>> newList)
         {
             if (newList is null || Items is null) return false;
             int previewsCount = newList.Count();
@@ -284,7 +284,7 @@ namespace PassManager.ViewModels.Bases
                         //convert the 2 grouping lists in normal lists
                         var itemsList = Items[i].ToList();
                         var previewsList = newList.ToList()[i].ToList();
-                        for (int j = 0; j < itemsList.Count(); j++)//loop thru all the items in the lists and check if their are equals
+                        for (int j = 0; j < itemsList.Count() && !needUpdate; j++)//loop thru all the items in the lists and check if their are equals
                         {
                             if (!itemsList[j].Equals(previewsList[j]))
                             {
@@ -309,7 +309,7 @@ namespace PassManager.ViewModels.Bases
                 DisplayMsg(ErrorMsg.NoItems(ItemType), true);
             }
         }
-        private protected ObservableCollection<Grouping<string, ItemPreview>> UpdateItems(IEnumerable<Grouping<string, ItemPreview>> newList)
+        private ObservableCollection<Grouping<string, ItemPreview>> UpdateItems(IEnumerable<Grouping<string, ItemPreview>> newList)
         {
             if (newList is null) return null;
             return new ObservableCollection<Grouping<string, ItemPreview>>(newList);

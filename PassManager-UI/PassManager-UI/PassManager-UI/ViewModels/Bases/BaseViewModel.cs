@@ -1,5 +1,4 @@
-﻿using System;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using System.ComponentModel;
 using Xamarin.Essentials;
 using PassManager.Models;
